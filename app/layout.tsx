@@ -26,17 +26,17 @@ export const metadata: Metadata = {
   metadataBase: SITE_URL,
   title: '애니어그램 유형 테스트',
   description:
-    '90문항으로 애니어그램 주유형과 윙을 확인하는 한국어 검사. 교육·자기이해 목적이며 임상적 진단이 아니에요.',
+    '90문항으로 애니어그램 주유형과 날개 유형을 확인하는 한국어 검사. 교육·자기이해 목적이며 임상적 진단이 아니에요.',
   openGraph: {
     type: 'website',
     title: '애니어그램 유형 테스트',
-    description: '45문항 또는 90문항으로 주유형과 윙을 확인해 보세요.',
+    description: '45문항 또는 90문항으로 주유형과 날개 유형을 확인해 보세요.',
     images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: LANDING_OG_ALT }],
   },
   twitter: {
     card: 'summary_large_image',
     title: '애니어그램 유형 테스트',
-    description: '45문항 또는 90문항으로 주유형과 윙을 확인해 보세요.',
+    description: '45문항 또는 90문항으로 주유형과 날개 유형을 확인해 보세요.',
     images: ['/opengraph-image'],
   },
 };

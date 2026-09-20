@@ -134,8 +134,9 @@ describe('TestRunner (AC-4)', () => {
       answer(4);
     }
     expect(screen.getByText(questions[TOTAL - 1].text)).toBeTruthy();
+    expect(screen.queryByRole('button', { name: '다음' })).toBeNull();
 
-    const finish = screen.getByRole('button', { name: '결과 보기' }) as HTMLButtonElement;
+    const finish = screen.getByRole('button', { name: '완료' }) as HTMLButtonElement;
     expect(finish.disabled).toBe(true);
     fireEvent.click(finish);
     expect(push).not.toHaveBeenCalled();
@@ -143,7 +144,7 @@ describe('TestRunner (AC-4)', () => {
     answer(4);
     expect(progressBar().getAttribute('aria-valuenow')).toBe(String(TOTAL));
 
-    const enabled = screen.getByRole('button', { name: '결과 보기' }) as HTMLButtonElement;
+    const enabled = screen.getByRole('button', { name: '완료' }) as HTMLButtonElement;
     expect(enabled.disabled).toBe(false);
     fireEvent.click(enabled);
 
@@ -419,7 +420,7 @@ describe('TestRunner 기본 45문항 · 이어하기', () => {
     expect(asked).toEqual(BASE_PLAN.map((at) => questions[at].id));
     expect(progressBar().getAttribute('aria-valuenow')).toBe('45');
 
-    fireEvent.click(screen.getByRole('button', { name: '결과 보기' }));
+    fireEvent.click(screen.getByRole('button', { name: '완료' }));
     const target = push.mock.calls[0][0] as string;
     const decoded = decodeResult(target.slice('/result/'.length));
     expect(decoded?.kind).toBe('base');
@@ -458,7 +459,7 @@ describe('TestRunner 기본 45문항 · 이어하기', () => {
     expect(asked.filter((id) => answered.includes(id))).toEqual([]);
     expect(new Set([...asked, ...answered]).size).toBe(TOTAL);
 
-    fireEvent.click(screen.getByRole('button', { name: '결과 보기' }));
+    fireEvent.click(screen.getByRole('button', { name: '완료' }));
     const target = push.mock.calls[0][0] as string;
     const decoded = decodeResult(target.slice('/result/'.length));
     expect(decoded?.kind).toBe('full');

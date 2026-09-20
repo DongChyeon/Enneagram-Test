@@ -22,8 +22,9 @@
  */
 
 import { typeById } from '../data/types';
-import { wingByLabel } from '../data/wings';
+import { formatWingLabel, wingByLabel } from '../data/wings';
 import { fictionalCharactersByType } from '../data/fictional-characters';
+import { typeRelationships } from '../data/type-relationships';
 import type { Result } from '../lib/types';
 import { ScoreBars } from './ScoreBars';
 import { ShareActions } from './ShareActions';
@@ -35,7 +36,7 @@ import { TypeMark } from './TypeMarkView';
  * 페이지 하단 각주로 분리하면 AC-8 ③을 만족하지 못한다 — 윙이 측정된 발견으로
  * 읽히지 않게 하는 것이 목적이므로 마커는 윙과 같은 덩어리 안에 있어야 한다.
  */
-export const WING_INTERPRETATION_MARKER = '윙은 이론적 해석이며 검증된 측정 결과가 아니에요.';
+export const WING_INTERPRETATION_MARKER = '날개는 이론적 해석이며 검증된 측정 결과가 아니에요.';
 
 /** 면책 고지 확정 문구. 랜딩·결과·카드 3면이 같은 내용을 쓴다(카드는 마지막 줄만). */
 export const DISCLAIMER_PARAGRAPHS: readonly string[] = [
@@ -89,8 +90,11 @@ export function ResultView({ result, code }: ResultViewProps) {
   const base = result.kind === 'base';
   const type = typeById.get(result.primaryType);
   const wing = wingByLabel.get(result.wing);
+  const relationships = typeRelationships[result.primaryType];
+  const goodMatch = typeById.get(relationships.good.typeId);
+  const difficultMatch = typeById.get(relationships.difficult.typeId);
 
-  if (type === undefined || wing === undefined) {
+  if (type === undefined || wing === undefined || goodMatch === undefined || difficultMatch === undefined) {
     // 디코드가 통과한 코드라면 도달할 수 없다 — 도달하면 데이터 누락 버그다.
     throw new Error(`유형·윙 데이터 누락: ${result.primaryType} / ${result.wing}`);
   }
@@ -119,7 +123,7 @@ export function ResultView({ result, code }: ResultViewProps) {
               {result.primaryType}유형 · {type.nameKo}
             </h1>
             <p className="tnum mt-2 text-[1.0625rem] font-bold tracking-[-0.01em] text-ink-soft">
-              {result.wing}
+              {formatWingLabel(result.wing)}
             </p>
           </div>
         </div>
@@ -199,11 +203,11 @@ export function ResultView({ result, code }: ResultViewProps) {
           마커가 같은 회색 면 안에 있어야 "이건 해석"이라는 말이 윙에 붙는다. */}
       <section aria-labelledby="wing-heading" className="mt-14 rounded-card bg-sub p-5 sm:p-7">
         <h2 id="wing-heading" className="text-[1.125rem] font-bold tracking-[-0.01em] text-ink">
-          윙 {wing.label}
+          {formatWingLabel(wing.label)}
         </h2>
         <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">{wing.description}</p>
         <p className="mt-5 border-t border-line pt-4 text-[0.8125rem] leading-[1.7] text-ink-faint">
-          <strong className="font-bold text-ink-soft">{WING_INTERPRETATION_MARKER}</strong> 윙과
+          <strong className="font-bold text-ink-soft">{WING_INTERPRETATION_MARKER}</strong> 날개와
           통합·분열 화살표는 실증 근거가 거의 확인되지 않았어요 (Hook et al., 2021).
         </p>
       </section>
@@ -221,12 +225,42 @@ export function ResultView({ result, code }: ResultViewProps) {
         scoreRange={base ? [5, 25] : [10, 50]}
       />
 
+      <section aria-labelledby="relationship-heading" className="mt-14">
+        <h2 id="relationship-heading" className="text-[1.25rem] font-bold text-ink">
+          다른 유형과의 관계
+        </h2>
+        <p className="mt-3 text-[0.875rem] leading-[1.7] text-ink-faint">
+          사람 사이의 궁합을 판정한 결과는 아니에요. 서로 편해지기 쉬운 지점과 부딪히기 쉬운
+          지점을 유형의 성향으로 풀어봤어요.
+        </p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <article className="rounded-card bg-sub p-5">
+            <p className="text-[0.8125rem] font-bold text-primary">잘 맞을 수 있는 유형</p>
+            <h3 className="mt-2 text-[1.0625rem] font-bold text-ink">
+              {goodMatch.id}유형 · {goodMatch.nameKo}
+            </h3>
+            <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">
+              {relationships.good.reason}
+            </p>
+          </article>
+          <article className="rounded-card bg-sub p-5">
+            <p className="text-[0.8125rem] font-bold text-ink-faint">잘 안 맞을 수 있는 유형</p>
+            <h3 className="mt-2 text-[1.0625rem] font-bold text-ink">
+              {difficultMatch.id}유형 · {difficultMatch.nameKo}
+            </h3>
+            <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">
+              {relationships.difficult.reason}
+            </p>
+          </article>
+        </div>
+      </section>
+
       <section aria-labelledby="character-heading" className="mt-14">
         <h2 id="character-heading" className="text-[1.25rem] font-bold text-ink">
           작품 속에서 찾아보기
         </h2>
         <p className="mt-3 text-[0.875rem] leading-[1.7] text-ink-faint">
-          공식 유형 설정이 아니라, 작품 속 행동을 {result.primaryType}유형의 특징으로 읽어 본 예시이에요.
+          공식 유형 설정이 아니라, 작품 속 행동을 {result.primaryType}유형의 특징으로 읽어 본 예시예요.
         </p>
         <ul className="mt-5 grid gap-3 sm:grid-cols-3">
           {fictionalCharactersByType[result.primaryType].map((character) => (

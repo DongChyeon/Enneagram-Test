@@ -40,7 +40,7 @@ describe('ResultView', () => {
     // ① 주유형 이름 + 5w4 라벨
     expect(result.wing).toBe('5w4');
     expect(text).toContain(type!.nameKo);
-    expect(screen.getByText('5w4')).toBeDefined();
+    expect(screen.getAllByText('5번 날개 4번')).toHaveLength(2);
 
     // ② 4개 섹션 전부 — 표제와 내용 양쪽
     expect(screen.getByText('핵심 동기')).toBeDefined();
@@ -134,6 +134,19 @@ describe('ResultView', () => {
     expect(img).not.toBeNull();
     expect(img!.getAttribute('src')).toBe('/result/5w4-TEST0000000/card');
     expect(container.textContent).toContain('길게 눌러 저장');
+  });
+
+  it('주유형과 잘 맞을 수 있는 유형과 잘 안 맞을 수 있는 유형의 이유를 표시한다', () => {
+    const result = resultFromScores(fixture(3));
+    const { container } = render(<ResultView result={result} code="5w4-TEST0000000" />);
+
+    const section = container.querySelector('section[aria-labelledby="relationship-heading"]');
+    expect(section).not.toBeNull();
+    expect(section!.textContent).toContain('잘 맞을 수 있는 유형');
+    expect(section!.textContent).toContain('잘 안 맞을 수 있는 유형');
+    expect(section!.textContent).toContain('9유형 · 균형을 맞추는 사람');
+    expect(section!.textContent).toContain('2유형 · 마음을 살피는 사람');
+    expect(section!.textContent).toContain('궁합을 판정한 결과는 아니에요');
   });
 
   it('주유형과 닮은 가상 인물 세 명을 공식 설정이 아닌 해석으로 표시한다', () => {

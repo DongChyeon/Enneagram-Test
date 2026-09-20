@@ -167,3 +167,9 @@ export const wingsByType = new Map<TypeId, Wing[]>(
     wings.filter((w) => w.baseTypeId === id),
   ]),
 );
+
+/** 내부 코드형 라벨(`5w6`)을 사람이 읽기 쉬운 표기로 바꾼다. */
+export function formatWingLabel(label: string): string {
+  const match = /^([1-9])w([1-9])$/.exec(label);
+  return match === null ? label : `${match[1]}번 날개 ${match[2]}번`;
+}

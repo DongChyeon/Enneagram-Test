@@ -22,10 +22,11 @@
 import * as React from 'react';
 
 import type { TypeId } from '../data/schema';
+import { formatWingLabel } from '../data/wings';
 import { TypeMark, markBox } from './TypeMarkView';
 
 /** 카드에 인쇄되는 윙 마커. 공간 제약 때문에 결과 페이지보다 짧다(확정 문구). */
-export const CARD_WING_MARKER = '윙 — 이론적 해석';
+export const CARD_WING_MARKER = '날개 — 이론적 해석';
 
 /** 면책 고지의 마지막 한 줄. 카드는 이 줄만 싣는다(확정 문구). */
 export const CARD_DISCLAIMER = '교육·자기이해 목적이며 임상적 진단이 아니에요.';
@@ -212,7 +213,9 @@ export function ShareCardArt({
               backgroundColor: FILL,
             }}
           >
-            <div style={{ fontSize: px(36), fontWeight: 700, color: INK }}>{wingLabel}</div>
+            <div style={{ fontSize: px(36), fontWeight: 700, color: INK }}>
+              {formatWingLabel(wingLabel)}
+            </div>
             <div
               style={{
                 fontSize: px(22),

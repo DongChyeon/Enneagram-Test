@@ -420,14 +420,24 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
               >
                 이전
               </button>
-              <button
-                type="button"
-                onClick={() => goTo(index + 1)}
-                disabled={index === planSize - 1}
-                className="press min-h-[3.25rem] flex-1 rounded-control bg-sub text-[0.9375rem] font-bold text-ink-soft hover:bg-line/60 disabled:cursor-not-allowed disabled:bg-sub disabled:text-ink-faint/50 disabled:hover:bg-sub"
-              >
-                다음
-              </button>
+              {index === planSize - 1 ? (
+                <button
+                  type="button"
+                  onClick={submit}
+                  disabled={!allAnswered || submitting}
+                  className="press min-h-[3.25rem] flex-1 rounded-control bg-primary text-[0.9375rem] font-bold text-white hover:bg-primary-press disabled:cursor-not-allowed disabled:bg-line disabled:text-ink-faint disabled:hover:bg-line"
+                >
+                  {submitting ? '결과를 여는 중…' : '완료'}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => goTo(index + 1)}
+                  className="press min-h-[3.25rem] flex-1 rounded-control bg-sub text-[0.9375rem] font-bold text-ink-soft hover:bg-line/60"
+                >
+                  다음
+                </button>
+              )}
             </div>
 
             <div aria-live="polite" className="mt-4">
@@ -458,14 +468,6 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
                     </button>
                   </p>
                 )}
-                <button
-                  type="button"
-                  onClick={submit}
-                  disabled={!allAnswered || submitting}
-                  className="press mt-4 min-h-[3.5rem] w-full rounded-control bg-primary text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press disabled:cursor-not-allowed disabled:bg-line disabled:text-ink-faint disabled:hover:bg-line"
-                >
-                  {submitting ? '결과를 여는 중…' : '결과 보기'}
-                </button>
               </div>
             ) : null}
 
