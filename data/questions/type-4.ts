@@ -23,7 +23,7 @@ export const type4Questions: Question[] = [
     rationale:
       '선택의 이유가 기준 준수가 아니라 자기다움 유지이므로 1번이 아니라 4번의 동기를 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '방식 선택의 독자성을 재는 문장으로, 낭만·예술성 어휘를 쓰는 상용 4번 문항과 표현이 다르다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"남들과 같은 방식" 대 "내 방식"의 선택 기술로, 정체성·독특함 같은 이론 어휘를 문면에 쓰지 않았다.' },
   },
   {
     id: 'q4-02',
@@ -36,7 +36,7 @@ export const type4Questions: Question[] = [
     rationale:
       '고유함 추구의 반대 방향 긍정 진술로, 자원 보호가 아니라 정체성 유지 동기를 재므로 5번이 아니라 4번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '관습 수용을 긍정문 역채점으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q4-01의 반대 방향 긍정 진술이며 "마음이 편한 편이다"라는 정도 표현으로 절대 진술을 피했다.' },
   },
   {
     id: 'q4-03',
@@ -54,15 +54,15 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-04',
     typeId: 4,
-    text: '평소에 남들에게는 당연한 것이 내게만 없다는 생각이 드는 편이다.',
+    text: '평소에 남들과 비슷해져 특별할 것 없는 사람이 될까 봐 마음이 쓰인다.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't4-lack-fear',
     reverse: false,
     rationale:
-      '결핍의 내용이 시간·에너지 자원이 아니라 정체성 조건이므로 5번이 아니라 4번을 잰다.',
+      '두려움의 대상이 시간·에너지 자원의 고갈이 아니라 “특별할 것 없는 존재가 됨”이라는 정체성 상실이므로 5번이 아니라 4번을 잰다. 또 비교의 축이 유능함의 순위가 아니라 고유함의 유무라는 점에서 3번의 실패 이미지 두려움과도 갈리고, q4-03이 재는 “남에게 있는 것의 결여”와 달리 “고유함의 소실”을 물어 같은 facet 안에서 서로 다른 면을 담당한다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '같은 결여 구성개념을 "당연한 것이 내게만 없다"는 다른 통사로 표현한 자체 문장이다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"특별할 것 없는 사람이 될까 봐"라는 한국어 일상 표현으로 4번 핵심 두려움을 구성개념 수준에서만 옮겼다.' },
   },
   {
     id: 'q4-05',
@@ -88,7 +88,7 @@ export const type4Questions: Question[] = [
     rationale:
       '비교 초점의 반대 방향 긍정 진술로, 경계 유지가 아니라 비교 주의 초점을 재므로 5번이 아니라 4번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '비교 대신 자기 과업으로 주의가 가는 반대 방향을 긍정문 역채점으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '타인 소식을 듣는 장면에서 주의가 "내 할 일"로 향한다는 반대 방향 주의 초점 진술로 자체 구성했다.' },
   },
   {
     id: 'q4-07',
@@ -101,7 +101,7 @@ export const type4Questions: Question[] = [
     rationale:
       '대화를 접는 이유가 시간·에너지 절약이 아니라 깊이 이해받으려는 기대이므로 5번이 아니라 4번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '깊이 지향을 대화 지속 곤란이라는 행동으로 기술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"가벼운 안부만 오가는 대화"라는 구체적 대화 유형을 지정해 깊이 지향을 간접 기술했다.' },
   },
   {
     id: 'q4-08',

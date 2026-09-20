@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Disclaimer from '../components/Disclaimer';
 import ResumeNotice from '../components/ResumeNotice';
 import { SECTION_SIZE, questionSetSignature, sectionCount } from '../components/progress';
-import { questions } from '../data/questions';
+import { BASE_PLAN, questions } from '../data/questions';
 
 /**
  * 랜딩 (Step 4.2).
@@ -15,7 +15,9 @@ import { questions } from '../data/questions';
  */
 
 const TOTAL = questions.length;
+const BASE_TOTAL = BASE_PLAN.length;
 const SECTION_COUNT = sectionCount(TOTAL);
+const BASE_SECTION_COUNT = sectionCount(BASE_TOTAL);
 /**
  * 이어하기 안내가 쓸 문항 세트 서명. 서버에서 한 번 만들어 문자열로 내려보낸다 —
  * 클라이언트 컴포넌트가 직접 `data/questions`를 import 하면 90문항 텍스트가
@@ -23,17 +25,57 @@ const SECTION_COUNT = sectionCount(TOTAL);
  */
 const QUESTION_SET_SIGNATURE = questionSetSignature(TOTAL, questions[0].id, questions[TOTAL - 1].id);
 
-const FACTS: { label: string; value: string }[] = [
-  { label: '문항', value: `${TOTAL}문항` },
-  { label: '구성', value: `${SECTION_SIZE}문항 × ${SECTION_COUNT}묶음` },
-  { label: '소요 시간', value: '약 10–15분' },
-  { label: '응답 저장', value: '브라우저 안에만' },
+/**
+ * 두 경로.
+ *
+ * **45가 90의 열화판이 아니고, 90이 45의 유료판도 아니다.** 둘 다 같은 아홉
+ * 축을 재고, 다른 것은 축당 문항 수뿐이다. 그래서 카드를 위아래가 아니라 나란히
+ * 놓고, 버튼도 둘 다 같은 무게(파랑 = 행동)로 둔다.
+ *
+ * 차이 설명에 "더 정확합니다" 같은 말을 쓰지 않는다 — 무엇이 어떻게 달라지는지를
+ * 적어야 고르는 사람이 판단할 수 있다. 문항 수가 배가 되면 유형 점수에서 **문항
+ * 하나가 차지하는 몫**이 1/5에서 1/10으로 줄고, 같은 개념을 다른 문장으로 두 번
+ * 묻게 된다 — 그게 정확도 차이의 전부이자 정확한 서술이다.
+ *
+ * 소요 시간은 한 문항에 6~9초(읽기 + 선택 + 100ms 자동 넘김)를 잡은 값이다.
+ */
+type Route = {
+  href: string;
+  total: number;
+  sections: number;
+  minutes: string;
+  perType: string;
+  accuracy: string;
+  cta: string;
+};
+
+const ROUTES: Route[] = [
+  {
+    href: '/test',
+    total: BASE_TOTAL,
+    sections: BASE_SECTION_COUNT,
+    minutes: '약 5–8분',
+    perType: '유형당 5문항',
+    accuracy:
+      '아홉 유형의 다섯 개념(동기·두려움·주의 초점·관계·부하)을 한 번씩 묻습니다. 문항 하나가 그 유형 점수의 5분의 1을 쥐고 있어서, 1위와 2위가 가깝게 나오면 문항 한두 개에 순서가 뒤집힐 수 있습니다.',
+    cta: `${BASE_TOTAL}문항으로 시작하기`,
+  },
+  {
+    href: '/test?full',
+    total: TOTAL,
+    sections: SECTION_COUNT,
+    minutes: '약 10–15분',
+    perType: '유형당 10문항',
+    accuracy:
+      '같은 다섯 개념을 서로 다른 문장으로 두 번씩 묻습니다. 한 문항을 잘못 읽었거나 그날 기분에 끌려 답했더라도 짝이 되는 다른 문항이 상쇄하므로, 점수가 문항 하나에 덜 흔들립니다.',
+    cta: `${TOTAL}문항으로 시작하기`,
+  },
 ];
 
 const DOES: { title: string; body: string }[] = [
   {
     title: '아홉 유형의 원점수를 계산합니다',
-    body: '유형마다 10문항씩, 5점 척도 응답을 합산해 10~50점의 원점수를 냅니다. 가장 높은 유형을 주유형으로, 원 위에서 인접한 두 유형 중 높은 쪽을 윙으로 함께 보여줍니다.',
+    body: '5점 척도 응답을 유형별로 합산해 원점수를 냅니다(45문항은 유형당 5문항 → 5~25점, 90문항은 유형당 10문항 → 10~50점). 가장 높은 유형을 주유형으로, 원 위에서 인접한 두 유형 중 높은 쪽을 윙으로 함께 보여줍니다.',
   },
   {
     title: '문항은 전부 새로 썼습니다',
@@ -46,7 +88,7 @@ const DOES: { title: string; body: string }[] = [
 ];
 
 const DOES_NOT = [
-  '표준화·타당화 절차를 거치지 않았습니다. 규준 집단도, 공개된 신뢰도·타당도 계수도 없습니다.',
+  '표준화·타당화 절차를 거치지 않았습니다. 규준 집단도, 공개된 신뢰도·타당도 계수도 없습니다. 이것은 45문항과 90문항에 똑같이 해당합니다 — 90문항을 고른다고 검증된 검사가 되지는 않습니다.',
   '당신의 유형을 확정해 주지 않습니다. 점수가 촘촘하면 결과 화면이 그 사실을 먼저 알려 줍니다.',
   '윙은 측정한 값이 아니라 이론에 따른 해석입니다. 결과 화면도 그렇게 표시합니다.',
 ];
@@ -60,38 +102,54 @@ export default function HomePage() {
           어디에 기대고 있는지 적어 봅니다
         </h1>
         <p className="mt-5 text-[1.0625rem] leading-[1.65] text-ink-soft">
-          {TOTAL}개의 문장을 읽고 요즘의 자신에게 얼마나 들어맞는지 고르면 됩니다.
-          맞히는 시험이 아니라, 스스로를 어떻게 보고 있는지를 정리하는 기록에 가깝습니다.
+          문장을 읽고 요즘의 자신에게 얼마나 들어맞는지 고르면 됩니다. 맞히는 시험이 아니라,
+          스스로를 어떻게 보고 있는지를 정리하는 기록에 가깝습니다.
         </p>
         <p className="mt-4 text-[0.9375rem] leading-[1.7] text-ink-soft">
-          한 화면에 한 문장씩 나오고, 고르면 다음 문장으로 저절로 넘어갑니다. {SECTION_SIZE}문항씩{' '}
-          {SECTION_COUNT}묶음으로 끊어 보여 주므로 지금 어디쯤인지 늘 보이고, 끝까지 대개{' '}
-          <strong className="font-bold text-ink">10–15분</strong> 걸립니다.
+          한 화면에 한 문장씩 나오고, 고르면 다음 문장으로 저절로 넘어갑니다. {SECTION_SIZE}문항씩
+          묶어 보여 주므로 지금 어디쯤인지 늘 보입니다. 길이는 아래에서 고르세요 — 둘 다 같은 아홉
+          축을 재고, 다른 것은 축마다 몇 번을 묻느냐입니다.
         </p>
       </header>
 
       {/* 네 가지 사실. 칸을 선으로 나누지 않고 가라앉은 한 면 안에 여백으로 나눈다. */}
-      <dl className="mt-8 grid grid-cols-2 gap-x-4 gap-y-5 rounded-card bg-sub px-5 py-5">
-        {FACTS.map((fact) => (
-          <div key={fact.label}>
-            <dt className="text-[0.8125rem] font-medium text-ink-faint">{fact.label}</dt>
-            <dd className="mt-1 text-[1rem] font-bold tracking-[-0.01em] text-ink">{fact.value}</dd>
-          </div>
+      <div className="mt-9 space-y-4">
+        {ROUTES.map((route) => (
+          <section
+            key={route.href}
+            aria-labelledby={`route-${route.total}`}
+            className="rounded-card bg-sub p-5 sm:p-7"
+          >
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h2
+                id={`route-${route.total}`}
+                className="tnum text-[1.25rem] font-bold tracking-[-0.02em] text-ink"
+              >
+                {route.total}문항
+              </h2>
+              <p className="tnum text-[0.875rem] font-medium text-ink-faint">
+                {route.perType} · {route.minutes}
+              </p>
+            </div>
+            <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">{route.accuracy}</p>
+            <Link
+              href={route.href}
+              className="press mt-5 flex min-h-[3.5rem] w-full items-center justify-center rounded-control bg-primary px-6 text-center text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press"
+            >
+              {route.cta}
+            </Link>
+          </section>
         ))}
-      </dl>
+      </div>
+
+      <p className="mt-5 text-[0.875rem] leading-[1.7] text-ink-faint">
+        {BASE_TOTAL}문항으로 시작해도 결과 화면에서 나머지 {TOTAL - BASE_TOTAL}문항을 이어서 답할
+        수 있고, <strong className="font-bold text-ink-soft">이미 답한 문항은 다시 묻지
+        않습니다.</strong> 어느 쪽이든 한 번에 다 하지 않아도 됩니다 — 중간에 나가도, 새로고침해도
+        같은 탭에서는 멈춘 자리에서 이어집니다. 응답은 브라우저 안에만 머뭅니다.
+      </p>
 
       <ResumeNotice total={TOTAL} signature={QUESTION_SET_SIGNATURE} />
-
-      <Link
-        href="/test"
-        className="press mt-7 flex min-h-[3.5rem] w-full items-center justify-center rounded-control bg-primary px-6 text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press"
-      >
-        검사 시작하기
-      </Link>
-      <p className="mt-3.5 text-center text-[0.8125rem] leading-[1.7] text-ink-faint">
-        한 번에 다 하지 않아도 됩니다. 중간에 나가도, 새로고침해도 같은 탭에서는 멈춘 자리에서
-        이어집니다.
-      </p>
 
       <section aria-labelledby="does-heading" className="mt-16">
         <h2 id="does-heading" className="text-[1.25rem] font-bold text-ink">

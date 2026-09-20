@@ -21,7 +21,7 @@ export const type7Questions: Question[] = [
     rationale:
       '선택지를 열어 두는 이유가 힘을 쥐기 위해서가 아니라 더 즐거운 가능성을 놓치지 않기 위해서라는 점에서 8번이 아니라 7번을 잰다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '선택지 보존 행동을 기술했고 낙천성 형용사형 상용 7번 문항과 다르다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"괜찮은 선택지를 여러 개 남겨 둔다"는 행동 기술로 7번의 선택지 확보 성향을 자체 표현했다.' },
   },
   {
     id: 'q7-02',
@@ -34,7 +34,7 @@ export const type7Questions: Question[] = [
     rationale:
       '선택지를 닫고도 아쉬움이 없다는 반대 방향 진술로, 결정을 미루는 9번의 무행동이 아니라 가능성 보존이라는 7번 동기의 낮은 쪽 끝을 잰다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '선택지 정리를 긍정문 역채점으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q7-01의 반대 방향 긍정 진술로 "미련 없이 접는"이라는 한국어 관용 표현을 사용했다.' },
   },
   {
     id: 'q7-03',
@@ -86,7 +86,7 @@ export const type7Questions: Question[] = [
     rationale:
       '빈 시간이 생겼을 때 9번은 그대로 머무르는 쪽이 먼저 보이는 반면 7번은 새 자극 쪽으로 주의가 이동한다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '일정 취소를 기회로 재해석하는 주의 초점을 구체 장면으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '약속 취소라는 상실 장면에서 주의가 "새로 해볼 일"로 이동함을 지정한 자체 주의 초점 문형이다.' },
   },
   {
     id: 'q7-07',
@@ -104,15 +104,15 @@ export const type7Questions: Question[] = [
   {
     id: 'q7-08',
     typeId: 7,
-    text: '지난 몇 년간 대체로 심각한 이야기가 길어지면 화제를 가벼운 쪽으로 돌리곤 했다.',
+    text: '지난 몇 년간 대체로 일이 어그러져도 그중 괜찮은 면을 먼저 찾아 말해 왔다.',
     sourceId: 'naranjo-1994',
     origin: 'authored',
     facet: 't7-mood-lifting',
     reverse: false,
     rationale:
-      '8번은 심각한 이야기를 그대로 밀고 나가는 쪽이라면 7번은 화제 자체를 옮겨 무게를 덜어 낸다는 점에서 갈린다.',
+      '8번은 어그러진 국면을 그대로 정면에서 밀고 나가는 쪽이라면 7번은 같은 국면에서 밝은 대목을 먼저 집어내 무게를 덜어 낸다는 점에서 갈린다. q7-07의 화제 전환과 달리 이야기 주제는 그대로 둔 채 초점만 옮기는 행동이라, 같은 facet 안에서 두 문항이 서로 다른 정보를 준다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '같은 전환 행동을 장기 시간 프레임으로 서술한 자체 문장이다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"지난 몇 년간 대체로"라는 장기 시간 프레임과 "괜찮은 면을 먼저 찾아 말해 왔다"는 발화 행동으로 재구성 방어를 기술했다.' },
   },
   {
     id: 'q7-09',
@@ -125,7 +125,7 @@ export const type7Questions: Question[] = [
     rationale:
       '9번의 지연이 움직이지 않아 생기는 것과 달리 7번의 미완은 다음 자극 쪽으로 에너지가 옮겨 가 생긴다는 점을 잰다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '집중이 잘 되는 단계를 시작과 마무리로 대비시킨 독자 표현이다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '시작 단계와 마무리 단계의 집중도를 대비한 자체 비교 프레임으로 7번의 지속성 문제를 중립 기술했다.' },
   },
   {
     id: 'q7-10',
@@ -138,6 +138,6 @@ export const type7Questions: Question[] = [
     rationale:
       '새 자극이 와도 이동하지 않는다는 반대 방향 진술로, 이동의 방향으로 9번과 구분되는 7번 부하 반응의 낮은 쪽 끝을 잰다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '완수 후 이동을 긍정문 역채점으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q7-09와 같은 구성개념의 반대 방향 진술로 "벌여 둔 일을 끝까지 마친 뒤에 옮긴다"를 자체 작성했다.' },
   },
 ];

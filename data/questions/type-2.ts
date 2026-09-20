@@ -59,7 +59,7 @@ export const type2Questions: Question[] = [
     rationale:
       '자기 가치의 조건을 "베풂의 유무"로 묶으므로, 조건을 성과의 유무로 묶는 유형 3과 달리 유형 2의 핵심 두려움 구조를 잰다.',
     authoredBy: 'worker-items-a',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '기여 여지가 없을 때의 위축을 "내 몫이 줄어든 느낌"으로 서술한 독자 표현이다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"해줄 것이 없는 자리"와 "내 몫이 줄어든 느낌"이라는 자체 비유로 2번의 필요받음 욕구를 간접 표현했다.' },
   },
   {
     id: 'q2-05',
@@ -72,7 +72,7 @@ export const type2Questions: Question[] = [
     rationale:
       '주의가 개인의 정서 상태로 향한다는 점에서, 여러 사람의 입장이 동시에 보이는 유형 9의 주의 초점이나 누가 결정권을 쥐었는지를 보는 유형 8과 구분되는 유형 2의 필요 탐지를 잰다.',
     authoredBy: 'worker-items-a',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '모임 장면에서 주의가 향하는 표적을 "표정이 어두운 사람"으로 구체화했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '모임 장면에서 "표정이 어두운 사람"을 초점 대상으로 특정한 주의 초점 문형으로, 일반적 공감 진술과 표현이 다르다.' },
   },
   {
     id: 'q2-06',
@@ -98,7 +98,7 @@ export const type2Questions: Question[] = [
     rationale:
       '자기 사정을 뒤로 미루고 먼저 움직이는 능동적 개입이라, 마찰을 피하려 입장을 미루는 유형 9의 유보와 달리 유형 2의 자기희생 행동을 잰다.',
     authoredBy: 'worker-items-a',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '자기희생을 일정 우선순위라는 관찰 가능한 행동으로 기술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '자기 일정과 타인 부탁의 처리 순서라는 행동 선택으로 표현해 "남을 돕는 것을 좋아한다"류 진술을 피했다.' },
   },
   {
     id: 'q2-08',
@@ -124,7 +124,7 @@ export const type2Questions: Question[] = [
     rationale:
       '서운함의 발생 지점이 "준 것에 대한 회수 실패"라는 점에서, 기준 위반에 대한 분함인 유형 1이나 통제당함에 대한 반발인 유형 8과 구분되는 유형 2의 부하 반응을 잰다.',
     authoredBy: 'worker-items-a',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '보답 불균형 반응을 "서운함이 오래간다"는 한국어 정서 어휘로 서술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"챙긴 만큼 돌아오지 않으면 서운함이 오래간다"는 한국어 정서 관용 표현으로 보답 기대의 좌절을 기술했다.' },
   },
   {
     id: 'q2-10',

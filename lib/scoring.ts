@@ -39,9 +39,35 @@
  * 같은 내용이 `README.md`에도 기록돼 있다.
  */
 
-import { questions } from '../data/questions';
-import type { TypeId } from '../data/schema';
-import type { Answer, Result, Scores } from './types';
+import { baseQuestions, questions } from '../data/questions';
+import type { Question, TypeId } from '../data/schema';
+import type { Answer, Result, ResultKind, Scores } from './types';
+
+/**
+ * 문항 세트별 척도.
+ *
+ * `itemsPerType`만 바뀌고 나머지는 거기서 따라 나온다 — 점수 범위는
+ * `[n, 5n]`이고, 이 범위가 `lib/code.ts`의 1바이트/유형 인코딩 검증에 그대로 쓰인다.
+ *
+ * ## `ambiguityBand`가 왜 세트마다 다른가
+ * **같은 비율을 유지한 것이다.** 전체 90문항의 3점은 폭 41(10~50) 위의 값이고,
+ * "리커트 한 칸 수준의 흔들림 세 번으로는 순위가 뒤집히지 않는다"고 말할 수 있는
+ * 최소선으로 고른 값이다. 기본 45문항의 폭은 21(5~25)이므로 같은 비율이면
+ * `3 × 21 / 41 ≈ 1.5`, 정수로 올려 **2**다. 같은 절대값 3을 그대로 쓰면 폭이
+ * 절반인 척도에서 두 배로 관대해진다.
+ *
+ * 두 값 모두 통계적으로 유도된 컷오프가 아니라 판단이다. 결과 종류에 따라
+ * 임계값이 갈린다는 사실은 `lib/scoring.test.ts`가 고정한다.
+ */
+export const SCALES: Record<ResultKind, { itemsPerType: number; min: number; max: number; ambiguityBand: number }> = {
+  base: { itemsPerType: 5, min: 5, max: 25, ambiguityBand: 2 },
+  full: { itemsPerType: 10, min: 10, max: 50, ambiguityBand: 3 },
+};
+
+/** 그 세트가 채점하는 문항들. 제시 순서는 무관하다 — `typeId`로만 합산한다. */
+export function itemsFor(kind: ResultKind): readonly Question[] {
+  return kind === 'base' ? baseQuestions : questions;
+}
 
 /** 1~9. 순회 순서를 고정하기 위한 단일 정본. */
 export const TYPE_IDS: readonly TypeId[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -62,20 +88,23 @@ export function adjacentSum(scores: Scores, n: TypeId): number {
 }
 
 /**
- * 90문항 응답을 유형별 원점수로 환산한다.
+ * 한 문항 세트의 응답을 유형별 원점수로 환산한다.
  *
  * 응답이 하나라도 누락됐거나 값이 1~5 정수가 아니면 예외를 던진다 —
- * 부분 응답을 조용히 채점하면 10 미만의 점수가 나와 인코딩(1바이트, 10~50)이
- * 깨진다. 결과 페이지는 90문항 완주 시에만 도달 가능하므로(AC-4) 이는 버그 신호다.
+ * 부분 응답을 조용히 채점하면 하한 미만의 점수가 나와 인코딩(1바이트)이
+ * 깨진다. 결과 페이지는 그 세트를 완주해야만 도달 가능하므로 이는 버그 신호다.
+ *
+ * 세트가 달라도 코드는 하나다. 기본 45문항은 90문항의 **진부분집합**이므로
+ * 같은 `typeId` 합산 규칙과 같은 역채점 규칙이 그대로 적용된다.
  */
-export function scoreAnswers(answers: Answer[]): Scores {
+export function scoreAnswers(answers: Answer[], kind: ResultKind = 'full'): Scores {
   const byQuestionId = new Map<string, number>();
   for (const answer of answers) {
     byQuestionId.set(answer.questionId, answer.value);
   }
 
   const scores: Scores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
-  for (const question of questions) {
+  for (const question of itemsFor(kind)) {
     const value = byQuestionId.get(question.id);
     if (value === undefined) {
       throw new Error(`응답 누락: ${question.id}`);
@@ -112,24 +141,25 @@ export function resolveWing(scores: Scores, primary: TypeId): string {
   return `${primary}w${wing}`;
 }
 
-/** 1위와 2위의 점수차가 3 미만이면 유형이 뚜렷하지 않다고 본다. */
-export function isAmbiguous(scores: Scores): boolean {
+/** 1위와 2위의 점수차가 세트의 `ambiguityBand` 미만이면 유형이 뚜렷하지 않다고 본다. */
+export function isAmbiguous(scores: Scores, kind: ResultKind = 'full'): boolean {
   const sorted = TYPE_IDS.map((t) => scores[t]).sort((a, b) => b - a);
-  return sorted[0] - sorted[1] < 3;
+  return sorted[0] - sorted[1] < SCALES[kind].ambiguityBand;
 }
 
 /** 점수에서 결과를 파생한다. 인코딩된 코드를 디코드할 때도 같은 경로를 쓴다. */
-export function resultFromScores(scores: Scores): Result {
+export function resultFromScores(scores: Scores, kind: ResultKind = 'full'): Result {
   const primaryType = resolvePrimary(scores);
   return {
+    kind,
     scores,
     primaryType,
     wing: resolveWing(scores, primaryType),
-    ambiguous: isAmbiguous(scores),
+    ambiguous: isAmbiguous(scores, kind),
   };
 }
 
 /** 응답 → 결과. */
-export function buildResult(answers: Answer[]): Result {
-  return resultFromScores(scoreAnswers(answers));
+export function buildResult(answers: Answer[], kind: ResultKind = 'full'): Result {
+  return resultFromScores(scoreAnswers(answers, kind), kind);
 }

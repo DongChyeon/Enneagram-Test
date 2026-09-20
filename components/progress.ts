@@ -15,10 +15,19 @@ import type { Likert } from '../lib/types';
  * (`TestRunner`는 직접 import 하고, 랜딩은 서버 컴포넌트에서 문자열로 내려준다).
  *
  * ## 묶음은 저장하지 않는다
- * 90문항을 10문항씩 9묶음으로 보여 주지만, **묶음 번호는 `index`에서 유도하는
- * 파생값**이다(`sectionOf`). 저장 페이로드는 예전 그대로
- * `{ signature, answers, index }` 세 필드다 — 묶음을 상태로 승격시키면
- * `index`와 어긋날 수 있는 두 번째 진실이 생기고, 기존 저장본의 호환도 깨진다.
+ * 문항을 10문항씩 묶어 보여 주지만, **묶음 번호는 `index`에서 유도하는
+ * 파생값**이다(`sectionOf`). 묶음을 상태로 승격시키면 `index`와 어긋날 수 있는
+ * 두 번째 진실이 생긴다.
+ *
+ * ## `answers`는 언제나 길이 90이다 — 기본 45문항도 마찬가지
+ * 기본 검사는 90칸 중 **45칸만** 채운다. 그래서 이어하기가 남은 45칸만 물으면
+ * 되고, 이미 답한 문항을 다시 물을 수 없다. 저장 페이로드에 한 필드만 늘렸다 —
+ * `mode`. 지금 어떤 진행 계획(기본 / 이어하기 / 전체)을 돌고 있는지는 `answers`만
+ * 봐서는 복원되지 않기 때문이다. `index`는 그 **계획 안에서의** 위치이지 90칸
+ * 좌표가 아니다.
+ *
+ * `mode`가 없는 저장본은 기본 검사(`'base'`)로 읽는다. 서명이 다른 저장본은
+ * 예전처럼 조용히 버린다 — 순서가 바뀌면 서명도 바뀌므로 자동으로 그렇게 된다.
  */
 
 export const STORAGE_KEY = 'enneagram-test.progress.v1';
@@ -28,11 +37,26 @@ export const SECTION_SIZE = 10;
 
 export type AnswerSlot = Likert | null;
 
+/**
+ * 진행 계획. 각 값에 대응하는 문항 위치 목록은 `data/questions.ts`가 소유한다.
+ * - `'base'`     기본 45문항 (유형당 5문항, 다섯 facet 각 1문항)
+ * - `'continue'` 기본 검사가 묻지 않은 45문항
+ * - `'full'`     90문항을 한 번에
+ */
+export type RunMode = 'base' | 'continue' | 'full';
+
 export type SavedProgress = {
   signature: string;
+  /** 언제나 길이 90(정본 문항 순서 좌표). */
   answers: AnswerSlot[];
+  /** **계획 안에서의** 위치. 90칸 좌표가 아니다. */
   index: number;
+  mode: RunMode;
 };
+
+export function toRunMode(value: unknown): RunMode {
+  return value === 'continue' || value === 'full' ? value : 'base';
+}
 
 /** 저장본이 어느 문항 세트의 것인지 식별한다. 달라지면 그 저장본은 버린다. */
 export function questionSetSignature(total: number, firstId: string, lastId: string): string {
@@ -107,7 +131,7 @@ export function readProgress(expected: { signature: string; total: number }): Sa
         ? rawIndex
         : 0;
 
-    return { signature: expected.signature, answers, index };
+    return { signature: expected.signature, answers, index, mode: toRunMode(record.mode) };
   } catch {
     return null;
   }

@@ -21,7 +21,7 @@ export const type3Questions: Question[] = [
     rationale:
       '평가 기준이 산출된 결과의 양이라는 점에서, 결과와 무관하게 제대로 했는지를 따지는 유형 1의 기준이 아니라 유형 3의 성과 동기를 잰다.',
     authoredBy: 'worker-items-a',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '하루 평가 기준을 성취량에 두는 진술로, 성공 지향 형용사 나열형과 문형이 다르다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '하루를 마감하는 시점의 자기평가 기준을 "무엇을 해냈는지"로 명시한 자체 문장으로, 성취 동기를 직접 선언하지 않는다.' },
   },
   {
     id: 'q3-02',
@@ -47,7 +47,7 @@ export const type3Questions: Question[] = [
     rationale:
       '불안의 축이 비교 우위와 유능해 보이는지에 있으므로, 자기에게 결여된 고유함을 비교하는 유형 4나 기준 위반을 걱정하는 유형 1과 구분되는 유형 3의 실패 이미지 두려움을 잰다.',
     authoredBy: 'worker-items-a',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '또래 비교 불안을 "뒤처져 보일까 봐"로 표현했고 번역투가 없다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"또래보다 뒤처져 보일까 봐"라는 상대 비교 프레임과 "때가 많다"는 빈도 표현을 써 절대 자기규정을 피했다.' },
   },
   {
     id: 'q3-04',
@@ -73,7 +73,7 @@ export const type3Questions: Question[] = [
     rationale:
       '주의의 대상이 인정 기준이라는 점에서, 같은 상황에서 올바른 절차가 먼저 보이는 유형 1의 주의 초점과 명확히 갈리는 유형 3 문항이다.',
     authoredBy: 'worker-items-a',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '새 과업에서 성과 기준을 먼저 탐색하는 초점을 자체 표현으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '새 업무에서 "무엇을 성과로 쳐주는가"라는 평가 기준 탐색을 초점으로 지정한 독자적 주의 초점 문형이다.' },
   },
   {
     id: 'q3-06',
@@ -99,7 +99,7 @@ export const type3Questions: Question[] = [
     rationale:
       '상대와 자리에 맞춰 자기 표현을 조정한다는 점에서, 어디서나 같은 기준을 적용하려는 유형 1과 달리 유형 3의 인상 조정을 잰다.',
     authoredBy: 'worker-items-a',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '인상 조정을 말투·태도라는 관찰 가능 행동으로 기술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"말투와 보여주는 모습"이라는 관찰 가능한 행동 단위로 상황별 이미지 조정을 기술해 기만 어휘를 배제했다.' },
   },
   {
     id: 'q3-08',
@@ -112,7 +112,7 @@ export const type3Questions: Question[] = [
     rationale:
       'q3-07과 같은 행동 차원(말투·태도를 청중에 따라 조정하는가)에서 반대 방향을 긍정문으로 쓴 역채점 문항이다. "자기답게 있는가"라는 유형 4의 진정성 진술이 아니라 "청중이 바뀔 때 자기 표현이 바뀌는가"만 묻도록 고쳐, 유형 3의 인상 조정 축에서 낮은 값만 가리킨다.',
     authoredBy: 'worker-items-a+worker-merge',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '인상 조정의 반대 방향을 긍정문으로 쓴 역채점 문장이다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q3-07의 반대 방향 긍정 진술로, "상대가 누구든 같은 말투와 태도"라는 일관성 표현을 자체 작성했다.' },
   },
   {
     id: 'q3-09',
@@ -138,6 +138,6 @@ export const type3Questions: Question[] = [
     rationale:
       '성과 진도와 휴식을 분리할 수 있음을 긍정문으로 쓴 역채점 문항으로, 마찰 없는 평온을 좇는 유형 9의 이완이 아니라 유형 3의 정지 곤란 축에서 낮은 값을 가리킨다.',
     authoredBy: 'worker-items-a',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '휴식 허용을 긍정문 역채점으로 서술했으며 기존 척도 표현과 겹치지 않는다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '미완의 업무와 휴식을 병치한 장면 설정으로 3번의 과잉활동 성향을 역방향에서 포착한 자체 문장이다.' },
   },
 ];

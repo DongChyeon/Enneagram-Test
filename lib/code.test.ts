@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { TypeId } from '../data/schema';
 import { decodeResult, encodeResult } from './code';
 import { TYPE_IDS, resultFromScores } from './scoring';
-import type { Scores } from './types';
+import type { ResultKind, Scores } from './types';
 
 function makeScores(values: number[]): Scores {
   return Object.fromEntries(TYPE_IDS.map((t, i) => [t, values[i]])) as Scores;
@@ -21,8 +21,8 @@ function makeRandom(seed: number): () => number {
   };
 }
 
-function roundTrip(scores: Scores): void {
-  const original = resultFromScores(scores);
+function roundTrip(scores: Scores, kind: ResultKind = 'full'): void {
+  const original = resultFromScores(scores, kind);
   const code = encodeResult(original);
 
   expect(code.length).toBeLessThanOrEqual(20);
@@ -31,6 +31,7 @@ function roundTrip(scores: Scores): void {
   const decoded = decodeResult(code);
   expect(decoded).not.toBeNull();
   expect(decoded).toEqual(original);
+  expect(decoded?.kind).toBe(kind);
 }
 
 describe('encodeResult / decodeResult — 라운드트립 (AC-9)', () => {
@@ -54,6 +55,35 @@ describe('encodeResult / decodeResult — 라운드트립 (AC-9)', () => {
     for (const values of boundaries) {
       roundTrip(makeScores(values));
     }
+  });
+
+  it('기본 45문항 무작위 1,000 조합이 무손실이고 kind가 보존된다', () => {
+    const random = makeRandom(20260921);
+    for (let i = 0; i < 1000; i += 1) {
+      const values = TYPE_IDS.map(() => 5 + Math.floor(random() * 21));
+      roundTrip(makeScores(values), 'base');
+    }
+  });
+
+  it('기본 45문항 경계 조합이 무손실이다', () => {
+    const boundaries: number[][] = [
+      [5, 5, 5, 5, 5, 5, 5, 5, 5],
+      [25, 25, 25, 25, 25, 25, 25, 25, 25],
+      [25, 5, 25, 5, 25, 5, 25, 5, 25],
+      [5, 25, 5, 25, 5, 25, 5, 25, 5],
+      [25, 24, 5, 5, 5, 5, 5, 5, 5],
+    ];
+    for (const values of boundaries) {
+      roundTrip(makeScores(values), 'base');
+    }
+  });
+
+  it('45문항 코드도 20자 이하다', () => {
+    const code = encodeResult(
+      resultFromScores(makeScores([25, 25, 25, 25, 25, 25, 25, 25, 25]), 'base'),
+    );
+    expect(code.length).toBe(18);
+    expect(code.length).toBeLessThanOrEqual(20);
   });
 
   it('코드 길이는 항상 20자 이하다', () => {
@@ -87,9 +117,33 @@ describe('decodeResult — 거부 조건 (AC-9)', () => {
     }
   });
 
-  it('버전 바이트가 다르면 null', () => {
-    const bytes = new Uint8Array([2, 50, 30, 20, 20, 20, 20, 20, 20, 30]);
-    expect(decodeResult(`1w9-${toBase64Url(bytes)}`)).toBeNull();
+  it('모르는 버전 바이트는 null', () => {
+    for (const version of [0, 3, 9, 255]) {
+      const bytes = new Uint8Array([version, 50, 30, 20, 20, 20, 20, 20, 20, 30]);
+      expect(decodeResult(`1w9-${toBase64Url(bytes)}`)).toBeNull();
+    }
+  });
+
+  /**
+   * 45문항 결과와 90문항 결과는 **다른 것**이다. 버전 바이트가 문항 세트를
+   * 가리키고 점수 범위 검증이 그 세트의 범위로 이뤄지므로, 한쪽 점수를 다른
+   * 쪽 버전으로 읽히게 만드는 코드는 디코드 단계에서 막힌다.
+   */
+  it('세트가 어긋난 코드는 null — 90문항 점수에 45문항 버전, 그 반대도', () => {
+    const fullScoresBaseVersion = new Uint8Array([2, 50, 30, 20, 20, 20, 20, 20, 20, 30]);
+    expect(decodeResult(`1w9-${toBase64Url(fullScoresBaseVersion)}`)).toBeNull();
+
+    const baseScoresFullVersion = new Uint8Array([1, 25, 15, 9, 9, 9, 9, 9, 9, 15]);
+    expect(decodeResult(`1w9-${toBase64Url(baseScoresFullVersion)}`)).toBeNull();
+  });
+
+  it('기본 45문항 점수가 5~25 범위를 벗어나면 null', () => {
+    const tooLow = new Uint8Array([2, 4, 15, 9, 9, 9, 9, 9, 9, 15]);
+    const tooHigh = new Uint8Array([2, 26, 15, 9, 9, 9, 9, 9, 9, 15]);
+    const inRange = new Uint8Array([2, 25, 15, 9, 9, 9, 9, 9, 9, 15]);
+    expect(decodeResult(`1w9-${toBase64Url(tooLow)}`)).toBeNull();
+    expect(decodeResult(`1w9-${toBase64Url(tooHigh)}`)).toBeNull();
+    expect(decodeResult(`1w9-${toBase64Url(inRange)}`)?.kind).toBe('base');
   });
 
   it('점수가 10~50 범위를 벗어나면 null', () => {

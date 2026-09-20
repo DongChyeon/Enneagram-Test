@@ -8,7 +8,7 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { questions } from '../data/questions';
+import { BASE_PLAN, CONTINUE_PLAN, questions } from '../data/questions';
 import { decodeResult } from '../lib/code';
 
 const push = vi.fn();
@@ -55,7 +55,7 @@ describe('TestRunner (AC-4)', () => {
 
   it('첫 문항에서 n/90 표기와 진행률 0, 그리고 비활성 "이전" 버튼을 보여준다', async () => {
     const TestRunner = await loadRunner();
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
 
     expect(screen.getByText(`/${TOTAL}`)).toBeTruthy();
     expect(progressBar().getAttribute('aria-valuenow')).toBe('0');
@@ -66,7 +66,7 @@ describe('TestRunner (AC-4)', () => {
 
   it('aria-valuenow가 응답한 문항 수를 따라간다', async () => {
     const TestRunner = await loadRunner();
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
 
     answer(4);
     expect(progressBar().getAttribute('aria-valuenow')).toBe('1');
@@ -76,7 +76,7 @@ describe('TestRunner (AC-4)', () => {
 
   it('"이전"으로 돌아가면 직전에 고른 값이 선택된 채로 복원된다', async () => {
     const TestRunner = await loadRunner();
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
 
     answer(5);
     expect(screen.getByText(questions[1].text)).toBeTruthy();
@@ -91,13 +91,13 @@ describe('TestRunner (AC-4)', () => {
 
   it('새로고침(재마운트)해도 sessionStorage에서 응답과 위치가 복원된다', async () => {
     const TestRunner = await loadRunner();
-    const first = render(<TestRunner />);
+    const first = render(<TestRunner requestedMode="full" />);
 
     answer(3);
     answer(1);
     first.unmount();
 
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
     act(() => {
       vi.advanceTimersByTime(0);
     });
@@ -116,7 +116,7 @@ describe('TestRunner (AC-4)', () => {
     );
 
     const TestRunner = await loadRunner();
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
     act(() => {
       vi.advanceTimersByTime(0);
     });
@@ -127,7 +127,7 @@ describe('TestRunner (AC-4)', () => {
 
   it('90문항을 전부 채우기 전에는 결과 이동이 막혀 있고, 다 채우면 /result/<code>로 간다', async () => {
     const TestRunner = await loadRunner();
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
 
     // 89문항까지만 답하고 마지막 문항으로 간다.
     for (let position = 0; position < TOTAL - 1; position += 1) {
@@ -179,7 +179,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
 
   it('진행률 바를 9칸으로 쪼개면서도 하나의 progressbar 계약을 유지한다', async () => {
     const TestRunner = await loadRunner();
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
 
     expect(screen.getAllByRole('progressbar')).toHaveLength(1);
     expect(progressBar().getAttribute('aria-valuemax')).toBe(String(TOTAL));
@@ -189,7 +189,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
 
   it('10문항을 채우면 다음 묶음 첫 문항 위에 완료 리본이 뜨고, 11번째를 답하면 사라진다', async () => {
     const TestRunner = await loadRunner();
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
 
     expect(screen.queryByRole('status')).toBeNull();
 
@@ -207,7 +207,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
 
   it('건너뛴 묶음은 완료라고 말하지 않는다', async () => {
     const TestRunner = await loadRunner();
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
 
     for (let position = 0; position < 9; position += 1) answer(4);
     // 10번 문항(index 9)을 비운 채 "다음"으로 경계를 넘는다.
@@ -220,7 +220,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
 
   it('묶음 경계를 넘어간 뒤에도 "이전"이 직전 선택값을 복원한다', async () => {
     const TestRunner = await loadRunner();
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
 
     for (let position = 0; position < 9; position += 1) answer(4);
     answer(2); // index 9 — 1묶음의 마지막 문항
@@ -235,12 +235,12 @@ describe('TestRunner 묶음 · 이어하기', () => {
 
   it('복원된 세션에는 이어하기 안내가 붙고, "처음부터"가 저장본을 지우고 1번으로 되돌린다', async () => {
     const TestRunner = await loadRunner();
-    const first = render(<TestRunner />);
+    const first = render(<TestRunner requestedMode="full" />);
     answer(3);
     answer(5);
     first.unmount();
 
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
     act(() => {
       vi.advanceTimersByTime(0);
     });
@@ -256,6 +256,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
         signature: `${TOTAL}:${questions[0].id}:${questions[TOTAL - 1].id}`,
         answers: Array.from({ length: TOTAL }, () => null),
         index: 0,
+        mode: 'full',
       }),
     );
     expect(progressBar().getAttribute('aria-valuenow')).toBe('0');
@@ -274,7 +275,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
     );
 
     const TestRunner = await loadRunner();
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
     act(() => {
       vi.advanceTimersByTime(0);
     });
@@ -284,7 +285,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
 
   it('마지막 묶음에 들어서면 남은 묶음 수 대신 마지막임을 알린다', async () => {
     const TestRunner = await loadRunner();
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
 
     for (let position = 0; position < TOTAL - 10; position += 1) answer(4);
 
@@ -310,12 +311,12 @@ describe('TestRunner 배너 겹침', () => {
 
   it('묶음 경계에서 복원해도 배너를 둘 쌓지 않는다 — 이어하기 안내만 남는다', async () => {
     const TestRunner = await loadRunner();
-    const first = render(<TestRunner />);
+    const first = render(<TestRunner requestedMode="full" />);
     for (let position = 0; position < 10; position += 1) answer(4);
     expect(screen.getByRole('status')).toBeTruthy();
     first.unmount();
 
-    render(<TestRunner />);
+    render(<TestRunner requestedMode="full" />);
     act(() => {
       vi.advanceTimersByTime(0);
     });
@@ -323,5 +324,176 @@ describe('TestRunner 배너 겹침', () => {
     expect(screen.getByText('이어서 답하는 중입니다.')).toBeTruthy();
     expect(screen.queryByRole('status')).toBeNull();
     expect(screen.getByText(questions[10].text)).toBeTruthy();
+  });
+});
+
+
+/** 화면에 떠 있는 문항의 id. `LikertScale`이 라디오 name으로 문항 id를 쓴다. */
+function currentQuestionId(): string {
+  return options()[0].name;
+}
+
+/**
+ * 자동 넘김 간격 (Part 3).
+ *
+ * 90문항이면 이 값이 90배로 쌓인다 — 확인으로 읽히는 최소 시간만 남긴다.
+ * 여기서 고정하는 것은 두 가지다: ① 간격이 지나기 전에는 **고른 값이 보인
+ * 채로 그 문항에 머문다**(점프가 아니라 확인이다) ② 손으로 넘기면 예약된
+ * 넘김이 취소되어 두 칸 건너뛰지 않는다.
+ */
+describe('TestRunner 자동 넘김', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    push.mockReset();
+    window.sessionStorage.clear();
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
+
+  it('100ms 전에는 고른 값이 보인 채로 머물고, 100ms에 다음 문항으로 넘어간다', async () => {
+    const TestRunner = await loadRunner();
+    render(<TestRunner requestedMode="full" />);
+
+    fireEvent.click(options()[4]);
+    act(() => {
+      vi.advanceTimersByTime(99);
+    });
+    expect(screen.getByText(questions[0].text)).toBeTruthy();
+    expect(options().map((input) => input.checked)).toEqual([false, false, false, false, true]);
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(screen.getByText(questions[1].text)).toBeTruthy();
+  });
+
+  it('손으로 넘기면 예약된 자동 넘김이 취소된다 — 두 칸 건너뛰지 않는다', async () => {
+    const TestRunner = await loadRunner();
+    render(<TestRunner requestedMode="full" />);
+
+    fireEvent.click(options()[2]);
+    fireEvent.click(screen.getByRole('button', { name: '다음' }));
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+
+    expect(screen.getByText(questions[1].text)).toBeTruthy();
+  });
+});
+
+/**
+ * 기본 45문항과 이어하기 45문항.
+ *
+ * **이 블록의 본체는 "다시 묻지 않는다"다.** 응답은 길이 90의 배열 하나이고
+ * 기본 검사는 그중 45칸만 채우므로, 이어하기가 남은 45칸만 돌면 이미 답한 문항이
+ * 다시 나올 수 없다. 두 번째 테스트가 45문항을 전부 돌며 그것을 확인한다.
+ */
+describe('TestRunner 기본 45문항 · 이어하기', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    push.mockReset();
+    window.sessionStorage.clear();
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
+
+  it('기본 진입(/test)은 45문항만 묻고 kind=base 코드를 만든다', async () => {
+    const TestRunner = await loadRunner();
+    render(<TestRunner />);
+
+    expect(screen.getByText(`/${BASE_PLAN.length}`)).toBeTruthy();
+    expect(progressBar().getAttribute('aria-valuemax')).toBe('45');
+    expect(currentQuestionId()).toBe(questions[BASE_PLAN[0]].id);
+
+    const asked: string[] = [];
+    for (let position = 0; position < BASE_PLAN.length; position += 1) {
+      asked.push(currentQuestionId());
+      answer(4);
+    }
+    expect(asked).toEqual(BASE_PLAN.map((at) => questions[at].id));
+    expect(progressBar().getAttribute('aria-valuenow')).toBe('45');
+
+    fireEvent.click(screen.getByRole('button', { name: '결과 보기' }));
+    const target = push.mock.calls[0][0] as string;
+    const decoded = decodeResult(target.slice('/result/'.length));
+    expect(decoded?.kind).toBe('base');
+    for (const typeId of [1, 2, 3, 4, 5, 6, 7, 8, 9] as const) {
+      expect(decoded?.scores[typeId]).toBeGreaterThanOrEqual(5);
+      expect(decoded?.scores[typeId]).toBeLessThanOrEqual(25);
+    }
+  });
+
+  it('이어하기는 남은 45문항만 묻고 — 답한 45문항은 한 번도 다시 나오지 않는다', async () => {
+    const TestRunner = await loadRunner();
+    const baseRun = render(<TestRunner />);
+    const answered: string[] = [];
+    for (let position = 0; position < BASE_PLAN.length; position += 1) {
+      answered.push(currentQuestionId());
+      answer(4);
+    }
+    baseRun.unmount();
+
+    render(<TestRunner requestedMode="continue" />);
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+
+    expect(screen.getByText(`/${CONTINUE_PLAN.length}`)).toBeTruthy();
+    expect(progressBar().getAttribute('aria-valuemax')).toBe('45');
+    expect(progressBar().getAttribute('aria-valuenow')).toBe('0');
+
+    const asked: string[] = [];
+    for (let position = 0; position < CONTINUE_PLAN.length; position += 1) {
+      asked.push(currentQuestionId());
+      answer(2);
+    }
+
+    expect(asked).toEqual(CONTINUE_PLAN.map((at) => questions[at].id));
+    expect(asked.filter((id) => answered.includes(id))).toEqual([]);
+    expect(new Set([...asked, ...answered]).size).toBe(TOTAL);
+
+    fireEvent.click(screen.getByRole('button', { name: '결과 보기' }));
+    const target = push.mock.calls[0][0] as string;
+    const decoded = decodeResult(target.slice('/result/'.length));
+    expect(decoded?.kind).toBe('full');
+    for (const typeId of [1, 2, 3, 4, 5, 6, 7, 8, 9] as const) {
+      expect(decoded?.scores[typeId]).toBeGreaterThanOrEqual(10);
+      expect(decoded?.scores[typeId]).toBeLessThanOrEqual(50);
+    }
+  });
+
+  it('기본 검사를 거치지 않고 이어하기로 들어오면 기본 45문항으로 돌린다', async () => {
+    const TestRunner = await loadRunner();
+    render(<TestRunner requestedMode="continue" />);
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+
+    expect(screen.getByText(`/${BASE_PLAN.length}`)).toBeTruthy();
+    expect(currentQuestionId()).toBe(questions[BASE_PLAN[0]].id);
+  });
+
+  it('기본 검사 도중 새로고침해도 기본 검사 자리에서 이어진다', async () => {
+    const TestRunner = await loadRunner();
+    const first = render(<TestRunner />);
+    answer(3);
+    answer(1);
+    first.unmount();
+
+    render(<TestRunner />);
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+
+    expect(screen.getByText(`/${BASE_PLAN.length}`)).toBeTruthy();
+    expect(progressBar().getAttribute('aria-valuenow')).toBe('2');
+    expect(currentQuestionId()).toBe(questions[BASE_PLAN[2]].id);
+    expect(screen.getByText('45문항 중 2문항을 답해 두었습니다.')).toBeTruthy();
   });
 });

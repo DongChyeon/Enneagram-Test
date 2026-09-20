@@ -30,9 +30,15 @@ import type { Scores } from '../lib/types';
 export type ScoreBarsProps = {
   scores: Scores;
   primaryType: TypeId;
+  /**
+   * 원점수의 가능 범위. 45문항 결과는 유형당 5문항이라 5~25,
+   * 90문항 결과는 10문항이라 10~50이다. 각주에 범위를 하드코딩하면
+   * 한쪽 경로에 틀린 숫자가 표시되므로 호출부가 넘긴다.
+   */
+  scoreRange: readonly [number, number];
 };
 
-export function ScoreBars({ scores, primaryType }: ScoreBarsProps) {
+export function ScoreBars({ scores, primaryType, scoreRange }: ScoreBarsProps) {
   const ordered = [...TYPE_IDS].sort((a, b) => scores[b] - scores[a]);
   const max = scores[ordered[0]];
   const gap = scores[ordered[0]] - scores[ordered[1]];
@@ -95,7 +101,7 @@ export function ScoreBars({ scores, primaryType }: ScoreBarsProps) {
       </ul>
 
       <p className="mt-5 text-[0.8125rem] leading-[1.7] text-ink-faint">
-        막대 길이는 가장 높은 유형을 100%로 둔 상대 비율이며, 오른쪽 숫자는 원점수(10~50)입니다.
+        막대 길이는 가장 높은 유형을 100%로 둔 상대 비율이며, 오른쪽 숫자는 원점수({scoreRange[0]}~{scoreRange[1]})입니다.
         원점수는 다른 사람과 비교하는 규준 점수가 아닙니다.
       </p>
     </section>

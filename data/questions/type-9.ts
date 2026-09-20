@@ -27,7 +27,7 @@ export const type9Questions: Question[] = [
     rationale:
       '5번과의 변별 — 5번이 소모될 자원을 아끼려 조용한 쪽을 택하는 것과 달리 9번은 내적 평온이 흔들리지 않는 쪽을 택한다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '선택 기준을 "마음이 덜 소란해지는 쪽"으로 표현해 순응 형용사형과 문형을 달리했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"마음이 덜 소란해지는 쪽"이라는 자체 비유로 9번의 선택 기준을 표현해 회피·나태 어휘를 배제했다.' },
   },
   {
     id: 'q9-02',
@@ -40,7 +40,7 @@ export const type9Questions: Question[] = [
     rationale:
       '7번과의 변별 — 새 자극 쪽으로 올라가는 7번식 이동을 반대 방향 긍정 진술로 두어, 가라앉는 쪽으로 안정을 찾는 9번 동기의 낮은 쪽 끝을 잰다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '변화 선호를 긍정문 역채점으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q9-01의 반대 방향 긍정 진술로 "잔잔한 쪽"과 "변화가 큰 쪽"의 대비를 자체 구성했다.' },
   },
   {
     id: 'q9-03',
@@ -92,7 +92,7 @@ export const type9Questions: Question[] = [
     rationale:
       '7번과의 변별 — 7번은 같은 질문에서 해볼 만한 재미있는 것이 먼저 떠오르는 반면 9번은 상대 쪽 선호가 먼저 떠오르고 자기 선호는 뒤로 밀린다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '선호를 묻는 질문에서 상대 쪽이 먼저 떠오르는 초점을 서술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '희망을 묻는 질문 장면에서 "상대가 원하는 쪽"이 먼저 떠오른다는 주의 초점 문형으로 자기 망각을 기술했다.' },
   },
   {
     id: 'q9-07',
@@ -105,7 +105,7 @@ export const type9Questions: Question[] = [
     rationale:
       '2번과의 변별 — 2번의 맞춤은 상대의 필요를 채우려는 능동적 개입인 반면 9번의 맞춤은 마찰을 피하려 자기 입장을 유보하는 것이다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '입장 유보를 비행동으로 기술해 유형 2의 능동 개입과 구분했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"굳이 말하지 않고 상대 쪽에 맞추는"이라는 행동 기술로 자기 의견 유보를 중립적으로 표현했다.' },
   },
   {
     id: 'q9-08',

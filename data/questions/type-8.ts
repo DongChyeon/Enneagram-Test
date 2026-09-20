@@ -37,20 +37,20 @@ export const type8Questions: Question[] = [
     rationale:
       '결정권을 남에게 넘겨도 편안하다는 반대 방향 진술로, 옳은 기준을 지키려는 1번의 순응이 아니라 자기 결정권 자체의 낮은 쪽 끝을 잰다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '지시 수용을 긍정문 역채점으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '8번의 자기결정 욕구를 "남이 정해 주는 대로 따라가는 쪽이 편하다"는 반대 방향 긍정 진술로 옮겼다.' },
   },
   {
     id: 'q8-03',
     typeId: 8,
-    text: '평소에 속사정을 털어놓기 전에 상대가 그걸 어떻게 쓸지 먼저 따져 보는 편이다.',
-    sourceId: 'naranjo-1994',
+    text: '평소에 약점을 내보이면 그만큼 상대에게 끌려다니게 된다고 여긴다.',
+    sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't8-vulnerability-fear',
     reverse: false,
     rationale:
-      '2번은 마음을 열어 관계를 얻으려는 반면 8번은 약점이 잡혀 휘둘릴 가능성을 먼저 차단한다는 점에서 갈린다.',
-    authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '취약성 노출 전 위험 계산을 행동 순서로 기술했다.' },
+      '약점을 통제의 지렛대로 본다는 점에서 8번의 통제 경계 축이다. 이전 판("상대가 그걸 어떻게 쓸지 따져 본다")은 상대를 믿어도 되는가를 물어 6번의 신뢰 검증 축이었고, q6-07과 같은 행동을 재고 있었다. 6번은 지지 부재를 두려워하지 주도권 상실을 두려워하지 않는다.',
+    authoredBy: 'worker-items-c+worker-merge',
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-6', note: '약점 노출을 상대에게 통제당하는 지렛대로 규정하는 인과 구도(약점을 내보이면 끌려다니게 된다)로 표현한 독자적 문장이며, 상용 검사의 의도-검증형 신뢰 문항이나 상투적 표현을 차용하지 않았다.' },
   },
   {
     id: 'q8-04',
@@ -115,7 +115,7 @@ export const type8Questions: Question[] = [
     rationale:
       '갈등 앞에서 물러선다는 반대 방향 진술로, 기준을 내세워 정정하는 1번의 개입이 아니라 정면 대면이라는 8번 관계 행동의 낮은 쪽 끝을 잰다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '대립 회피를 긍정문 역채점으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '의견 충돌 장면에서 "한발 물러서는"이라는 한국어 관용 표현을 쓴 반대 방향 긍정 진술이다.' },
   },
   {
     id: 'q8-09',

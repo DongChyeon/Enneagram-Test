@@ -23,7 +23,7 @@ export const type5Questions: Question[] = [
     rationale:
       '지체의 이유가 마찰 회피가 아니라 준비된 상태 확보이므로 9번이 아니라 5번의 동기를 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '선행 탐색 후 착수라는 행동 순서를 기술했고 지적 호기심 형용사형과 다르다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"충분히 알아본 뒤에야 움직이기 시작한다"는 행동 순서 기술로 5번의 지식 선행 성향을 표현했다.' },
   },
   {
     id: 'q5-02',
@@ -36,7 +36,7 @@ export const type5Questions: Question[] = [
     rationale:
       '준비 후 행동 동기의 반대 방향 긍정 진술로, 평온 유지가 아니라 앎의 충분함을 재므로 9번이 아니라 5번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '즉시 착수를 긍정문 역채점으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q5-01의 반대 방향 긍정 진술이며 "뛰어들어 부딪히며 익히는"이라는 한국어 관용구를 사용했다.' },
   },
   {
     id: 'q5-03',
@@ -49,20 +49,20 @@ export const type5Questions: Question[] = [
     rationale:
       '걱정의 대상이 관계의 불편함이 아니라 소모될 자원이므로 9번이 아니라 5번의 두려움을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '연속 약속에 대한 기운 고갈 예상을 자체 표현으로 서술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"약속이 연달아 잡히면"이라는 상황 조건과 "남은 기운"이라는 자원 비유로 에너지 보존 개념을 옮겼다.' },
   },
   {
     id: 'q5-04',
     typeId: 5,
-    text: '평소에 가진 것이 바닥나 남에게 기대야 하는 상황을 가장 피하고 싶다.',
+    text: '평소에 가진 것이 바닥나 남에게 기대는 처지를 다른 사람들보다 더 불편해한다.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't5-depletion-fear',
     reverse: false,
     rationale:
-      '피하려는 것이 갈등으로 자리를 잃는 일이 아니라 자원 고갈로 무력해지는 일이므로 9번이 아니라 5번을 잰다.',
+      '불편해하는 대상이 갈등으로 자리를 잃는 일이 아니라 자원이 바닥나 남에게 기대게 되는 일이므로 9번이 아니라 5번을 잰다. 절대 최상급(“가장 피하고 싶다”) 대신 상대 진술(“다른 사람들보다”)로 써서 묵종 편향을 낮췄다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '의존 회피라는 핵심 두려움을 "가진 것이 바닥나"라는 자원 은유로 새로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"다른 사람들보다 더 불편해한다"는 상대 비교 형식을 문면에 명시한 자체 문장이다.' },
   },
   {
     id: 'q5-05',
@@ -88,7 +88,7 @@ export const type5Questions: Question[] = [
     rationale:
       '먼저 보이는 것이 누구에게 맞춰야 하는가가 아니라 구조의 원리이므로 9번이 아니라 5번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '과업의 작동 원리를 먼저 보는 주의 초점 문장이다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '업무를 맡는 장면에서 "전체가 움직이는 원리"를 초점으로 지정한 주의 초점 문형으로 5번의 이해 지향을 표현했다.' },
   },
   {
     id: 'q5-07',
@@ -114,7 +114,7 @@ export const type5Questions: Question[] = [
     rationale:
       '관여 범위 자기 결정의 반대 방향 긍정 진술로, 조화 유지가 아니라 경계 관리를 재므로 9번이 아니라 5번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '범위 설정 없는 수용을 긍정문 역채점으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '요청 수용 시 "범위를 따지지 않고 그때그때"라는 경계 설정의 반대 방향 진술로 자체 작성했다.' },
   },
   {
     id: 'q5-09',
@@ -127,7 +127,7 @@ export const type5Questions: Question[] = [
     rationale:
       '혼자가 되는 목적이 마찰 회피가 아니라 소모된 자원의 회복이므로 9번이 아니라 5번의 부하 반응을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '재충전 행동을 혼자 있는 시간 확보로 구체화했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"요구가 몰린 날"과 "혼자 있는 시간"의 인과 기술로 철수 방어를 중립적 행동 언어로 옮겼다.' },
   },
   {
     id: 'q5-10',

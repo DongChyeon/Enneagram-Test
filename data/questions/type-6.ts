@@ -23,7 +23,7 @@ export const type6Questions: Question[] = [
     rationale:
       '확보의 목적이 현재의 오류 교정이 아니라 앞으로 기댈 기반 마련이므로 1번이 아니라 6번의 동기를 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '착수 전 근거 확보 행동을 기술했고 불안 형용사형 상용 문항과 문형이 다르다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"기댈 만한 근거부터 확보해 둔다"는 준비 행동 기술로 확실성 추구를 표현했다.' },
   },
   {
     id: 'q6-02',
@@ -36,7 +36,7 @@ export const type6Questions: Question[] = [
     rationale:
       '확실함 확보 동기의 반대 방향 긍정 진술로, 통제권 장악이 아니라 안전 기반의 필요를 재므로 8번이 아니라 6번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '보장 없는 진행을 긍정문 역채점으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q6-01의 반대 방향 긍정 진술로 "확실한 보장이 없어도 마음 편히"라는 조건절 대비를 자체 구성했다.' },
   },
   {
     id: 'q6-03',
@@ -49,7 +49,7 @@ export const type6Questions: Question[] = [
     rationale:
       '대비의 대상이 통제당할 가능성이 아니라 기댈 데 없이 혼자 감당하는 상황이므로 8번이 아니라 6번의 두려움을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '지원 부재 상황에 대한 사전 대비를 자체 표현으로 서술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"기댈 사람이 없는 상황"이라는 지지 상실 시나리오에 대한 사전 대비 행동으로 6번 핵심 두려움을 간접 기술했다.' },
   },
   {
     id: 'q6-04',
@@ -88,7 +88,7 @@ export const type6Questions: Question[] = [
     rationale:
       '먼저 보이는 것이 현재 준비물의 결함이 아니라 최악의 경우에 대한 대비이므로 1번이 아니라 6번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '여행 준비라는 구체 장면에 대비책 탐색을 결합한 자체 문장이다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '여행 준비라는 일상 장면에서 "어긋날 경우의 대비책"을 초점으로 지정한 독자적 주의 초점 문형이다.' },
   },
   {
     id: 'q6-07',
@@ -101,7 +101,7 @@ export const type6Questions: Question[] = [
     rationale:
       '거리를 두는 이유가 통제 거부가 아니라 신뢰 가능 여부의 확인이므로 8번이 아니라 6번의 관계 방식을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '신뢰 형성 전 의도 확인을 행동 순서로 기술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '초면 관계에서 "의도를 확인한 뒤에야 마음을 연다"는 순서 기술로 신뢰 검증 행동을 표현했다.' },
   },
   {
     id: 'q6-08',
@@ -114,7 +114,7 @@ export const type6Questions: Question[] = [
     rationale:
       '신뢰 확인 절차의 반대 방향 긍정 진술로, 상대의 오류 점검이 아니라 신뢰성 확인을 재므로 1번이 아니라 6번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '무조건적 신뢰를 긍정문 역채점으로 썼다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q6-07의 반대 방향 긍정 진술이며 "별다른 확인 없이 믿고 시작하는"이라는 한국어 표현을 사용했다.' },
   },
   {
     id: 'q6-09',

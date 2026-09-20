@@ -21,6 +21,8 @@
  *     읽는 사람이 누를 곳을 잘못 찾는다.
  */
 
+import Link from 'next/link';
+
 import { typeById } from '../data/types';
 import { wingByLabel } from '../data/wings';
 import type { Result } from '../lib/types';
@@ -46,6 +48,34 @@ export const DISCLAIMER_PARAGRAPHS: readonly string[] = [
 /** 면책 고지의 마지막 한 줄. 카드(`ShareCardArt`)가 싣는 것과 같은 문자열이다. */
 export const DISCLAIMER_LAST_LINE = '교육·자기이해 목적이며 임상적 진단이 아닙니다.';
 
+/**
+ * 45문항 결과의 **신뢰도 한계 고지** 확정 문구.
+ *
+ * 이 블록은 면책 고지를 대체하지 않는다 — 면책 고지는 그대로 아래에 있고, 이것이
+ * 하나 더 얹힌다. 표준화·타당화를 거치지 않았다는 한계는 45와 90에 **똑같이**
+ * 해당하므로 그 말은 여기 옮겨 적지 않는다. 여기 적는 것은 45문항에만 해당하는
+ * 것, 곧 **척도당 문항 수가 절반이라는 사실과 그 결과**뿐이다.
+ *
+ * .54는 Spearman-Brown 예언 공식으로 환산한 값이다 — 10문항 척도의 내적 일관성을
+ * .70으로 잡아도 문항을 5/10으로 줄이면
+ * `(0.5 × .70) / (1 + (0.5 − 1) × .70) ≈ .54`가 된다. 통상 쓰는 최소선 .70에는
+ * 미치지 못한다. 숫자를 적는 이유는 "조금 덜 정확하다"가 얼마나 덜인지를 읽는
+ * 사람이 스스로 판단할 수 있게 하기 위해서다.
+ *
+ * 말투는 **깎아내리지 않는다.** 45문항은 잠정치가 아니라 이 검사의 한 경로이고,
+ * 90문항은 같은 것을 두 번 물어 흔들림을 줄이는 다른 경로다.
+ */
+export const BASE_LIMIT_HEADING = '45문항으로 나온 결과입니다';
+
+export const BASE_LIMIT_PARAGRAPHS: readonly string[] = [
+  '아홉 유형의 다섯 개념을 한 번씩, 유형당 5문항으로 물었습니다. 유형 점수는 5~25점 범위이고, 문항 하나가 그 점수의 5분의 1을 쥐고 있습니다.',
+  '그래서 1위와 2위가 가깝게 나왔다면 문항 한두 개로 순서가 뒤집힐 수 있습니다. 5문항 척도의 내적 일관성은 전체 90문항을 .70으로 놓고 Spearman-Brown 공식으로 환산하면 약 .54로, 통상 쓰는 최소 기준 .70에는 미치지 못합니다.',
+  '나머지 45문항은 같은 개념을 다른 문장으로 한 번 더 묻습니다. 한 문항을 잘못 읽었거나 그날 기분에 끌려 답했더라도 짝이 되는 문항이 상쇄하므로, 다 답하면 결과가 지금과 달라질 수 있습니다.',
+];
+
+/** 이어하기 버튼 문구. `/test?continue`는 이미 답한 45문항을 다시 묻지 않는다. */
+export const CONTINUE_CTA = '45문항 더 답하고 정확도 높이기';
+
 export type ResultViewProps = {
   result: Result;
   /** 공유 링크·카드 URL의 코드. */
@@ -56,6 +86,7 @@ export type ResultViewProps = {
 type DetailBlock = { title: string; body: string | readonly string[] };
 
 export function ResultView({ result, code }: ResultViewProps) {
+  const base = result.kind === 'base';
   const type = typeById.get(result.primaryType);
   const wing = wingByLabel.get(result.wing);
 
@@ -81,7 +112,9 @@ export function ResultView({ result, code }: ResultViewProps) {
         <div className="flex items-center gap-5">
           <TypeMark typeId={result.primaryType} dot={6} />
           <div className="min-w-0">
-            <p className="text-[0.875rem] font-medium text-ink-faint">가장 높게 나온 유형</p>
+            <p className="text-[0.875rem] font-medium text-ink-faint">
+              {base ? '45문항에서 가장 높게 나온 유형' : '90문항에서 가장 높게 나온 유형'}
+            </p>
             <h1 className="mt-1.5 text-[1.625rem] font-bold leading-[1.35] tracking-[-0.03em] text-ink sm:text-[2rem]">
               {result.primaryType}유형 · {type.nameKo}
             </h1>
@@ -96,6 +129,22 @@ export function ResultView({ result, code }: ResultViewProps) {
       {/* ⑤ 모호성 안내 — isAmbiguous(1위−2위 < 3)일 때만.
           경고가 아니라 **읽을 것**이므로 노랑도 파랑도 쓰지 않는다. 회색 면 위에
           잉크 한 점만 찍어 눈이 먼저 걸리게 한다. */}
+      {base ? (
+        <aside
+          aria-labelledby="base-limit-heading"
+          className="animate-rise-in mt-8 rounded-card bg-sub p-5 sm:p-7"
+        >
+          <h2 id="base-limit-heading" className="text-[1.0625rem] font-bold leading-[1.5] text-ink">
+            {BASE_LIMIT_HEADING}
+          </h2>
+          <div className="mt-3 space-y-3 text-[0.9375rem] leading-[1.7] text-ink-soft">
+            {BASE_LIMIT_PARAGRAPHS.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+        </aside>
+      ) : null}
+
       {result.ambiguous ? (
         <aside role="note" className="animate-rise-in mt-8 flex gap-3.5 rounded-card bg-sub p-5">
           <span
@@ -160,9 +209,38 @@ export function ResultView({ result, code }: ResultViewProps) {
       </section>
 
       {/* ④ 상대 비율 막대 + 원점수 + 1위–2위 점수차 */}
-      <ScoreBars scores={result.scores} primaryType={result.primaryType} />
+      {/*
+        두 경로 모두 분포를 보여준다. 이 화면이 "당신의 유형은 X입니다"라고 단정하지
+        않고 9유형 프로파일을 제시하는 것은 요인 구조가 아홉으로 재현되지 않는다는
+        연구(hook-2021, newgent-2004)에 대한 대응이다 — 45문항 경로에서 분포가 빠지면
+        그 정직성 설계가 절반만 작동한다. 각주의 원점수 범위는 `ScoreBars`가 인자로 받는다.
+      */}
+      <ScoreBars
+        scores={result.scores}
+        primaryType={result.primaryType}
+        scoreRange={base ? [5, 25] : [10, 50]}
+      />
 
       <ShareActions code={code} />
+
+      {base ? (
+        <section aria-labelledby="continue-heading" className="mt-14 rounded-card bg-sub p-5 sm:p-7">
+          <h2 id="continue-heading" className="text-[1.125rem] font-bold tracking-[-0.01em] text-ink">
+            남은 45문항
+          </h2>
+          <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">
+            같은 다섯 개념을 서로 다른 문장으로 한 번 더 묻습니다. 다 답하면 90문항 결과가 되고
+            9유형 점수 분포도 함께 나옵니다.{' '}
+            <strong className="font-bold text-ink">이미 답한 45문항은 다시 묻지 않습니다.</strong>
+          </p>
+          <Link
+            href="/test?continue"
+            className="press mt-5 flex min-h-[3.5rem] w-full items-center justify-center rounded-control bg-primary px-6 text-center text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press"
+          >
+            {CONTINUE_CTA}
+          </Link>
+        </section>
+      ) : null}
 
       {/* ⑥ 면책 고지 */}
       <section
