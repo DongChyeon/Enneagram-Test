@@ -204,25 +204,29 @@ export default function TestRunner() {
 
   return (
     <div className="flex min-h-[100svh] flex-col bg-paper">
-      <header className="sticky top-0 z-10 border-b border-line bg-paper/95 backdrop-blur">
+      {/*
+        상단 고정 막대. 90문항 내내 한 번도 사라지지 않는 유일한 면이라
+        내용을 세 줄로 제한한다: 지금 몇 번째인가 · 전체 진척 · 이 묶음의 진척.
+      */}
+      <header className="sticky top-0 z-10 border-b border-line bg-paper/90 backdrop-blur">
         <div className="mx-auto w-full max-w-[34rem] px-5 py-3.5 sm:px-8">
           <div className="flex items-baseline justify-between gap-4">
             <Link
               href="/"
-              className="text-[0.75rem] font-medium text-ink-faint transition-colors hover:text-ink-soft"
+              className="press text-[0.875rem] font-medium text-ink-faint hover:text-ink-soft"
             >
               ← 소개로
             </Link>
-            <p className="tnum text-[0.9375rem] font-semibold text-ink">
+            <p className="tnum text-[1rem] font-bold tracking-[-0.02em] text-ink">
               {index + 1}
-              <span className="font-normal text-ink-faint">/{TOTAL}</span>
+              <span className="font-medium text-ink-faint">/{TOTAL}</span>
             </p>
           </div>
           <div className="mt-2.5">
             <ProgressBar value={answeredCount} max={TOTAL} segments={SECTION_COUNT} />
           </div>
-          <p className="tnum mt-1.5 text-[0.6875rem] text-ink-faint">
-            <span className="font-semibold text-ink-soft">
+          <p className="tnum mt-2 text-[0.75rem] font-medium text-ink-faint">
+            <span className="font-bold text-ink-soft">
               묶음 {section + 1}/{SECTION_COUNT}
             </span>
             {' · '}이 묶음에서 {sectionAnswered}/{sectionSize}문항
@@ -230,32 +234,32 @@ export default function TestRunner() {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-[34rem] flex-1 flex-col px-5 pb-10 pt-8 sm:px-8 sm:pt-10">
+      <main className="mx-auto flex w-full max-w-[34rem] flex-1 flex-col px-5 pb-12 pt-8 sm:px-8 sm:pt-10">
         {!restored ? (
           <p className="pt-10 text-[0.9375rem] text-ink-faint">문항을 불러오는 중입니다…</p>
         ) : (
           <>
             {resumed ? (
-              <div className="animate-item-in mb-6 rounded-lg border border-line bg-surface p-4">
-                <p className="text-[0.875rem] leading-[1.6] text-ink">
-                  <span className="font-semibold">이어서 답하는 중입니다.</span>{' '}
+              <div className="animate-item-in mb-7 rounded-card bg-sub p-5">
+                <p className="text-[0.9375rem] leading-[1.6] text-ink">
+                  <span className="font-bold">이어서 답하는 중입니다.</span>{' '}
                   <span className="tnum text-ink-soft">
                     {TOTAL}문항 중 {answeredCount}문항을 답해 두었습니다.
                   </span>
                 </p>
                 {confirmingReset ? (
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     <button
                       type="button"
                       onClick={restart}
-                      className="min-h-[2.75rem] flex-1 rounded-lg border border-line-strong bg-surface px-4 text-[0.875rem] font-semibold text-ink transition-colors duration-150 hover:border-ink-faint"
+                      className="press min-h-[3rem] flex-1 rounded-control bg-white px-4 text-[0.9375rem] font-bold text-ink hover:bg-line/50"
                     >
                       지우고 1번부터
                     </button>
                     <button
                       type="button"
                       onClick={() => setConfirmingReset(false)}
-                      className="min-h-[2.75rem] flex-1 rounded-lg px-4 text-[0.875rem] font-semibold text-ink-faint transition-colors duration-150 hover:text-ink-soft"
+                      className="press min-h-[3rem] flex-1 rounded-control px-4 text-[0.9375rem] font-bold text-ink-faint hover:text-ink-soft"
                     >
                       취소
                     </button>
@@ -264,7 +268,7 @@ export default function TestRunner() {
                   <button
                     type="button"
                     onClick={() => setConfirmingReset(true)}
-                    className="mt-2 text-[0.8125rem] font-semibold text-accent underline underline-offset-4"
+                    className="mt-3 text-[0.875rem] font-bold text-primary underline underline-offset-4 hover:text-primary-press"
                   >
                     처음부터 다시 하기
                   </button>
@@ -272,20 +276,28 @@ export default function TestRunner() {
               </div>
             ) : null}
 
+            {/*
+              묶음 완료 리본. 앞 묶음을 **실제로 다 채웠을 때만** 뜬다.
+              면은 회색이고 파랑은 체크 하나뿐이다 — 이 줄은 읽을 것이지
+              누를 것이 아니므로 파랑을 면으로 깔지 않는다.
+            */}
             {crossedSection ? (
               <p
                 role="status"
-                className="animate-item-in mb-6 flex items-center gap-2.5 rounded-lg bg-accent-wash px-4 py-3 text-[0.875rem] leading-[1.6] text-accent-strong"
+                className="animate-item-in mb-7 flex items-center gap-3 rounded-card bg-sub px-5 py-4 text-[0.9375rem] leading-[1.6] text-ink"
               >
-                <span aria-hidden="true" className="text-[0.75rem] font-semibold">
+                <span
+                  aria-hidden="true"
+                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-[0.75rem] font-bold text-white"
+                >
                   ✓
                 </span>
                 <span>
-                  <span className="tnum font-semibold">{section}번째 묶음</span>을 끝냈습니다.{' '}
+                  <span className="tnum font-bold">{section}번째 묶음</span>을 끝냈습니다.{' '}
                   {remainingSections === 1 ? (
                     <>이제 마지막 묶음, {sectionSize}문항 남았습니다.</>
                   ) : (
-                    <span className="tnum">{remainingSections}묶음 남았습니다.</span>
+                    <span className="tnum text-ink-soft">{remainingSections}묶음 남았습니다.</span>
                   )}
                 </span>
               </p>
@@ -293,22 +305,19 @@ export default function TestRunner() {
 
             <fieldset key={question.id} className="animate-item-in">
               <legend className="mb-7 w-full">
-                <span className="tnum block text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-accent">
-                  Question {index + 1}
-                </span>
-                <span className="mt-3 block text-[1.3125rem] font-semibold leading-[1.6] tracking-[-0.01em] text-ink sm:text-[1.5rem]">
+                <span className="block text-[1.375rem] font-bold leading-[1.45] tracking-[-0.02em] text-ink sm:text-[1.625rem]">
                   {question.text}
                 </span>
               </legend>
               <LikertScale name={question.id} value={answers[index]} onChange={select} />
             </fieldset>
 
-            <div className="mt-8 flex gap-3">
+            <div className="mt-7 flex gap-2">
               <button
                 type="button"
                 onClick={() => goTo(index - 1)}
                 disabled={index === 0}
-                className="min-h-[3rem] flex-1 rounded-lg border border-line bg-surface text-[0.9375rem] font-semibold text-ink-soft transition-colors duration-150 hover:border-line-strong disabled:cursor-not-allowed disabled:border-line disabled:bg-transparent disabled:text-ink-faint/60 disabled:hover:border-line"
+                className="press min-h-[3.25rem] flex-1 rounded-control bg-sub text-[0.9375rem] font-bold text-ink-soft hover:bg-line/60 disabled:cursor-not-allowed disabled:bg-sub disabled:text-ink-faint/50 disabled:hover:bg-sub"
               >
                 이전
               </button>
@@ -316,7 +325,7 @@ export default function TestRunner() {
                 type="button"
                 onClick={() => goTo(index + 1)}
                 disabled={index === TOTAL - 1}
-                className="min-h-[3rem] flex-1 rounded-lg border border-line bg-surface text-[0.9375rem] font-semibold text-ink-soft transition-colors duration-150 hover:border-line-strong disabled:cursor-not-allowed disabled:border-line disabled:bg-transparent disabled:text-ink-faint/60 disabled:hover:border-line"
+                className="press min-h-[3.25rem] flex-1 rounded-control bg-sub text-[0.9375rem] font-bold text-ink-soft hover:bg-line/60 disabled:cursor-not-allowed disabled:bg-sub disabled:text-ink-faint/50 disabled:hover:bg-sub"
               >
                 다음
               </button>
@@ -324,25 +333,25 @@ export default function TestRunner() {
 
             <div aria-live="polite" className="mt-4">
               {error !== null ? (
-                <p className="rounded-lg border border-line-strong bg-surface px-4 py-3 text-[0.875rem] leading-[1.6] text-ink">
+                <p className="rounded-control bg-sub px-4 py-3.5 text-[0.875rem] font-medium leading-[1.6] text-ink">
                   {error}
                 </p>
               ) : null}
             </div>
 
             {showFinishPanel ? (
-              <div className="mt-2 rounded-lg border border-line bg-surface p-4">
+              <div className="mt-3 rounded-card bg-sub p-5">
                 {allAnswered ? (
-                  <p className="text-[0.875rem] leading-[1.6] text-ink-soft">
+                  <p className="text-[0.9375rem] leading-[1.6] text-ink-soft">
                     {TOTAL}문항에 모두 답했습니다. 결과는 링크 주소 안에 담기며 서버에 저장되지 않습니다.
                   </p>
                 ) : (
-                  <p className="text-[0.875rem] leading-[1.6] text-ink-soft">
+                  <p className="text-[0.9375rem] leading-[1.6] text-ink-soft">
                     아직 {TOTAL - answeredCount}문항이 비어 있어 결과를 낼 수 없습니다.{' '}
                     <button
                       type="button"
                       onClick={() => goTo(firstUnanswered)}
-                      className="font-semibold text-accent underline underline-offset-4"
+                      className="font-bold text-primary underline underline-offset-4 hover:text-primary-press"
                     >
                       {firstUnanswered + 1}번 문항으로 이동
                     </button>
@@ -352,14 +361,14 @@ export default function TestRunner() {
                   type="button"
                   onClick={submit}
                   disabled={!allAnswered || submitting}
-                  className="mt-3 min-h-[3.25rem] w-full rounded-lg bg-accent text-[1rem] font-semibold text-white transition-colors duration-150 hover:bg-accent-strong disabled:cursor-not-allowed disabled:bg-line-strong disabled:text-white/80 disabled:hover:bg-line-strong"
+                  className="press mt-4 min-h-[3.5rem] w-full rounded-control bg-primary text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press disabled:cursor-not-allowed disabled:bg-line disabled:text-ink-faint disabled:hover:bg-line"
                 >
                   {submitting ? '결과를 여는 중…' : '결과 보기'}
                 </button>
               </div>
             ) : null}
 
-            <p className="mt-8 text-[0.75rem] leading-[1.7] text-ink-faint">
+            <p className="mt-10 text-[0.8125rem] leading-[1.7] text-ink-faint">
               고민이 길어지면 처음 떠오른 쪽을 고르세요. {SECTION_SIZE}문항씩 {SECTION_COUNT}묶음으로
               나뉘어 있고, 같은 탭에서는 새로고침하거나 잠시 나갔다 와도 이어서 답할 수 있습니다.
               키보드를 쓴다면 1–5 키로 바로 선택할 수 있습니다.

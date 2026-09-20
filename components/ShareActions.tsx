@@ -17,6 +17,13 @@
  * iOS Safari에서 실패하는 조합이 정확히 이것이다.
  * `fetch → blob → File`은 다운로드가 아니라 공유 시트에 넘길 객체를 만드는
  * 용도이므로 ①에서 허용된다.
+ *
+ * ## 색과 배치
+ * 세 갈래 중 **주 경로는 하나뿐**이므로 파랑도 하나뿐이다 — 「카드 공유」만
+ * 채운 파랑이고, 나머지 둘은 회색 면이다. 폴백을 같은 무게로 세워 두면
+ * 셋 다 똑같이 중요해 보이고, 그 순간 이 구역은 선택지 세 개가 된다.
+ * 390px에서 세 버튼이 한 줄에 못 들어가므로 주 버튼은 전폭, 폴백 둘은
+ * 아래 한 줄에 반씩 놓는다.
  */
 
 import { useState } from 'react';
@@ -27,6 +34,9 @@ export type ShareActionsProps = {
 };
 
 type Status = { kind: 'idle' | 'ok' | 'fail'; message: string };
+
+const SECONDARY =
+  'press flex min-h-[3.25rem] flex-1 items-center justify-center rounded-control bg-sub px-4 text-[0.9375rem] font-bold text-ink-soft hover:bg-line/60';
 
 export function ShareActions({ code }: ShareActionsProps) {
   const [status, setStatus] = useState<Status>({ kind: 'idle', message: '' });
@@ -67,52 +77,41 @@ export function ShareActions({ code }: ShareActionsProps) {
   }
 
   return (
-    <section aria-labelledby="share-heading" className="mt-8">
-      <h2 id="share-heading" className="text-base font-bold">
+    <section aria-labelledby="share-heading" className="mt-14">
+      <h2 id="share-heading" className="text-[1.25rem] font-bold text-ink">
         결과 공유·저장
       </h2>
 
-      <div className="mt-3 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={copyLink}
-          className="min-h-11 rounded-lg border border-neutral-300 px-4 text-sm font-medium"
-        >
+      <button
+        type="button"
+        onClick={shareCard}
+        className="press mt-5 min-h-[3.5rem] w-full rounded-control bg-primary px-6 text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press"
+      >
+        카드 공유
+      </button>
+
+      <div className="mt-2 flex gap-2">
+        <button type="button" onClick={copyLink} className={SECONDARY}>
           링크 복사
         </button>
-        {/* ① Web Share */}
-        <button
-          type="button"
-          onClick={shareCard}
-          className="min-h-11 rounded-lg bg-emerald-800 px-4 text-sm font-medium text-white"
-        >
-          카드 공유
-        </button>
-        {/* ② 동일 출처 앵커 다운로드 — 파일명은 download 속성이 나른다 */}
-        <a
-          href={`${cardUrl}?dl=1`}
-          download={fileName}
-          className="flex min-h-11 items-center rounded-lg border border-neutral-300 px-4 text-sm font-medium"
-        >
+        <a href={`${cardUrl}?dl=1`} download={fileName} className={SECONDARY}>
           카드 내려받기
         </a>
       </div>
 
-      <p aria-live="polite" className="mt-2 min-h-5 text-xs text-neutral-600">
+      <p aria-live="polite" className="mt-3 min-h-5 text-[0.8125rem] leading-[1.6] text-ink-soft">
         {status.message}
       </p>
 
-      {/* ③ 인라인 이미지 — 맨 URL이라 content-disposition이 없고 그대로 렌더된다 */}
       <figure className="mt-4">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={cardUrl}
           alt="결과 공유 카드 미리보기"
           width={1080}
           height={1350}
-          className="w-full max-w-xs rounded-xl border border-neutral-200"
+          className="w-full max-w-[17rem] rounded-card border border-line"
         />
-        <figcaption className="mt-2 text-xs text-neutral-600">
+        <figcaption className="mt-3 text-[0.8125rem] leading-[1.7] text-ink-faint">
           위 두 버튼이 동작하지 않으면 카드를 길게 눌러 저장하세요.
         </figcaption>
       </figure>

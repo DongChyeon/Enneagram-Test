@@ -1,10 +1,3 @@
-/**
- * 면책 고지 (R3 완화 ①의 세 표면 중 랜딩·결과가 쓰는 전문판).
- *
- * 문구는 `.omc/plans/open-questions.md`에서 확정된 **축자 고정 텍스트**다.
- * 문장을 고치지 말 것 — 줄바꿈만 화면 폭에 맞춰 문단으로 나눴다.
- * 공유 카드는 공간 제약 때문에 마지막 한 줄만 쓴다(AC-11).
- */
 export const DISCLAIMER_LAST_LINE = '교육·자기이해 목적이며 임상적 진단이 아닙니다.';
 
 const PARAGRAPHS = [
@@ -14,24 +7,26 @@ const PARAGRAPHS = [
   '채용·인사 평가·진로 결정·정신건강 판단의 근거로 사용하지 마십시오.',
 ];
 
+/**
+ * 면책 고지. **문구는 결과 페이지·공유 카드와 한 글자도 다르면 안 된다** —
+ * 같은 말을 세 표면에서 같게 하는 것이 이 고지의 존재 이유다. 여기서 바뀌는
+ * 것은 담는 그릇뿐이다: 테두리 상자 대신 가라앉은 회색 면, 넉넉한 여백.
+ */
 export default function Disclaimer() {
   return (
     <section
       aria-labelledby="disclaimer-heading"
-      className="rounded-lg border border-line bg-surface px-5 py-6 sm:px-7 sm:py-7"
+      className="rounded-card bg-sub px-5 py-6 sm:px-7 sm:py-7"
     >
-      <h2
-        id="disclaimer-heading"
-        className="text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-ink-faint"
-      >
-        Disclaimer
+      <h2 id="disclaimer-heading" className="text-[0.9375rem] font-bold text-ink">
+        읽어 주세요
       </h2>
-      <div className="mt-4 space-y-3 text-[0.9375rem] leading-[1.75] text-ink-soft">
+      <div className="mt-3.5 space-y-3 text-[0.9375rem] leading-[1.7] text-ink-soft">
         {PARAGRAPHS.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}
       </div>
-      <p className="mt-5 border-t border-line pt-4 text-[0.9375rem] font-semibold leading-[1.7] text-ink">
+      <p className="mt-5 text-[0.9375rem] font-bold leading-[1.7] text-ink">
         {DISCLAIMER_LAST_LINE}
       </p>
     </section>

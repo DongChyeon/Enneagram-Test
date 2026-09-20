@@ -32,11 +32,6 @@ const config: Config = {
           press: 'var(--primary-press)',
           wash: 'var(--primary-wash)',
         },
-        accent: {
-          DEFAULT: 'var(--accent)',
-          strong: 'var(--accent-strong)',
-          wash: 'var(--accent-wash)',
-        },
       },
       borderRadius: {
         // 큰 면 16px, 컨트롤 14px — 이 둘만 쓴다.

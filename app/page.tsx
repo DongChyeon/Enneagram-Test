@@ -53,31 +53,29 @@ const DOES_NOT = [
 
 export default function HomePage() {
   return (
-    <main className="mx-auto w-full max-w-[38rem] px-5 pb-20 pt-14 sm:px-8 sm:pt-20">
+    <main className="mx-auto w-full max-w-[38rem] px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
       <header className="animate-rise-in">
-        <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-accent">
-          Enneagram · Self-report
-        </p>
-        <h1 className="mt-4 text-[1.625rem] font-bold leading-[1.4] tracking-[-0.02em] text-ink sm:text-[2.25rem] sm:leading-[1.35]">
+        <h1 className="text-[1.75rem] font-bold leading-[1.4] tracking-[-0.03em] text-ink sm:text-[2.375rem] sm:leading-[1.32]">
           아홉 가지 동기 패턴 중<br />
           어디에 기대고 있는지 적어 봅니다
         </h1>
-        <p className="mt-5 text-[1.0625rem] leading-[1.75] text-ink-soft">
+        <p className="mt-5 text-[1.0625rem] leading-[1.65] text-ink-soft">
           {TOTAL}개의 문장을 읽고 요즘의 자신에게 얼마나 들어맞는지 고르면 됩니다.
           맞히는 시험이 아니라, 스스로를 어떻게 보고 있는지를 정리하는 기록에 가깝습니다.
         </p>
-        <p className="mt-4 text-[0.9375rem] leading-[1.75] text-ink-soft">
+        <p className="mt-4 text-[0.9375rem] leading-[1.7] text-ink-soft">
           한 화면에 한 문장씩 나오고, 고르면 다음 문장으로 저절로 넘어갑니다. {SECTION_SIZE}문항씩{' '}
           {SECTION_COUNT}묶음으로 끊어 보여 주므로 지금 어디쯤인지 늘 보이고, 끝까지 대개{' '}
-          <strong className="font-semibold text-ink">10–15분</strong> 걸립니다.
+          <strong className="font-bold text-ink">10–15분</strong> 걸립니다.
         </p>
       </header>
 
-      <dl className="mt-9 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line">
+      {/* 네 가지 사실. 칸을 선으로 나누지 않고 가라앉은 한 면 안에 여백으로 나눈다. */}
+      <dl className="mt-8 grid grid-cols-2 gap-x-4 gap-y-5 rounded-card bg-sub px-5 py-5">
         {FACTS.map((fact) => (
-          <div key={fact.label} className="bg-surface px-4 py-3.5">
-            <dt className="text-[0.75rem] tracking-[0.02em] text-ink-faint">{fact.label}</dt>
-            <dd className="mt-1 text-[0.9375rem] font-semibold text-ink">{fact.value}</dd>
+          <div key={fact.label}>
+            <dt className="text-[0.8125rem] font-medium text-ink-faint">{fact.label}</dt>
+            <dd className="mt-1 text-[1rem] font-bold tracking-[-0.01em] text-ink">{fact.value}</dd>
           </div>
         ))}
       </dl>
@@ -86,39 +84,48 @@ export default function HomePage() {
 
       <Link
         href="/test"
-        className="mt-7 flex min-h-[3.5rem] w-full items-center justify-center gap-2 rounded-lg bg-accent px-6 text-[1.0625rem] font-semibold text-white transition-colors duration-150 hover:bg-accent-strong active:bg-accent-strong"
+        className="press mt-7 flex min-h-[3.5rem] w-full items-center justify-center rounded-control bg-primary px-6 text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press"
       >
         검사 시작하기
-        <span aria-hidden="true">→</span>
       </Link>
-      <p className="mt-3 text-center text-[0.8125rem] leading-[1.7] text-ink-faint">
+      <p className="mt-3.5 text-center text-[0.8125rem] leading-[1.7] text-ink-faint">
         한 번에 다 하지 않아도 됩니다. 중간에 나가도, 새로고침해도 같은 탭에서는 멈춘 자리에서
         이어집니다.
       </p>
 
-      <section aria-labelledby="does-heading" className="mt-14">
-        <h2 id="does-heading" className="text-[1.125rem] font-bold tracking-[-0.01em] text-ink">
+      <section aria-labelledby="does-heading" className="mt-16">
+        <h2 id="does-heading" className="text-[1.25rem] font-bold text-ink">
           이 검사가 하는 일
         </h2>
-        <ul className="mt-5 space-y-6">
-          {DOES.map((item) => (
-            <li key={item.title} className="border-l-2 border-accent-wash pl-4">
-              <h3 className="text-[0.9375rem] font-semibold leading-[1.6] text-ink">{item.title}</h3>
-              <p className="mt-1.5 text-[0.9375rem] leading-[1.75] text-ink-soft">{item.body}</p>
+        <ul className="mt-6 space-y-7">
+          {DOES.map((item, order) => (
+            <li key={item.title} className="flex gap-3.5">
+              <span
+                aria-hidden="true"
+                className="tnum mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sub text-[0.75rem] font-bold text-ink-faint"
+              >
+                {order + 1}
+              </span>
+              <div className="min-w-0">
+                <h3 className="text-[1rem] font-bold leading-[1.5] tracking-[-0.01em] text-ink">
+                  {item.title}
+                </h3>
+                <p className="mt-1.5 text-[0.9375rem] leading-[1.7] text-ink-soft">{item.body}</p>
+              </div>
             </li>
           ))}
         </ul>
       </section>
 
-      <section aria-labelledby="does-not-heading" className="mt-12">
-        <h2 id="does-not-heading" className="text-[1.125rem] font-bold tracking-[-0.01em] text-ink">
+      <section aria-labelledby="does-not-heading" className="mt-14">
+        <h2 id="does-not-heading" className="text-[1.25rem] font-bold text-ink">
           이 검사가 하지 않는 일
         </h2>
-        <ul className="mt-5 space-y-3.5">
+        <ul className="mt-6 space-y-4">
           {DOES_NOT.map((item) => (
             <li
               key={item}
-              className="relative pl-5 text-[0.9375rem] leading-[1.75] text-ink-soft before:absolute before:left-0 before:top-[0.8em] before:h-px before:w-3 before:bg-line-strong"
+              className="relative pl-4 text-[0.9375rem] leading-[1.7] text-ink-soft before:absolute before:left-0 before:top-[0.72em] before:h-1 before:w-1 before:rounded-full before:bg-ink-faint"
             >
               {item}
             </li>
@@ -126,7 +133,7 @@ export default function HomePage() {
         </ul>
       </section>
 
-      <div className="mt-12">
+      <div className="mt-14">
         <Disclaimer />
       </div>
     </main>

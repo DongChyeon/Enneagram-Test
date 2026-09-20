@@ -14,8 +14,10 @@
  * 나머지 화면은 흰 바탕 + 회색 계단 + 거의 검정인 본문으로만 구성한다.
  * 면·면의 구분은 1px 선이 아니라 `--bg-sub` 채움과 여백이 맡는다.
  *
- * `--paper` / `--surface` / `--accent*`는 기존 클래스 이름을 깨지 않기 위한
- * 호환 별칭이다 — 값만 새 체계로 다시 가리킨다.
+ * `--paper` / `--surface`는 기존 클래스 이름(`bg-paper` 등)을 깨지 않기 위한
+ * 호환 별칭이고, 둘 다 `--bg`를 가리킨다. **"강조색"이라는 이름의 변수는 두지
+ * 않는다** — 그런 이름은 조용히 행동 파랑으로 풀려서, 누를 수 없는 장식에
+ * 파랑을 칠하는 문이 된다. 색은 위의 두 축과 회색 계단이 전부다.
  */
 @layer base {
   :root {
@@ -38,9 +40,6 @@
     /* 호환 별칭 */
     --paper: var(--bg);
     --surface: var(--bg);
-    --accent: var(--primary);
-    --accent-strong: var(--primary-press);
-    --accent-wash: var(--primary-wash);
   }
 
   html {

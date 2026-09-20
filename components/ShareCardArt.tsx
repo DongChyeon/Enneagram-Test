@@ -77,12 +77,31 @@ export type ShareCardArtProps = {
   gap?: number | null;
 };
 
-const INK = '#12151c';
-const MUTED = '#5b6472';
-const PAPER = '#f7f6f2';
-const ACCENT = '#2f5d50';
-const TRACK = '#e2e0d8';
-const RULE = '#dcd9cf';
+/**
+ * 카드의 색. satori에는 CSS 변수가 없으므로 `app/globals.css`의 토큰을 **같은
+ * 값의 리터럴로 옮겨 적는다**(정본은 여전히 globals.css다).
+ *
+ * 카드에는 **버튼이 없다.** 그러므로 파랑도 없다 — 파랑은 누를 수 있는 것의
+ * 색이고, 누를 것이 없는 면에 칠하면 그냥 장식이다. 카드에서 채도를 갖는
+ * 것은 도트 캐릭터 하나뿐이고, 나머지는 흰 바탕 위 회색 계단이다.
+ * 점수 막대도 같은 이유로 무채색이다: 1위는 색이 아니라 잉크 농도로 구분한다.
+ */
+const INK = '#191f28';
+const MUTED = '#6b7684';
+const FAINT = '#8b95a1';
+const PAPER = '#ffffff';
+/** 윙 알약·막대 트랙·구분선이 공유하는 중성 채움. `--line`과 같은 값이다. */
+const FILL = '#e5e8eb';
+const TRACK = FILL;
+const RULE = FILL;
+
+/**
+ * 제목 한 줄의 폭을 추정할 때 쓰는 글자 폭(em). 실제 조판 폭이 아니라
+ * **한 줄에 들어가는가**만 판정하면 되는 값이라 근사로 충분하다 —
+ * 렌더된 카드에서 역산한 Pretendard Bold 한글 자평(0.88em)·공백(0.3em)이다.
+ */
+const TITLE_EM_CJK = 0.88;
+const TITLE_EM_SPACE = 0.3;
 
 export function ShareCardArt({
   width,
@@ -129,6 +148,19 @@ export function ShareCardArt({
   // satori(yoga)에서 남은 폭에 기대면 긴 유형명이 한 글자씩 세로로 접힌다.
   const headWidth = width - pad * 2 - markBox(markDot) - markGap;
 
+  // 제목 크기는 **고정값이 아니다.** 세로 판형(1080×1350)은 머리글·막대 아홉
+  // 줄·면책 고지가 캔버스를 정확히 채워 높이 여유가 한 줄도 없다. 그래서 긴
+  // 유형명이 두 줄로 접히는 순간 바닥의 면책 고지가 캔버스 **밖으로** 밀려난다
+  // — 헤더가 `headWidth`로 가로 접힘은 막아도, 세로로 넘친 것은 아무도
+  // 막아 주지 않는다(satori는 넘친 내용을 잘라 낼 뿐 오류를 내지 않는다).
+  // 그래서 이름이 한 줄에 안 들어가면 접는 대신 **들어갈 만큼만 줄인다**.
+  // 가로 판형은 머리글 칸이 넓어 아홉 이름 전부 원래 크기로 한 줄에 들어간다.
+  const titleEm = [...typeNameKo].reduce(
+    (sum, ch) => sum + (/\s/.test(ch) ? TITLE_EM_SPACE : TITLE_EM_CJK),
+    0,
+  );
+  const titleSize = Math.min(px(74), Math.floor((headWidth * 0.97) / titleEm));
+
   return (
     <div
       style={{
@@ -144,7 +176,7 @@ export function ShareCardArt({
     >
       <div style={{ display: 'flex', alignItems: 'flex-start' }}>
         <div style={{ display: 'flex', flexDirection: 'column', width: headWidth, flexShrink: 0 }}>
-          <div style={{ fontSize: px(26), color: MUTED, letterSpacing: 1 }}>{CARD_BRAND}</div>
+          <div style={{ fontSize: px(26), color: MUTED }}>{CARD_BRAND}</div>
 
           <div
             style={{
@@ -153,10 +185,10 @@ export function ShareCardArt({
               marginTop: px(28),
             }}
           >
-            <div style={{ fontSize: px(24), color: MUTED }}>{CARD_PRIMARY_LABEL}</div>
+            <div style={{ fontSize: px(24), color: FAINT }}>{CARD_PRIMARY_LABEL}</div>
             <div
               style={{
-                fontSize: px(74),
+                fontSize: titleSize,
                 fontWeight: 700,
                 lineHeight: 1.18,
                 marginTop: px(6),
@@ -175,17 +207,16 @@ export function ShareCardArt({
               alignSelf: 'flex-start',
               alignItems: 'center',
               marginTop: px(22),
-              padding: `${px(12)}px ${px(22)}px`,
+              padding: `${px(14)}px ${px(24)}px`,
               borderRadius: px(999),
-              backgroundColor: '#e8ece9',
-              border: `${Math.max(1, Math.round(2 * scale))}px solid ${ACCENT}`,
+              backgroundColor: FILL,
             }}
           >
-            <div style={{ fontSize: px(36), fontWeight: 700, color: ACCENT }}>{wingLabel}</div>
+            <div style={{ fontSize: px(36), fontWeight: 700, color: INK }}>{wingLabel}</div>
             <div
               style={{
                 fontSize: px(22),
-                color: ACCENT,
+                color: MUTED,
                 marginLeft: px(16),
               }}
             >
@@ -220,7 +251,7 @@ export function ShareCardArt({
               display: 'flex',
               justifyContent: 'space-between',
               fontSize: px(24),
-              color: MUTED,
+              color: FAINT,
               marginTop: px(22),
               marginBottom: px(20),
             }}
@@ -245,7 +276,8 @@ export function ShareCardArt({
                     width: labelWidth,
                     flexShrink: 0,
                     fontSize: px(22),
-                    color: INK,
+                    fontWeight: index === 0 ? 700 : 400,
+                    color: index === 0 ? INK : MUTED,
                     whiteSpace: 'nowrap',
                   }}
                 >
@@ -266,7 +298,7 @@ export function ShareCardArt({
                     style={{
                       width: Math.round(trackWidth * (bar.score / maxScore)),
                       height: '100%',
-                      backgroundColor: ACCENT,
+                      backgroundColor: index === 0 ? INK : FAINT,
                       borderRadius: Math.round(barHeight / 2),
                     }}
                   />
@@ -279,7 +311,8 @@ export function ShareCardArt({
                     display: 'flex',
                     justifyContent: 'flex-end',
                     fontSize: px(22),
-                    color: MUTED,
+                    fontWeight: index === 0 ? 700 : 400,
+                    color: index === 0 ? INK : FAINT,
                   }}
                 >
                   {String(bar.score)}
@@ -299,7 +332,7 @@ export function ShareCardArt({
         <div
           style={{
             fontSize: px(22),
-            color: MUTED,
+            color: FAINT,
             marginTop: px(22),
           }}
         >
