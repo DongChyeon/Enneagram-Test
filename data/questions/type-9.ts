@@ -19,7 +19,7 @@ export const type9Questions: Question[] = [
   {
     id: 'q9-01',
     typeId: 9,
-    text: '평소에 무엇을 할지 고를 때 마음이 덜 소란해지는 쪽을 택하는 편이다.',
+    text: '평소에 무엇을 할지 고를 때 마음이 덜 소란해지는 쪽을 택한다.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't9-inner-calm',
@@ -58,7 +58,7 @@ export const type9Questions: Question[] = [
   {
     id: 'q9-04',
     typeId: 9,
-    text: '평소에 대화가 오갈 때 먼저 눈에 들어오는 것은 분위기가 틀어질 낌새다.',
+    text: '평소에 대화가 오갈 때는 분위기가 틀어질 낌새가 먼저 눈에 들어온다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't9-conflict-fear',
@@ -71,7 +71,7 @@ export const type9Questions: Question[] = [
   {
     id: 'q9-05',
     typeId: 9,
-    text: '평소에 다툼을 들을 때 먼저 눈에 들어오는 것은 양쪽 말이 각각 맞는 지점이다.',
+    text: '평소에 다툼을 들으면 양쪽 말이 각각 맞는 지점이 먼저 눈에 들어온다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't9-others-view-attention',
@@ -84,7 +84,7 @@ export const type9Questions: Question[] = [
   {
     id: 'q9-06',
     typeId: 9,
-    text: '평소에 뭘 하고 싶냐는 말을 들을 때 먼저 떠오르는 것은 상대가 원하는 쪽이다.',
+    text: '평소에 뭘 하고 싶냐는 말을 들으면 상대가 원하는 쪽이 먼저 떠오른다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't9-others-view-attention',
@@ -97,7 +97,7 @@ export const type9Questions: Question[] = [
   {
     id: 'q9-07',
     typeId: 9,
-    text: '평소에 생각이 달라도 굳이 말하지 않고 상대 쪽에 맞추는 일이 많은 편이다.',
+    text: '평소에 생각이 달라도 굳이 말하지 않고 상대 쪽에 맞추는 일이 잦다.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't9-accommodation',

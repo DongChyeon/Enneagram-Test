@@ -29,7 +29,7 @@ export const type8Questions: Question[] = [
   {
     id: 'q8-02',
     typeId: 8,
-    text: '평소에 일의 방향은 정해 주는 대로 따라가는 것이 더 편한 편이다.',
+    text: '평소에 일의 방향은 남이 정해 주는 대로 따라가는 쪽이 편하다.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't8-self-agency',
@@ -55,7 +55,7 @@ export const type8Questions: Question[] = [
   {
     id: 'q8-04',
     typeId: 8,
-    text: '평소에 부탁을 받을 때 먼저 눈에 들어오는 것은 내가 휘둘릴 여지가 있는지다.',
+    text: '평소에 부탁을 받으면 내가 휘둘릴 여지가 있는지에 먼저 눈이 간다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't8-vulnerability-fear',
@@ -68,7 +68,7 @@ export const type8Questions: Question[] = [
   {
     id: 'q8-05',
     typeId: 8,
-    text: '평소에 낯선 자리에서 먼저 눈에 들어오는 것은 누가 결정권을 쥐었는지다.',
+    text: '평소에 낯선 자리에서는 누가 결정권을 쥐었는지에 먼저 눈이 간다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't8-power-attention',
@@ -81,7 +81,7 @@ export const type8Questions: Question[] = [
   {
     id: 'q8-06',
     typeId: 8,
-    text: '평소에 의견이 맞설 때 먼저 눈에 들어오는 것은 상대가 물러설 지점이다.',
+    text: '평소에 의견이 맞서면 상대가 물러설 지점이 먼저 눈에 들어온다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't8-power-attention',
@@ -120,7 +120,7 @@ export const type8Questions: Question[] = [
   {
     id: 'q8-09',
     typeId: 8,
-    text: '지난 몇 년간 대체로 내가 밀어붙이는 세기가 세다는 말을 들은 적이 있다.',
+    text: '지난 몇 년간 대체로 세게 밀어붙인다는 말을 들은 적이 있다.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't8-intensity-overrun',

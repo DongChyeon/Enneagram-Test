@@ -13,7 +13,7 @@ export const type7Questions: Question[] = [
   {
     id: 'q7-01',
     typeId: 7,
-    text: '평소에 하나로 정하기보다 괜찮은 선택지를 여러 개 남겨 두는 편이다.',
+    text: '평소에 하나로 정하기보다 괜찮은 선택지를 여러 개 남겨 둔다.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't7-option-keeping',
@@ -52,7 +52,7 @@ export const type7Questions: Question[] = [
   {
     id: 'q7-04',
     typeId: 7,
-    text: '평소에 새 일을 맡을 때 먼저 눈에 들어오는 것은 얼마나 묶이게 될지다.',
+    text: '평소에 새 일을 맡을 때는 얼마나 묶이게 될지에 먼저 눈이 간다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't7-confinement-fear',
@@ -65,7 +65,7 @@ export const type7Questions: Question[] = [
   {
     id: 'q7-05',
     typeId: 7,
-    text: '평소에 새 계획을 들을 때 먼저 눈에 들어오는 것은 재미있어 보이는 대목이다.',
+    text: '평소에 새 계획을 들으면 재미있어 보이는 대목이 먼저 눈에 들어온다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't7-possibility-attention',
@@ -78,7 +78,7 @@ export const type7Questions: Question[] = [
   {
     id: 'q7-06',
     typeId: 7,
-    text: '평소에 약속이 취소되면 먼저 눈에 들어오는 것은 그 시간에 새로 해볼 일이다.',
+    text: '평소에 약속이 취소되면 그 시간에 새로 해볼 일이 먼저 떠오른다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't7-possibility-attention',
@@ -117,7 +117,7 @@ export const type7Questions: Question[] = [
   {
     id: 'q7-09',
     typeId: 7,
-    text: '평소에 일의 마무리 단계보다 시작 단계에서 집중이 더 잘 되는 편이다.',
+    text: '평소에 일을 마무리할 때보다 시작할 때 집중이 더 잘 된다.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't7-follow-through',
@@ -130,7 +130,7 @@ export const type7Questions: Question[] = [
   {
     id: 'q7-10',
     typeId: 7,
-    text: '평소에 벌여 둔 일은 새 아이디어가 떠올라도 끝까지 마친 뒤에 옮기는 편이다.',
+    text: '평소에 새 아이디어가 떠올라도 벌여 둔 일을 끝까지 마친 뒤에 새 일로 옮겨 간다.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't7-follow-through',

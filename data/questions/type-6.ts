@@ -15,7 +15,7 @@ export const type6Questions: Question[] = [
   {
     id: 'q6-01',
     typeId: 6,
-    text: '평소에 일을 시작하기 전에 기댈 만한 근거를 확보해 두는 편이다.',
+    text: '평소에 일을 시작하기 전에 기댈 만한 근거부터 확보해 둔다.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't6-security-seeking',
@@ -41,7 +41,7 @@ export const type6Questions: Question[] = [
   {
     id: 'q6-03',
     typeId: 6,
-    text: '평소에 도와줄 사람이 아무도 없는 상황에 놓일 경우를 미리 대비해 두는 편이다.',
+    text: '평소에 기댈 사람이 없는 상황에 놓일 때를 미리 대비해 둔다.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't6-unsupported-fear',
@@ -54,7 +54,7 @@ export const type6Questions: Question[] = [
   {
     id: 'q6-04',
     typeId: 6,
-    text: '평소에 어려운 일이 닥쳤을 때 먼저 눈에 들어오는 것은 누가 내 편에 있는가다.',
+    text: '평소에 어려운 일이 닥치면 누가 내 편에 있는지에 먼저 눈이 간다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't6-unsupported-fear',
@@ -67,7 +67,7 @@ export const type6Questions: Question[] = [
   {
     id: 'q6-05',
     typeId: 6,
-    text: '평소에 새 계획을 들을 때 먼저 눈에 들어오는 것은 앞으로 잘못될 수 있는 지점이다.',
+    text: '평소에 새 계획을 들으면 앞으로 잘못될 수 있는 지점이 먼저 눈에 들어온다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't6-risk-attention',
@@ -80,7 +80,7 @@ export const type6Questions: Question[] = [
   {
     id: 'q6-06',
     typeId: 6,
-    text: '평소에 여행을 준비할 때 먼저 눈에 들어오는 것은 어긋났을 때의 대비책이다.',
+    text: '평소에 여행을 준비할 때는 일이 어긋날 경우의 대비책에 먼저 눈이 간다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't6-risk-attention',
@@ -93,7 +93,7 @@ export const type6Questions: Question[] = [
   {
     id: 'q6-07',
     typeId: 6,
-    text: '평소에 처음 만난 사람에게는 상대의 의도를 확인한 뒤에 마음을 여는 편이다.',
+    text: '평소에 처음 만난 사람에게는 의도를 확인한 뒤에야 마음을 연다.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't6-trust-testing',

@@ -15,7 +15,7 @@ export const type5Questions: Question[] = [
   {
     id: 'q5-01',
     typeId: 5,
-    text: '평소에 충분히 알아본 뒤에야 움직이기 시작하는 편이다.',
+    text: '평소에 무슨 일이든 충분히 알아본 뒤에야 움직이기 시작한다.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't5-competence-reserve',
@@ -41,7 +41,7 @@ export const type5Questions: Question[] = [
   {
     id: 'q5-03',
     typeId: 5,
-    text: '평소에 약속이 연달아 잡히면 남은 기운이 모자랄까 먼저 걱정되는 편이다.',
+    text: '평소에 약속이 연달아 잡히면 남은 기운이 모자랄까 먼저 걱정된다.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't5-depletion-fear',
@@ -67,7 +67,7 @@ export const type5Questions: Question[] = [
   {
     id: 'q5-05',
     typeId: 5,
-    text: '평소에 새 모임에서 먼저 눈에 들어오는 것은 이 자리가 어떤 규칙으로 돌아가는지다.',
+    text: '평소에 새 모임에서는 어떤 규칙으로 모임이 돌아가는지에 먼저 눈이 간다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't5-observation-attention',
@@ -80,7 +80,7 @@ export const type5Questions: Question[] = [
   {
     id: 'q5-06',
     typeId: 5,
-    text: '평소에 일을 맡으면 먼저 눈에 들어오는 것은 전체가 어떤 원리로 움직이는가다.',
+    text: '평소에 일을 맡으면 전체가 움직이는 원리가 먼저 눈에 들어온다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't5-observation-attention',
@@ -106,7 +106,7 @@ export const type5Questions: Question[] = [
   {
     id: 'q5-08',
     typeId: 5,
-    text: '평소에 부탁을 받으면 범위를 따지지 않고 그때그때 받아들이는 편이다.',
+    text: '평소에 부탁을 받으면 범위를 따지지 않고 그때그때 받아들이곤 한다.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't5-boundary-keeping',
@@ -119,7 +119,7 @@ export const type5Questions: Question[] = [
   {
     id: 'q5-09',
     typeId: 5,
-    text: '평소에 요구가 몰린 날에는 혼자 있는 시간을 만들어 기운을 되찾는 편이다.',
+    text: '평소에 요구가 몰린 날이면 혼자 있는 시간을 만들어 기운을 되찾는다.',
     sourceId: 'naranjo-1994',
     origin: 'authored',
     facet: 't5-withdrawal',
@@ -132,7 +132,7 @@ export const type5Questions: Question[] = [
   {
     id: 'q5-10',
     typeId: 5,
-    text: '평소에 연락이 몰릴 때 먼저 눈에 들어오는 것은 답하는 데 들 시간과 기운이다.',
+    text: '평소에 연락이 몰리면 답하는 데 들 시간과 기운이 먼저 떠오른다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't5-withdrawal',

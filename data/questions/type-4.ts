@@ -15,7 +15,7 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-01',
     typeId: 4,
-    text: '평소에 남들과 같은 방식으로 하기보다 내 방식대로 하는 쪽을 택하는 편이다.',
+    text: '평소에 남들과 같은 방식으로 하기보다 내 방식대로 가는 쪽을 택한다.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't4-authenticity',
@@ -67,7 +67,7 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-05',
     typeId: 4,
-    text: '평소에 새 모임에 들어갈 때 먼저 눈에 들어오는 것은 나와 그들의 다른 점이다.',
+    text: '평소에 새 모임에 들어가면 다른 사람들과 나의 다른 점이 먼저 눈에 들어온다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't4-comparison-attention',
@@ -80,7 +80,7 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-06',
     typeId: 4,
-    text: '평소에 남의 소식을 들을 때 나와 견주기보다 내 할 일에 먼저 눈이 가는 편이다.',
+    text: '평소에 남의 소식을 들어도 나와 견주기보다 내 할 일에 먼저 눈이 간다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't4-comparison-attention',
@@ -93,7 +93,7 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-07',
     typeId: 4,
-    text: '평소에 가벼운 안부만 주고받는 대화는 오래 이어 가기 어려운 편이다.',
+    text: '평소에 가벼운 안부만 오가는 대화는 오래 이어 가기가 어렵다.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't4-depth-expectation',
@@ -106,7 +106,7 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-08',
     typeId: 4,
-    text: '평소에 대화할 때 먼저 눈에 들어오는 것은 이 사람이 나를 어디까지 이해하는가다.',
+    text: '평소에 대화할 때는 상대가 나를 어디까지 이해하는지에 먼저 눈이 간다.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't4-depth-expectation',
