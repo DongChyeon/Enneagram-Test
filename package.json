@@ -1,0 +1,33 @@
+{
+  "name": "enneagram-test-site",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "next": "15.5.4",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "5.7.3",
+    "@types/node": "22.10.7",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3",
+    "tailwindcss": "3.4.17",
+    "eslint": "9.18.0",
+    "eslint-config-next": "15.5.4",
+    "vitest": "2.1.8",
+    "tsx": "4.19.2",
+    "@testing-library/react": "16.1.0",
+    "@testing-library/jest-dom": "6.6.3",
+    "jsdom": "25.0.1",
+    "@vitejs/plugin-react": "4.3.4",
+    "@eslint/eslintrc": "3.3.7"
+  }
+}

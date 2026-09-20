@@ -1,0 +1,101 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1789878399117,
+  "projectRoot": "/Users/donghyeon/orca/projects/Enneagram-Test",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {},
+  "hotPaths": [
+    {
+      "path": "data/questions.test.ts",
+      "accessCount": 9,
+      "lastAccessed": 1789888338105,
+      "type": "file"
+    },
+    {
+      "path": "docs/sources.md",
+      "accessCount": 8,
+      "lastAccessed": 1789888537317,
+      "type": "file"
+    },
+    {
+      "path": "data/questions/type-8.ts",
+      "accessCount": 5,
+      "lastAccessed": 1789888940887,
+      "type": "file"
+    },
+    {
+      "path": "data/schema.ts",
+      "accessCount": 4,
+      "lastAccessed": 1789887299894,
+      "type": "file"
+    },
+    {
+      "path": "data/sources.ts",
+      "accessCount": 3,
+      "lastAccessed": 1789887041284,
+      "type": "file"
+    },
+    {
+      "path": "docs/item-review.md",
+      "accessCount": 3,
+      "lastAccessed": 1789888505946,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 1,
+      "lastAccessed": 1789886552226,
+      "type": "file"
+    },
+    {
+      "path": "tsconfig.json",
+      "accessCount": 1,
+      "lastAccessed": 1789886556125,
+      "type": "file"
+    },
+    {
+      "path": "vitest.config.ts",
+      "accessCount": 1,
+      "lastAccessed": 1789886562592,
+      "type": "file"
+    },
+    {
+      "path": "data/types.ts",
+      "accessCount": 1,
+      "lastAccessed": 1789887017221,
+      "type": "file"
+    },
+    {
+      "path": "data/questions.ts",
+      "accessCount": 1,
+      "lastAccessed": 1789887494190,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
