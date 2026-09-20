@@ -15,10 +15,11 @@ import './globals.css';
  * 포인트라 `new URL()`이 모듈 평가 시점에 `TypeError`를 던지고, 첫 빌드가
  * 통째로 실패해 OG PNG가 하나도 생성되지 않는다.
  *
- * 아래 값은 Vercel 프리뷰 호스트를 쓰는 **잠정 상수**다. 프로덕션 도메인으로
- * 교체하는 것이 Step 6의 선행 조건이다.
+ * 아래 값은 실제 배포 도메인이다(2026-09-20 배포로 확정). 도메인이 바뀌면
+ * 이 상수만 고치는 것으로는 부족하다 — OG 이미지 18장을 재생성해야 한다.
+ * 그러지 않으면 미리보기 카드가 옛 주소를 가리킨다. `docs/deploy.md` 참조.
  */
-const SITE_URL = new URL('https://enneagram-test.vercel.app');
+const SITE_URL = new URL('https://enneagram-test-one.vercel.app');
 
 export const metadata: Metadata = {
   metadataBase: SITE_URL,
