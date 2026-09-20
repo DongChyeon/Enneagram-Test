@@ -3,11 +3,11 @@
 import type { Likert } from '../lib/types';
 
 export const LIKERT_OPTIONS: { value: Likert; label: string }[] = [
-  { value: 1, label: '전혀 그렇지 않다' },
-  { value: 2, label: '그렇지 않은 편이다' },
-  { value: 3, label: '보통이다' },
-  { value: 4, label: '그런 편이다' },
-  { value: 5, label: '매우 그렇다' },
+  { value: 1, label: '전혀 그렇지 않아요' },
+  { value: 2, label: '그렇지 않은 편이에요' },
+  { value: 3, label: '보통이에요' },
+  { value: 4, label: '그런 편이에요' },
+  { value: 5, label: '매우 그래요' },
 ];
 
 /**

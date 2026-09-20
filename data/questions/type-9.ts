@@ -19,20 +19,20 @@ export const type9Questions: Question[] = [
   {
     id: 'q9-01',
     typeId: 9,
-    text: '평소에 무엇을 할지 고를 때 마음이 덜 소란해지는 쪽을 택한다.',
+    text: '평소에 무엇을 할지 고를 때 마음이 덜 소란해지는 쪽을 택해요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't9-inner-calm',
     reverse: false,
     rationale:
-      '5번과의 변별 — 5번이 소모될 자원을 아끼려 조용한 쪽을 택하는 것과 달리 9번은 내적 평온이 흔들리지 않는 쪽을 택한다.',
+      '5번과의 변별 — 5번이 소모될 자원을 아끼려 조용한 쪽을 택하는 것과 달리 9번은 내적 평온이 흔들리지 않는 쪽을 택해요.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"마음이 덜 소란해지는 쪽"이라는 자체 비유로 9번의 선택 기준을 표현해 회피·나태 어휘를 배제했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"마음이 덜 소란해지는 쪽"이라는 자체 비유로 9번의 선택 기준을 표현해 회피·나태 어휘를 배제했어요.' },
   },
   {
     id: 'q9-02',
     typeId: 9,
-    text: '평소에 잔잔한 쪽보다 변화가 큰 쪽을 먼저 고르는 편이다.',
+    text: '평소에 잔잔한 쪽보다 변화가 큰 쪽을 먼저 고르는 편이에요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't9-inner-calm',
@@ -40,25 +40,25 @@ export const type9Questions: Question[] = [
     rationale:
       '7번과의 변별 — 새 자극 쪽으로 올라가는 7번식 이동을 반대 방향 긍정 진술로 두어, 가라앉는 쪽으로 안정을 찾는 9번 동기의 낮은 쪽 끝을 잰다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q9-01의 반대 방향 긍정 진술로 "잔잔한 쪽"과 "변화가 큰 쪽"의 대비를 자체 구성했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q9-01의 반대 방향 긍정 진술로 "잔잔한 쪽"과 "변화가 큰 쪽"의 대비를 자체 구성했어요.' },
   },
   {
     id: 'q9-03',
     typeId: 9,
-    text: '지난 몇 년간 대체로 가까운 사람과 부딪치면 사이가 멀어질까 봐 걱정했다.',
+    text: '지난 몇 년간 대체로 가까운 사람과 부딪치면 사이가 멀어질까 봐 걱정했어요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't9-conflict-fear',
     reverse: false,
     rationale:
-      '2번과의 변별 — 2번은 사랑받지 못할까 봐 먼저 다가가 필요를 채우는 반면 9번은 마찰 자체가 연결을 끊을까 봐 부딪침을 피한다.',
+      '2번과의 변별 — 2번은 사랑받지 못할까 봐 먼저 다가가 필요를 채우는 반면 9번은 마찰 자체가 연결을 끊을까 봐 부딪침을 피해요.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '갈등 후 관계 단절 우려를 장기 시간 프레임 안에서 서술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '갈등 후 관계 단절 우려를 장기 시간 프레임 안에서 서술했어요.' },
   },
   {
     id: 'q9-04',
     typeId: 9,
-    text: '평소에 대화가 오갈 때는 분위기가 틀어질 낌새가 먼저 눈에 들어온다.',
+    text: '평소에 대화가 오갈 때는 분위기가 틀어질 낌새가 먼저 눈에 들어와요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't9-conflict-fear',
@@ -66,12 +66,12 @@ export const type9Questions: Question[] = [
     rationale:
       '5번과의 변별 — 5번은 같은 자리에서 빠져나갈 통로가 먼저 보이는 반면 9번은 마찰이 생길 지점이 먼저 보인다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '대화 중 분위기 악화 징후에 주의가 가는 초점을 자체 표현으로 지정했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '대화 중 분위기 악화 징후에 주의가 가는 초점을 자체 표현으로 지정했어요.' },
   },
   {
     id: 'q9-05',
     typeId: 9,
-    text: '평소에 다툼을 들으면 양쪽 말이 각각 맞는 지점이 먼저 눈에 들어온다.',
+    text: '평소에 다툼을 들으면 양쪽 말이 각각 맞는 지점이 먼저 눈에 들어와요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't9-others-view-attention',
@@ -84,7 +84,7 @@ export const type9Questions: Question[] = [
   {
     id: 'q9-06',
     typeId: 9,
-    text: '평소에 뭘 하고 싶냐는 말을 들으면 상대가 원하는 쪽이 먼저 떠오른다.',
+    text: '평소에 뭘 하고 싶냐는 말을 들으면 상대가 원하는 쪽이 먼저 떠올라요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't9-others-view-attention',
@@ -92,12 +92,12 @@ export const type9Questions: Question[] = [
     rationale:
       '7번과의 변별 — 7번은 같은 질문에서 해볼 만한 재미있는 것이 먼저 떠오르는 반면 9번은 상대 쪽 선호가 먼저 떠오르고 자기 선호는 뒤로 밀린다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '희망을 묻는 질문 장면에서 "상대가 원하는 쪽"이 먼저 떠오른다는 주의 초점 문형으로 자기 망각을 기술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '희망을 묻는 질문 장면에서 "상대가 원하는 쪽"이 먼저 떠오른다는 주의 초점 문형으로 자기 망각을 기술했어요.' },
   },
   {
     id: 'q9-07',
     typeId: 9,
-    text: '평소에 생각이 달라도 굳이 말하지 않고 상대 쪽에 맞추는 일이 잦다.',
+    text: '평소에 생각이 달라도 굳이 말하지 않고 상대 쪽에 맞추는 일이 잦아요.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't9-accommodation',
@@ -105,12 +105,12 @@ export const type9Questions: Question[] = [
     rationale:
       '2번과의 변별 — 2번의 맞춤은 상대의 필요를 채우려는 능동적 개입인 반면 9번의 맞춤은 마찰을 피하려 자기 입장을 유보하는 것이다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"굳이 말하지 않고 상대 쪽에 맞추는"이라는 행동 기술로 자기 의견 유보를 중립적으로 표현했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"굳이 말하지 않고 상대 쪽에 맞추는"이라는 행동 기술로 자기 의견 유보를 중립적으로 표현했어요.' },
   },
   {
     id: 'q9-08',
     typeId: 9,
-    text: '평소에 의견이 갈리면 내 쪽을 분명히 말하는 편이다.',
+    text: '평소에 의견이 갈리면 내 쪽을 분명히 말하는 편이에요.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't9-accommodation',
@@ -123,7 +123,7 @@ export const type9Questions: Question[] = [
   {
     id: 'q9-09',
     typeId: 9,
-    text: '평소에 해야 할 일을 알면서도 손에 익은 덜 중요한 일로 시간을 보내는 편이다.',
+    text: '평소에 해야 할 일을 알면서도 손에 익은 덜 중요한 일로 시간을 보내는 편이에요.',
     sourceId: 'naranjo-1994',
     origin: 'authored',
     facet: 't9-priority-blur',
@@ -136,7 +136,7 @@ export const type9Questions: Question[] = [
   {
     id: 'q9-10',
     typeId: 9,
-    text: '지난 몇 년간 대체로 중요한 결정일수록 뒤로 미뤄 두는 편이었다.',
+    text: '지난 몇 년간 대체로 중요한 결정일수록 뒤로 미뤄 두는 편이었어요.',
     sourceId: 'riso-hudson-personality-types',
     origin: 'authored',
     facet: 't9-priority-blur',
@@ -144,6 +144,6 @@ export const type9Questions: Question[] = [
     rationale:
       '5번과의 변별 — 5번의 보류는 정보가 충분해질 때까지 자원을 아끼는 것인 반면 9번의 보류는 결정이 불러올 마찰을 미루는 것이다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '중요 결정의 유예를 장기 시간 프레임 안에서 서술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '중요 결정의 유예를 장기 시간 프레임 안에서 서술했어요.' },
   },
 ];

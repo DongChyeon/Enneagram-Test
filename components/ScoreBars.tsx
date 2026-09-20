@@ -101,8 +101,8 @@ export function ScoreBars({ scores, primaryType, scoreRange }: ScoreBarsProps) {
       </ul>
 
       <p className="mt-5 text-[0.8125rem] leading-[1.7] text-ink-faint">
-        막대 길이는 가장 높은 유형을 100%로 둔 상대 비율이며, 오른쪽 숫자는 원점수({scoreRange[0]}~{scoreRange[1]})입니다.
-        원점수는 다른 사람과 비교하는 규준 점수가 아닙니다.
+        막대 길이는 가장 높은 유형을 100%로 둔 상대 비율이며, 오른쪽 숫자는 원점수({scoreRange[0]}~{scoreRange[1]})이에요.
+        원점수는 다른 사람과 비교하는 규준 점수가 아니에요.
       </p>
     </section>
   );

@@ -31,10 +31,10 @@ export default function ResumeNotice({ total, signature }: { total: number; sign
 
   return (
     <div className="animate-rise-in mt-7 rounded-card bg-sub p-5">
-      <p className="text-[1rem] font-bold leading-[1.5] text-ink">답하다 만 기록이 남아 있습니다</p>
+      <p className="text-[1rem] font-bold leading-[1.5] text-ink">답하다 만 기록이 남아 있어요</p>
       <p className="tnum mt-1.5 text-[0.9375rem] leading-[1.6] text-ink-soft">
-        {total}문항 중 {answered}문항 · {sections}묶음 중 {section}번째 묶음까지 왔습니다. 아래
-        버튼을 누르면 멈춘 자리에서 이어서 답합니다.
+        {total}문항 중 {answered}문항 · {sections}묶음 중 {section}번째 묶음까지 왔어요. 아래
+        버튼을 누르면 멈춘 자리에서 이어서 답해요.
       </p>
       {confirming ? (
         <div className="mt-4 flex flex-wrap gap-2">

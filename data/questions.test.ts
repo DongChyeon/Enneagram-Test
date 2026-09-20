@@ -135,6 +135,12 @@ describe('data/questions.ts — AC-2 (필드 완전성 + 참조 무결성)', () 
     }
   });
 
+  it('모든 문항이 자연스러운 해요체로 끝난다', () => {
+    for (const q of questions) {
+      expect(q.text, `question ${q.id} text tone`).toMatch(/요\.$/);
+    }
+  });
+
   it('reverse가 모든 문항에 명시적으로 존재한다 (boolean)', () => {
     for (const q of questions) {
       expect(typeof q.reverse, `question ${q.id}`).toBe('boolean');

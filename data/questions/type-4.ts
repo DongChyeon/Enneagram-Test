@@ -15,7 +15,7 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-01',
     typeId: 4,
-    text: '평소에 남들과 같은 방식으로 하기보다 내 방식대로 가는 쪽을 택한다.',
+    text: '평소에 남들과 같은 방식으로 하기보다 내 방식대로 가는 쪽을 택해요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't4-authenticity',
@@ -28,7 +28,7 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-02',
     typeId: 4,
-    text: '평소에 남들이 하는 방식을 그대로 따라도 마음이 편한 편이다.',
+    text: '평소에 남들이 하는 방식을 그대로 따라도 마음이 편한 편이에요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't4-authenticity',
@@ -36,12 +36,12 @@ export const type4Questions: Question[] = [
     rationale:
       '고유함 추구의 반대 방향 긍정 진술로, 자원 보호가 아니라 정체성 유지 동기를 재므로 5번이 아니라 4번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q4-01의 반대 방향 긍정 진술이며 "마음이 편한 편이다"라는 정도 표현으로 절대 진술을 피했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q4-01의 반대 방향 긍정 진술이며 "마음이 편한 편이다"라는 정도 표현으로 절대 진술을 피했어요.' },
   },
   {
     id: 'q4-03',
     typeId: 4,
-    text: '지난 몇 년간 대체로 남들에겐 있는 무언가가 내게는 빠져 있다고 여겨 왔다.',
+    text: '지난 몇 년간 대체로 남들에겐 있는 무언가가 내게는 빠져 있다고 여겨 왔어요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't4-lack-fear',
@@ -54,20 +54,20 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-04',
     typeId: 4,
-    text: '평소에 남들과 비슷해져 특별할 것 없는 사람이 될까 봐 마음이 쓰인다.',
+    text: '평소에 남들과 비슷해져 특별할 것 없는 사람이 될까 봐 마음이 쓰여요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't4-lack-fear',
     reverse: false,
     rationale:
-      '두려움의 대상이 시간·에너지 자원의 고갈이 아니라 “특별할 것 없는 존재가 됨”이라는 정체성 상실이므로 5번이 아니라 4번을 잰다. 또 비교의 축이 유능함의 순위가 아니라 고유함의 유무라는 점에서 3번의 실패 이미지 두려움과도 갈리고, q4-03이 재는 “남에게 있는 것의 결여”와 달리 “고유함의 소실”을 물어 같은 facet 안에서 서로 다른 면을 담당한다.',
+      '두려움의 대상이 시간·에너지 자원의 고갈이 아니라 “특별할 것 없는 존재가 됨”이라는 정체성 상실이므로 5번이 아니라 4번을 잰다. 또 비교의 축이 유능함의 순위가 아니라 고유함의 유무라는 점에서 3번의 실패 이미지 두려움과도 갈리고, q4-03이 재는 “남에게 있는 것의 결여”와 달리 “고유함의 소실”을 물어 같은 facet 안에서 서로 다른 면을 담당해요.',
     authoredBy: 'worker-items-b',
     copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"특별할 것 없는 사람이 될까 봐"라는 한국어 일상 표현으로 4번 핵심 두려움을 구성개념 수준에서만 옮겼다.' },
   },
   {
     id: 'q4-05',
     typeId: 4,
-    text: '평소에 새 모임에 들어가면 다른 사람들과 나의 다른 점이 먼저 눈에 들어온다.',
+    text: '평소에 새 모임에 들어가면 다른 사람들과 나의 다른 점이 먼저 눈에 들어와요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't4-comparison-attention',
@@ -80,7 +80,7 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-06',
     typeId: 4,
-    text: '평소에 남의 소식을 들어도 나와 견주기보다 내 할 일에 먼저 눈이 간다.',
+    text: '평소에 남의 소식을 들어도 나와 견주기보다 내 할 일에 먼저 눈이 가요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't4-comparison-attention',
@@ -88,12 +88,12 @@ export const type4Questions: Question[] = [
     rationale:
       '비교 초점의 반대 방향 긍정 진술로, 경계 유지가 아니라 비교 주의 초점을 재므로 5번이 아니라 4번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '타인 소식을 듣는 장면에서 주의가 "내 할 일"로 향한다는 반대 방향 주의 초점 진술로 자체 구성했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '타인 소식을 듣는 장면에서 주의가 "내 할 일"로 향한다는 반대 방향 주의 초점 진술로 자체 구성했어요.' },
   },
   {
     id: 'q4-07',
     typeId: 4,
-    text: '평소에 가벼운 안부만 오가는 대화는 오래 이어 가기가 어렵다.',
+    text: '평소에 가벼운 안부만 오가는 대화는 오래 이어 가기가 어려워요.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't4-depth-expectation',
@@ -101,12 +101,12 @@ export const type4Questions: Question[] = [
     rationale:
       '대화를 접는 이유가 시간·에너지 절약이 아니라 깊이 이해받으려는 기대이므로 5번이 아니라 4번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"가벼운 안부만 오가는 대화"라는 구체적 대화 유형을 지정해 깊이 지향을 간접 기술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"가벼운 안부만 오가는 대화"라는 구체적 대화 유형을 지정해 깊이 지향을 간접 기술했어요.' },
   },
   {
     id: 'q4-08',
     typeId: 4,
-    text: '평소에 대화할 때는 상대가 나를 어디까지 이해하는지에 먼저 눈이 간다.',
+    text: '평소에 대화할 때는 상대가 나를 어디까지 이해하는지에 먼저 눈이 가요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't4-depth-expectation',
@@ -119,7 +119,7 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-09',
     typeId: 4,
-    text: '지난 몇 년간 대체로 감정이 올라오면 사람들과 거리를 두고 혼자 삭이는 편이었다.',
+    text: '지난 몇 년간 대체로 감정이 올라오면 사람들과 거리를 두고 혼자 삭이는 편이었어요.',
     sourceId: 'naranjo-1994',
     origin: 'authored',
     facet: 't4-mood-swing',
@@ -132,7 +132,7 @@ export const type4Questions: Question[] = [
   {
     id: 'q4-10',
     typeId: 4,
-    text: '지난 몇 년간 대체로 하루 안에서도 마음의 진폭이 남들보다 큰 편이었다.',
+    text: '지난 몇 년간 대체로 하루 안에서도 마음의 진폭이 남들보다 큰 편이었어요.',
     sourceId: 'riso-hudson-personality-types',
     origin: 'authored',
     facet: 't4-mood-swing',
@@ -140,6 +140,6 @@ export const type4Questions: Question[] = [
     rationale:
       '묻는 것이 기준 위반에 따른 자책의 강도가 아니라 감정 진폭의 크기이므로 1번이 아니라 4번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '정서 진폭을 장기 시간 프레임과 상대 비교로 이중 고정해 상태 문항화를 피했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '정서 진폭을 장기 시간 프레임과 상대 비교로 이중 고정해 상태 문항화를 피했어요.' },
   },
 ];

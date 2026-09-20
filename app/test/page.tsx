@@ -19,7 +19,7 @@ import TestRunner from '../../components/TestRunner';
  */
 export const metadata: Metadata = {
   title: '검사 진행 · 에니어그램 유형 테스트',
-  description: '5점 척도 자기보고 검사. 응답은 브라우저 안에만 머뭅니다.',
+  description: '5점 척도 자기보고 검사. 응답은 브라우저 안에만 머물러요.',
 };
 
 export default function TestPage() {

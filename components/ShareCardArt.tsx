@@ -28,7 +28,7 @@ import { TypeMark, markBox } from './TypeMarkView';
 export const CARD_WING_MARKER = '윙 — 이론적 해석';
 
 /** 면책 고지의 마지막 한 줄. 카드는 이 줄만 싣는다(확정 문구). */
-export const CARD_DISCLAIMER = '교육·자기이해 목적이며 임상적 진단이 아닙니다.';
+export const CARD_DISCLAIMER = '교육·자기이해 목적이며 임상적 진단이 아니에요.';
 
 /** 카드 머리글. */
 export const CARD_BRAND = '애니어그램 유형 테스트';

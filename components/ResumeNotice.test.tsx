@@ -42,9 +42,9 @@ describe('ResumeNotice', () => {
     save(24);
     render(<ResumeNotice total={TOTAL} signature={SIGNATURE} />);
 
-    expect(screen.getByText('답하다 만 기록이 남아 있습니다')).toBeTruthy();
+    expect(screen.getByText('답하다 만 기록이 남아 있어요')).toBeTruthy();
     expect(
-      screen.getByText(`${TOTAL}문항 중 24문항 · 9묶음 중 3번째 묶음까지 왔습니다. 아래 버튼을 누르면 멈춘 자리에서 이어서 답합니다.`),
+      screen.getByText(`${TOTAL}문항 중 24문항 · 9묶음 중 3번째 묶음까지 왔어요. 아래 버튼을 누르면 멈춘 자리에서 이어서 답해요.`),
     ).toBeTruthy();
   });
 
@@ -60,6 +60,6 @@ describe('ResumeNotice', () => {
     fireEvent.click(screen.getByRole('button', { name: '지우고 1번부터' }));
 
     expect(window.sessionStorage.getItem(KEY)).toBeNull();
-    expect(screen.queryByText('답하다 만 기록이 남아 있습니다')).toBeNull();
+    expect(screen.queryByText('답하다 만 기록이 남아 있어요')).toBeNull();
   });
 });

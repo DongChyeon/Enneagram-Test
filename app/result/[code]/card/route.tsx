@@ -35,7 +35,7 @@ export async function GET(
   const { code } = await params;
   const result = decodeResult(code);
   if (result === null) {
-    return new Response('결과 코드를 해석할 수 없습니다.', {
+    return new Response('결과 코드를 해석할 수 없어요.', {
       status: 404,
       headers: { 'content-type': 'text/plain; charset=utf-8' },
     });

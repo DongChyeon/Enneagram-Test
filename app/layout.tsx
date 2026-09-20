@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   metadataBase: SITE_URL,
   title: '애니어그램 유형 테스트',
   description:
-    '90문항으로 애니어그램 주유형과 윙을 확인하는 한국어 검사. 교육·자기이해 목적이며 임상적 진단이 아닙니다.',
+    '90문항으로 애니어그램 주유형과 윙을 확인하는 한국어 검사. 교육·자기이해 목적이며 임상적 진단이 아니에요.',
   openGraph: {
     type: 'website',
     title: '애니어그램 유형 테스트',

@@ -7,7 +7,7 @@
  * 닫으려면 테스트가 붙잡을 수 있는 동기·순수 컴포넌트가 하나 필요하고,
  * 그것이 이 파일이다(`components/__tests__/result.test.tsx`).
  *
- * 표현은 "당신의 유형은 X입니다"가 아니라 **"가장 높게 나온 유형은 X입니다"** 다.
+ * 표현은 "당신의 유형은 X이에요"가 아니라 **"가장 높게 나온 유형은 X이에요"** 다.
  * 요인분석이 아홉 개의 독립된 차원을 일관되게 확인하지 못했다는 면책 고지와
  * 짝을 이루는 서술이다(Hook et al., 2021).
  *
@@ -35,18 +35,18 @@ import { TypeMark } from './TypeMarkView';
  * 페이지 하단 각주로 분리하면 AC-8 ③을 만족하지 못한다 — 윙이 측정된 발견으로
  * 읽히지 않게 하는 것이 목적이므로 마커는 윙과 같은 덩어리 안에 있어야 한다.
  */
-export const WING_INTERPRETATION_MARKER = '윙은 이론적 해석이며 검증된 측정 결과가 아닙니다.';
+export const WING_INTERPRETATION_MARKER = '윙은 이론적 해석이며 검증된 측정 결과가 아니에요.';
 
 /** 면책 고지 확정 문구. 랜딩·결과·카드 3면이 같은 내용을 쓴다(카드는 마지막 줄만). */
 export const DISCLAIMER_PARAGRAPHS: readonly string[] = [
-  '이 검사는 에니어그램 이론에 근거해 자체 제작한 90문항 자기보고 도구입니다. 상용 에니어그램 검사의 문항을 사용하지 않았으며, 표준화·타당화 절차를 거치지 않았습니다.',
-  '결과는 진단이 아니라, 아홉 가지 동기 패턴에 대해 당신이 스스로를 어떻게 보고했는지를 정리한 것입니다. 점수가 비슷한 유형이 여럿일 수 있고, 시기와 상황에 따라 결과가 달라질 수 있습니다.',
-  '에니어그램은 학술적 검증 근거가 제한적이며, 요인분석 연구들은 아홉 개의 독립된 차원을 일관되게 확인하지 못했습니다 (Hook et al., 2021).',
-  '채용·인사 평가·진로 결정·정신건강 판단의 근거로 사용하지 마십시오.',
+  '이 검사는 에니어그램 이론에 근거해 자체 제작한 90문항 자기보고 도구예요. 상용 에니어그램 검사의 문항을 사용하지 않았으며, 표준화·타당화 절차를 거치지 않았어요.',
+  '결과는 진단이 아니라, 아홉 가지 동기 패턴에 대해 당신이 스스로를 어떻게 보고했는지를 정리한 것이에요. 점수가 비슷한 유형이 여럿일 수 있고, 시기와 상황에 따라 결과가 달라질 수 있어요.',
+  '에니어그램은 학술적 검증 근거가 제한적이며, 요인분석 연구들은 아홉 개의 독립된 차원을 일관되게 확인하지 못했어요 (Hook et al., 2021).',
+  '채용·인사 평가·진로 결정·정신건강 판단의 근거로 사용하지 마세요.',
 ];
 
 /** 면책 고지의 마지막 한 줄. 카드(`ShareCardArt`)가 싣는 것과 같은 문자열이다. */
-export const DISCLAIMER_LAST_LINE = '교육·자기이해 목적이며 임상적 진단이 아닙니다.';
+export const DISCLAIMER_LAST_LINE = '교육·자기이해 목적이며 임상적 진단이 아니에요.';
 
 /**
  * 45문항 결과의 **신뢰도 한계 고지** 확정 문구.
@@ -65,12 +65,12 @@ export const DISCLAIMER_LAST_LINE = '교육·자기이해 목적이며 임상적
  * 말투는 **깎아내리지 않는다.** 45문항은 잠정치가 아니라 이 검사의 한 경로이고,
  * 90문항은 같은 것을 두 번 물어 흔들림을 줄이는 다른 경로다.
  */
-export const BASE_LIMIT_HEADING = '45문항으로 나온 결과입니다';
+export const BASE_LIMIT_HEADING = '45문항으로 나온 결과예요';
 
 export const BASE_LIMIT_PARAGRAPHS: readonly string[] = [
-  '아홉 유형의 다섯 개념을 한 번씩, 유형당 5문항으로 물었습니다. 유형 점수는 5~25점 범위이고, 문항 하나가 그 점수의 5분의 1을 쥐고 있습니다.',
-  '그래서 1위와 2위가 가깝게 나왔다면 문항 한두 개로 순서가 뒤집힐 수 있습니다. 5문항 척도의 내적 일관성은 전체 90문항을 .70으로 놓고 Spearman-Brown 공식으로 환산하면 약 .54로, 통상 쓰는 최소 기준 .70에는 미치지 못합니다.',
-  '나머지 45문항은 같은 개념을 다른 문장으로 한 번 더 묻습니다. 한 문항을 잘못 읽었거나 그날 기분에 끌려 답했더라도 짝이 되는 문항이 상쇄하므로, 다 답하면 결과가 지금과 달라질 수 있습니다.',
+  '아홉 유형의 다섯 개념을 한 번씩, 유형당 5문항으로 물었어요. 유형 점수는 5~25점 범위이고, 문항 하나가 그 점수의 5분의 1을 쥐고 있어요.',
+  '그래서 1위와 2위가 가깝게 나왔다면 문항 한두 개로 순서가 뒤집힐 수 있어요. 5문항 척도의 내적 일관성은 전체 90문항을 .70으로 놓고 Spearman-Brown 공식으로 환산하면 약 .54로, 통상 쓰는 최소 기준 .70에는 미치지 못해요.',
+  '나머지 45문항은 같은 개념을 다른 문장으로 한 번 더 물어요. 한 문항을 잘못 읽었거나 그날 기분에 끌려 답했더라도 짝이 되는 문항이 상쇄하므로, 다 답하면 결과가 지금과 달라질 수 있어요.',
 ];
 
 /** 이어하기 버튼 문구. `/test?continue`는 이미 답한 45문항을 다시 묻지 않는다. */
@@ -156,7 +156,7 @@ export function ResultView({ result, code }: ResultViewProps) {
           <div className="min-w-0">
             <p className="text-[1rem] font-bold leading-[1.5] text-ink">유형이 뚜렷하지 않음</p>
             <p className="mt-1.5 text-[0.9375rem] leading-[1.7] text-ink-soft">
-              1위와 2위의 점수차가 3점 미만입니다. 한 유형으로 좁히기보다 상위 두세 유형의 설명을
+              1위와 2위의 점수차가 3점 미만이에요. 한 유형으로 좁히기보다 상위 두세 유형의 설명을
               함께 읽어 보세요.
             </p>
           </div>
@@ -204,13 +204,13 @@ export function ResultView({ result, code }: ResultViewProps) {
         <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">{wing.description}</p>
         <p className="mt-5 border-t border-line pt-4 text-[0.8125rem] leading-[1.7] text-ink-faint">
           <strong className="font-bold text-ink-soft">{WING_INTERPRETATION_MARKER}</strong> 윙과
-          통합·분열 화살표는 실증 근거가 거의 확인되지 않았습니다 (Hook et al., 2021).
+          통합·분열 화살표는 실증 근거가 거의 확인되지 않았어요 (Hook et al., 2021).
         </p>
       </section>
 
       {/* ④ 상대 비율 막대 + 원점수 + 1위–2위 점수차 */}
       {/*
-        두 경로 모두 분포를 보여준다. 이 화면이 "당신의 유형은 X입니다"라고 단정하지
+        두 경로 모두 분포를 보여준다. 이 화면이 "당신의 유형은 X이에요"라고 단정하지
         않고 9유형 프로파일을 제시하는 것은 요인 구조가 아홉으로 재현되지 않는다는
         연구(hook-2021, newgent-2004)에 대한 대응이다 — 45문항 경로에서 분포가 빠지면
         그 정직성 설계가 절반만 작동한다. 각주의 원점수 범위는 `ScoreBars`가 인자로 받는다.
@@ -226,7 +226,7 @@ export function ResultView({ result, code }: ResultViewProps) {
           작품 속에서 찾아보기
         </h2>
         <p className="mt-3 text-[0.875rem] leading-[1.7] text-ink-faint">
-          공식 유형 설정이 아니라, 작품 속 행동을 {result.primaryType}유형의 특징으로 읽어 본 예시입니다.
+          공식 유형 설정이 아니라, 작품 속 행동을 {result.primaryType}유형의 특징으로 읽어 본 예시이에요.
         </p>
         <ul className="mt-5 grid gap-3 sm:grid-cols-3">
           {fictionalCharactersByType[result.primaryType].map((character) => (

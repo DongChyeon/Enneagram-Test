@@ -98,7 +98,7 @@ export function ShareActions({ code }: ShareActionsProps) {
     if (!isKakaoTalkWebView() && typeof navigator.share === 'function') {
       try {
         await navigator.share({ title, text: '내 결과를 확인해 보세요.', url });
-        setStatus({ kind: 'ok', message: '공유 시트를 열었습니다.' });
+        setStatus({ kind: 'ok', message: '공유 시트를 열었어요.' });
         return;
       } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') return;
@@ -108,7 +108,7 @@ export function ShareActions({ code }: ShareActionsProps) {
     const copied = await copyText(url);
     setStatus(
       copied
-        ? { kind: 'ok', message: '결과 링크를 복사했습니다. 카카오톡 대화방에 붙여 넣으세요.' }
+        ? { kind: 'ok', message: '결과 링크를 복사했어요. 카카오톡 대화방에 붙여 넣으세요.' }
         : { kind: 'fail', message: '주소창의 결과 링크를 길게 눌러 복사해 주세요.' },
     );
   }
@@ -121,17 +121,17 @@ export function ShareActions({ code }: ShareActionsProps) {
       const file = new File([blob], fileName, { type: 'image/png' });
       if (typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file] });
-        setStatus({ kind: 'ok', message: '공유 시트를 열었습니다.' });
+        setStatus({ kind: 'ok', message: '공유 시트를 열었어요.' });
         return;
       }
       setStatus({
         kind: 'fail',
-        message: '이 브라우저는 이미지 공유를 지원하지 않습니다. 아래 "카드 내려받기"를 쓰거나 카드를 길게 눌러 저장하세요.',
+        message: '이 브라우저는 이미지 공유를 지원하지 않아요. 아래 "카드 내려받기"를 쓰거나 카드를 길게 눌러 저장하세요.',
       });
     } catch {
       setStatus({
         kind: 'fail',
-        message: '공유에 실패했습니다. 아래 "카드 내려받기"를 쓰거나 카드를 길게 눌러 저장하세요.',
+        message: '공유에 실패했어요. 아래 "카드 내려받기"를 쓰거나 카드를 길게 눌러 저장하세요.',
       });
     }
   }

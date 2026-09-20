@@ -199,7 +199,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
     expect(screen.getByText('묶음 2/9')).toBeTruthy();
     const ribbon = screen.getByRole('status');
     expect(ribbon.textContent).toContain('1번째 묶음');
-    expect(ribbon.textContent).toContain('8묶음 남았습니다');
+    expect(ribbon.textContent).toContain('8묶음 남았어요.');
 
     answer(4);
     expect(screen.queryByRole('status')).toBeNull();
@@ -245,8 +245,8 @@ describe('TestRunner 묶음 · 이어하기', () => {
       vi.advanceTimersByTime(0);
     });
 
-    expect(screen.getByText('이어서 답하는 중입니다.')).toBeTruthy();
-    expect(screen.getByText(`${TOTAL}문항 중 2문항을 답해 두었습니다.`)).toBeTruthy();
+    expect(screen.getByText('이어서 답하는 중이에요.')).toBeTruthy();
+    expect(screen.getByText(`${TOTAL}문항 중 2문항을 답해 두었어요.`)).toBeTruthy();
 
     fireEvent.click(screen.getByRole('button', { name: '처음부터 다시 하기' }));
     fireEvent.click(screen.getByRole('button', { name: '지우고 1번부터' }));
@@ -261,7 +261,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
     );
     expect(progressBar().getAttribute('aria-valuenow')).toBe('0');
     expect(screen.getByText(questions[0].text)).toBeTruthy();
-    expect(screen.queryByText('이어서 답하는 중입니다.')).toBeNull();
+    expect(screen.queryByText('이어서 답하는 중이에요.')).toBeNull();
   });
 
   it('한 문항도 답하지 않은 저장본은 이어하기 안내를 띄우지 않는다', async () => {
@@ -280,7 +280,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
       vi.advanceTimersByTime(0);
     });
 
-    expect(screen.queryByText('이어서 답하는 중입니다.')).toBeNull();
+    expect(screen.queryByText('이어서 답하는 중이에요.')).toBeNull();
   });
 
   it('마지막 묶음에 들어서면 남은 묶음 수 대신 마지막임을 알린다', async () => {
@@ -321,7 +321,7 @@ describe('TestRunner 배너 겹침', () => {
       vi.advanceTimersByTime(0);
     });
 
-    expect(screen.getByText('이어서 답하는 중입니다.')).toBeTruthy();
+    expect(screen.getByText('이어서 답하는 중이에요.')).toBeTruthy();
     expect(screen.queryByRole('status')).toBeNull();
     expect(screen.getByText(questions[10].text)).toBeTruthy();
   });
@@ -494,6 +494,6 @@ describe('TestRunner 기본 45문항 · 이어하기', () => {
     expect(screen.getByText(`/${BASE_PLAN.length}`)).toBeTruthy();
     expect(progressBar().getAttribute('aria-valuenow')).toBe('2');
     expect(currentQuestionId()).toBe(questions[BASE_PLAN[2]].id);
-    expect(screen.getByText('45문항 중 2문항을 답해 두었습니다.')).toBeTruthy();
+    expect(screen.getByText('45문항 중 2문항을 답해 두었어요.')).toBeTruthy();
   });
 });

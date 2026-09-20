@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { code } = await params;
   const result = decodeResult(code);
   if (result === null) {
-    return { title: '결과를 찾을 수 없습니다' };
+    return { title: '결과를 찾을 수 없어요' };
   }
 
   // 어느 경로로 나온 결과인지 제목에서부터 밝힌다 — 링크만 보고 지나가는
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const items = result.kind === 'base' ? 45 : 90;
   const type = typeById.get(result.primaryType);
   const title = `[${items}문항] ${result.wing} · ${type?.nameKo ?? ''} — 애니어그램 유형 테스트`;
-  const description = `${items}문항 자기보고 결과입니다. ${type?.summary ?? ''} 교육·자기이해 목적이며 임상적 진단이 아닙니다.`;
+  const description = `${items}문항 자기보고 결과예요. ${type?.summary ?? ''} 교육·자기이해 목적이며 임상적 진단이 아니에요.`;
 
   return {
     title,

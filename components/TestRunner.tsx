@@ -253,7 +253,7 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
     cancelAdvance();
     const open = plan.findIndex((position) => answers[position] === null);
     if (open !== -1) {
-      setError(`${open + 1}번 문항이 아직 비어 있습니다.`);
+      setError(`${open + 1}번 문항이 아직 비어 있어요.`);
       setIndex(open);
       return;
     }
@@ -263,7 +263,7 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
     for (const position of scored) {
       const value = answers[position];
       if (value === null) {
-        setError('아직 채워지지 않은 문항이 있어 결과를 낼 수 없습니다.');
+        setError('아직 채워지지 않은 문항이 있어 결과를 낼 수 없어요.');
         return;
       }
       payload.push({ questionId: questions[position].id, value });
@@ -276,7 +276,7 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
       router.push(`/result/${code}`);
     } catch {
       setSubmitting(false);
-      setError('결과를 만드는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.');
+      setError('결과를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.');
     }
   }, [answers, cancelAdvance, plan, resultKind, router]);
 
@@ -331,24 +331,24 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
 
       <main className="mx-auto flex w-full max-w-[34rem] flex-1 flex-col px-5 pb-12 pt-8 sm:px-8 sm:pt-10">
         {!restored ? (
-          <p className="pt-10 text-[0.9375rem] text-ink-faint">문항을 불러오는 중입니다…</p>
+          <p className="pt-10 text-[0.9375rem] text-ink-faint">문항을 불러오는 중이에요…</p>
         ) : (
           <>
             {mode === 'continue' && !resumed ? (
               <p className="animate-item-in mb-7 rounded-card bg-sub p-5 text-[0.9375rem] leading-[1.7] text-ink-soft">
                 <span className="font-bold text-ink">
-                  이미 답한 {BASE_PLAN.length}문항은 그대로 두고, 남은 {planSize}문항만 묻습니다.
+                  이미 답한 {BASE_PLAN.length}문항은 그대로 두고, 남은 {planSize}문항만 물어요.
                 </span>{' '}
-                끝나면 {TOTAL}문항 전체 결과가 나옵니다.
+                끝나면 {TOTAL}문항 전체 결과가 나와요.
               </p>
             ) : null}
 
             {resumed ? (
               <div className="animate-item-in mb-7 rounded-card bg-sub p-5">
                 <p className="text-[0.9375rem] leading-[1.6] text-ink">
-                  <span className="font-bold">이어서 답하는 중입니다.</span>{' '}
+                  <span className="font-bold">이어서 답하는 중이에요.</span>{' '}
                   <span className="tnum text-ink-soft">
-                    {planSize}문항 중 {answeredCount}문항을 답해 두었습니다.
+                    {planSize}문항 중 {answeredCount}문항을 답해 두었어요.
                   </span>
                 </p>
                 {confirmingReset ? (
@@ -392,11 +392,11 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
                   ✓
                 </span>
                 <span>
-                  <span className="tnum font-bold">{section}번째 묶음</span>을 끝냈습니다.{' '}
+                  <span className="tnum font-bold">{section}번째 묶음</span>을 끝냈어요.{' '}
                   {remainingSections === 1 ? (
-                    <>이제 마지막 묶음, {sectionSize}문항 남았습니다.</>
+                    <>이제 마지막 묶음, {sectionSize}문항 남았어요.</>
                   ) : (
-                    <span className="tnum text-ink-soft">{remainingSections}묶음 남았습니다.</span>
+                    <span className="tnum text-ink-soft">{remainingSections}묶음 남았어요.</span>
                   )}
                 </span>
               </p>
@@ -443,12 +443,12 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
                 {allAnswered ? (
                   <p className="text-[0.9375rem] leading-[1.6] text-ink-soft">
                     {mode === 'base'
-                      ? `${planSize}문항에 모두 답했습니다. 결과는 링크 주소 안에 담기며 서버에 저장되지 않습니다. 이어서 나머지 ${TOTAL - planSize}문항을 답하면 더 정확한 결과가 됩니다.`
-                      : `${TOTAL}문항에 모두 답했습니다. 결과는 링크 주소 안에 담기며 서버에 저장되지 않습니다.`}
+                      ? `${planSize}문항에 모두 답했어요. 결과는 링크 주소 안에 담기며 서버에 저장되지 않아요. 이어서 나머지 ${TOTAL - planSize}문항을 답하면 더 정확한 결과가 돼요.`
+                      : `${TOTAL}문항에 모두 답했어요. 결과는 링크 주소 안에 담기며 서버에 저장되지 않아요.`}
                   </p>
                 ) : (
                   <p className="text-[0.9375rem] leading-[1.6] text-ink-soft">
-                    아직 {planSize - answeredCount}문항이 비어 있어 결과를 낼 수 없습니다.{' '}
+                    아직 {planSize - answeredCount}문항이 비어 있어 결과를 낼 수 없어요.{' '}
                     <button
                       type="button"
                       onClick={() => goTo(firstUnanswered)}
@@ -472,7 +472,7 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
             <p className="mt-10 text-[0.8125rem] leading-[1.7] text-ink-faint">
               고민이 길어지면 처음 떠오른 쪽을 고르세요. 최대 {SECTION_SIZE}문항씩{' '}
               {sectionTotal}묶음으로 나뉘어 있고, 같은 탭에서는 새로고침하거나 잠시 나갔다 와도
-              이어서 답할 수 있습니다. 키보드를 쓴다면 1–5 키로 바로 선택할 수 있습니다.
+              이어서 답할 수 있어요. 키보드를 쓴다면 1–5 키로 바로 선택할 수 있어요.
             </p>
           </>
         )}

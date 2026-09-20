@@ -57,7 +57,7 @@ describe('ShareActions', () => {
 
     await waitFor(() => expect(writeText).toHaveBeenCalledWith(window.location.href));
     expect(share).not.toHaveBeenCalled();
-    expect(screen.getByText('결과 링크를 복사했습니다. 카카오톡 대화방에 붙여 넣으세요.')).toBeTruthy();
+    expect(screen.getByText('결과 링크를 복사했어요. 카카오톡 대화방에 붙여 넣으세요.')).toBeTruthy();
   });
 
   it('Clipboard API가 없는 WebView에서도 execCommand 복사로 폴백한다', async () => {
@@ -70,6 +70,6 @@ describe('ShareActions', () => {
     fireEvent.click(screen.getByRole('button', { name: '결과 공유하기' }));
 
     await waitFor(() => expect(execCommand).toHaveBeenCalledWith('copy'));
-    expect(screen.getByText('결과 링크를 복사했습니다. 카카오톡 대화방에 붙여 넣으세요.')).toBeTruthy();
+    expect(screen.getByText('결과 링크를 복사했어요. 카카오톡 대화방에 붙여 넣으세요.')).toBeTruthy();
   });
 });

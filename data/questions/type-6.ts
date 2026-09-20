@@ -15,7 +15,7 @@ export const type6Questions: Question[] = [
   {
     id: 'q6-01',
     typeId: 6,
-    text: '평소에 일을 시작하기 전에 기댈 만한 근거부터 확보해 둔다.',
+    text: '평소에 일을 시작하기 전에 기댈 만한 근거부터 확보해 둬요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't6-security-seeking',
@@ -23,12 +23,12 @@ export const type6Questions: Question[] = [
     rationale:
       '확보의 목적이 현재의 오류 교정이 아니라 앞으로 기댈 기반 마련이므로 1번이 아니라 6번의 동기를 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"기댈 만한 근거부터 확보해 둔다"는 준비 행동 기술로 확실성 추구를 표현했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"기댈 만한 근거부터 확보해 둔다"는 준비 행동 기술로 확실성 추구를 표현했어요.' },
   },
   {
     id: 'q6-02',
     typeId: 6,
-    text: '평소에 확실한 보장이 없어도 마음 편히 일을 진행하는 편이다.',
+    text: '평소에 확실한 보장이 없어도 마음 편히 일을 진행하는 편이에요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't6-security-seeking',
@@ -36,12 +36,12 @@ export const type6Questions: Question[] = [
     rationale:
       '확실함 확보 동기의 반대 방향 긍정 진술로, 통제권 장악이 아니라 안전 기반의 필요를 재므로 8번이 아니라 6번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q6-01의 반대 방향 긍정 진술로 "확실한 보장이 없어도 마음 편히"라는 조건절 대비를 자체 구성했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q6-01의 반대 방향 긍정 진술로 "확실한 보장이 없어도 마음 편히"라는 조건절 대비를 자체 구성했어요.' },
   },
   {
     id: 'q6-03',
     typeId: 6,
-    text: '평소에 기댈 사람이 없는 상황에 놓일 때를 미리 대비해 둔다.',
+    text: '평소에 기댈 사람이 없는 상황에 놓일 때를 미리 대비해 둬요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't6-unsupported-fear',
@@ -49,12 +49,12 @@ export const type6Questions: Question[] = [
     rationale:
       '대비의 대상이 통제당할 가능성이 아니라 기댈 데 없이 혼자 감당하는 상황이므로 8번이 아니라 6번의 두려움을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"기댈 사람이 없는 상황"이라는 지지 상실 시나리오에 대한 사전 대비 행동으로 6번 핵심 두려움을 간접 기술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '"기댈 사람이 없는 상황"이라는 지지 상실 시나리오에 대한 사전 대비 행동으로 6번 핵심 두려움을 간접 기술했어요.' },
   },
   {
     id: 'q6-04',
     typeId: 6,
-    text: '평소에 어려운 일이 닥치면 누가 내 편에 있는지에 먼저 눈이 간다.',
+    text: '평소에 어려운 일이 닥치면 누가 내 편에 있는지에 먼저 눈이 가요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't6-unsupported-fear',
@@ -67,7 +67,7 @@ export const type6Questions: Question[] = [
   {
     id: 'q6-05',
     typeId: 6,
-    text: '평소에 새 계획을 들으면 앞으로 잘못될 수 있는 지점이 먼저 눈에 들어온다.',
+    text: '평소에 새 계획을 들으면 앞으로 잘못될 수 있는 지점이 먼저 눈에 들어와요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't6-risk-attention',
@@ -75,12 +75,12 @@ export const type6Questions: Question[] = [
     rationale:
       '먼저 보이는 것이 지금 어긋나 있는 오류가 아니라 앞으로의 위험이므로 1번이 아니라 6번의 주의 초점을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '미래 오류 지점에 주의가 가는 초점을 "앞으로 잘못될 수 있는 지점"으로 지정했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '미래 오류 지점에 주의가 가는 초점을 "앞으로 잘못될 수 있는 지점"으로 지정했어요.' },
   },
   {
     id: 'q6-06',
     typeId: 6,
-    text: '평소에 여행을 준비할 때는 일이 어긋날 경우의 대비책에 먼저 눈이 간다.',
+    text: '평소에 여행을 준비할 때는 일이 어긋날 경우의 대비책에 먼저 눈이 가요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't6-risk-attention',
@@ -93,7 +93,7 @@ export const type6Questions: Question[] = [
   {
     id: 'q6-07',
     typeId: 6,
-    text: '평소에 처음 만난 사람에게는 의도를 확인한 뒤에야 마음을 연다.',
+    text: '평소에 처음 만난 사람에게는 의도를 확인한 뒤에야 마음을 열어요.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't6-trust-testing',
@@ -101,12 +101,12 @@ export const type6Questions: Question[] = [
     rationale:
       '거리를 두는 이유가 통제 거부가 아니라 신뢰 가능 여부의 확인이므로 8번이 아니라 6번의 관계 방식을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '초면 관계에서 "의도를 확인한 뒤에야 마음을 연다"는 순서 기술로 신뢰 검증 행동을 표현했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: '초면 관계에서 "의도를 확인한 뒤에야 마음을 연다"는 순서 기술로 신뢰 검증 행동을 표현했어요.' },
   },
   {
     id: 'q6-08',
     typeId: 6,
-    text: '평소에 처음 보는 사람도 별다른 확인 없이 믿고 시작하는 편이다.',
+    text: '평소에 처음 보는 사람도 별다른 확인 없이 믿고 시작하는 편이에요.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't6-trust-testing',
@@ -114,12 +114,12 @@ export const type6Questions: Question[] = [
     rationale:
       '신뢰 확인 절차의 반대 방향 긍정 진술로, 상대의 오류 점검이 아니라 신뢰성 확인을 재므로 1번이 아니라 6번을 잰다.',
     authoredBy: 'worker-items-b',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q6-07의 반대 방향 긍정 진술이며 "별다른 확인 없이 믿고 시작하는"이라는 한국어 표현을 사용했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review-5', note: 'q6-07의 반대 방향 긍정 진술이며 "별다른 확인 없이 믿고 시작하는"이라는 한국어 표현을 사용했어요.' },
   },
   {
     id: 'q6-09',
     typeId: 6,
-    text: '지난 몇 년간 대체로 결정을 내린 뒤에도 그 선택을 여러 번 되짚어 보곤 했다.',
+    text: '지난 몇 년간 대체로 결정을 내린 뒤에도 그 선택을 여러 번 되짚어 보곤 했어요.',
     sourceId: 'riso-hudson-personality-types',
     origin: 'authored',
     facet: 't6-doubt-loop',
@@ -132,7 +132,7 @@ export const type6Questions: Question[] = [
   {
     id: 'q6-10',
     typeId: 6,
-    text: '지난 몇 년간 대체로 이미 정한 일도 한 번 더 확인하고 나서야 넘어가는 편이었다.',
+    text: '지난 몇 년간 대체로 이미 정한 일도 한 번 더 확인하고 나서야 넘어가는 편이었어요.',
     sourceId: 'naranjo-1994',
     origin: 'authored',
     facet: 't6-doubt-loop',

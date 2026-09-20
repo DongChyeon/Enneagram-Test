@@ -16,7 +16,7 @@ export const type8Questions: Question[] = [
   {
     id: 'q8-01',
     typeId: 8,
-    text: '평소에 내 일에 관한 결정은 다른 사람들보다 직접 내리려는 편이다.',
+    text: '평소에 내 일에 관한 결정은 다른 사람들보다 직접 내리려는 편이에요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't8-self-agency',
@@ -24,12 +24,12 @@ export const type8Questions: Question[] = [
     rationale:
       '통제의 대상이 옳은 기준이 아니라 자기 영역의 결정권이라는 점에서 1번이 아니라 8번을 잰다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '결정권 보유를 상대 빈도 진술로 기술해 "나는 주도하는 사람이다"류의 직역을 피했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '결정권 보유를 상대 빈도 진술로 기술해 "나는 주도하는 사람이다"류의 직역을 피했어요.' },
   },
   {
     id: 'q8-02',
     typeId: 8,
-    text: '평소에 일의 방향은 남이 정해 주는 대로 따라가는 쪽이 편하다.',
+    text: '평소에 일의 방향은 남이 정해 주는 대로 따라가는 쪽이 편해요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't8-self-agency',
@@ -42,7 +42,7 @@ export const type8Questions: Question[] = [
   {
     id: 'q8-03',
     typeId: 8,
-    text: '평소에 약점을 내보이면 그만큼 상대에게 끌려다니게 된다고 여긴다.',
+    text: '평소에 약점을 내보이면 그만큼 상대에게 끌려다니게 된다고 여겨요.',
     sourceId: 'riso-hudson-wisdom',
     origin: 'authored',
     facet: 't8-vulnerability-fear',
@@ -55,7 +55,7 @@ export const type8Questions: Question[] = [
   {
     id: 'q8-04',
     typeId: 8,
-    text: '평소에 부탁을 받으면 내가 휘둘릴 여지가 있는지에 먼저 눈이 간다.',
+    text: '평소에 부탁을 받으면 내가 휘둘릴 여지가 있는지에 먼저 눈이 가요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't8-vulnerability-fear',
@@ -68,20 +68,20 @@ export const type8Questions: Question[] = [
   {
     id: 'q8-05',
     typeId: 8,
-    text: '평소에 낯선 자리에서는 누가 결정권을 쥐었는지에 먼저 눈이 간다.',
+    text: '평소에 낯선 자리에서는 누가 결정권을 쥐었는지에 먼저 눈이 가요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't8-power-attention',
     reverse: false,
     rationale:
-      '같은 자리에서 2번은 누가 마음이 불편한지를 먼저 보는 반면 8번은 힘이 어디에 있는지를 먼저 본다.',
+      '같은 자리에서 2번은 누가 마음이 불편한지를 먼저 보는 반면 8번은 힘이 어디에 있는지를 먼저 봐요.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '낯선 자리에서 결정권 소재를 보는 초점을 자체 표현으로 지정했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '낯선 자리에서 결정권 소재를 보는 초점을 자체 표현으로 지정했어요.' },
   },
   {
     id: 'q8-06',
     typeId: 8,
-    text: '평소에 의견이 맞서면 상대가 물러설 지점이 먼저 눈에 들어온다.',
+    text: '평소에 의견이 맞서면 상대가 물러설 지점이 먼저 눈에 들어와요.',
     sourceId: 'palmer-1988',
     origin: 'authored',
     facet: 't8-power-attention',
@@ -94,7 +94,7 @@ export const type8Questions: Question[] = [
   {
     id: 'q8-07',
     typeId: 8,
-    text: '평소에 불만이 생기면 다른 사람들보다 그 자리에서 바로 말하는 편이다.',
+    text: '평소에 불만이 생기면 다른 사람들보다 그 자리에서 바로 말하는 편이에요.',
     sourceId: 'naranjo-1994',
     origin: 'authored',
     facet: 't8-direct-confrontation',
@@ -102,12 +102,12 @@ export const type8Questions: Question[] = [
     rationale:
       '2번은 관계가 상할까 봐 말을 삼키는 반면 8번은 갈등을 감수하고 그 자리에서 꺼낸다는 점에서 갈린다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '불만의 즉시 표명을 상대 빈도 진술로 기술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '불만의 즉시 표명을 상대 빈도 진술로 기술했어요.' },
   },
   {
     id: 'q8-08',
     typeId: 8,
-    text: '평소에 의견이 갈리면 부딪치기 전에 한발 물러서는 편이다.',
+    text: '평소에 의견이 갈리면 부딪치기 전에 한발 물러서는 편이에요.',
     sourceId: 'naranjo-1994',
     origin: 'authored',
     facet: 't8-direct-confrontation',
@@ -120,7 +120,7 @@ export const type8Questions: Question[] = [
   {
     id: 'q8-09',
     typeId: 8,
-    text: '지난 몇 년간 대체로 세게 밀어붙인다는 말을 들은 적이 있다.',
+    text: '지난 몇 년간 대체로 세게 밀어붙인다는 말을 들은 적이 있어요.',
     sourceId: 'chestnut-2013',
     origin: 'authored',
     facet: 't8-intensity-overrun',
@@ -128,12 +128,12 @@ export const type8Questions: Question[] = [
     rationale:
       '부담을 주는 지점이 돌봄의 과잉인 2번과 달리 힘의 과잉이라는 점에서 8번의 부하 반응을 잰다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '강도에 대한 타인 피드백을 보고 형식으로 서술해 악덕 라벨을 피했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '강도에 대한 타인 피드백을 보고 형식으로 서술해 악덕 라벨을 피했어요.' },
   },
   {
     id: 'q8-10',
     typeId: 8,
-    text: '평소에 일이 더디게 가면 다른 사람들보다 목소리가 먼저 커지는 편이다.',
+    text: '평소에 일이 더디게 가면 다른 사람들보다 목소리가 먼저 커지는 편이에요.',
     sourceId: 'riso-hudson-personality-types',
     origin: 'authored',
     facet: 't8-intensity-overrun',
@@ -141,6 +141,6 @@ export const type8Questions: Question[] = [
     rationale:
       '1번은 같은 상황에서 불만을 눌러 두는 쪽인 반면 8번은 세기를 올려 상황을 다시 쥔다는 점에서 갈린다.',
     authoredBy: 'worker-items-c',
-    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '지연 상황의 반응을 "목소리가 먼저 커지는"이라는 관찰 가능 행동으로 기술했다.' },
+    copyrightReview: { verdict: 'clear', reviewedBy: 'worker-review', note: '지연 상황의 반응을 "목소리가 먼저 커지는"이라는 관찰 가능 행동으로 기술했어요.' },
   },
 ];

@@ -78,7 +78,7 @@ export default function OpenGraphImage() {
             color: '#77746e',
           }}
         >
-          <span>응답은 브라우저 안에만 저장됩니다</span>
+          <span>응답은 브라우저 안에만 저장돼요</span>
           <span style={{ fontWeight: 700, color: '#3d70b2' }}>교육 · 자기이해 목적</span>
         </div>
       </div>

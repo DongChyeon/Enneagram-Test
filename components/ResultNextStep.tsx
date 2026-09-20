@@ -30,7 +30,7 @@ export function ResultNextStep({ code }: ResultNextStepProps) {
           내 결과도 알아보기
         </h2>
         <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">
-          이 링크는 다른 사람이 공유한 결과입니다. 내 결과를 보려면 처음부터 45문항에 답해 주세요.
+          이 링크는 다른 사람이 공유한 결과예요. 내 결과를 보려면 처음부터 45문항에 답해 주세요.
         </p>
         <Link href="/test" className={LINK_CLASS}>
           45문항 검사 시작하기
@@ -45,9 +45,9 @@ export function ResultNextStep({ code }: ResultNextStepProps) {
         남은 45문항
       </h2>
       <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">
-        같은 다섯 개념을 서로 다른 문장으로 한 번 더 묻습니다. 다 답하면 90문항 결과가 되고 9유형
-        점수 분포도 함께 나옵니다.{' '}
-        <strong className="font-bold text-ink">이미 답한 45문항은 다시 묻지 않습니다.</strong>
+        같은 다섯 개념을 서로 다른 문장으로 한 번 더 물어요. 다 답하면 90문항 결과가 되고 9유형
+        점수 분포도 함께 나와요.{' '}
+        <strong className="font-bold text-ink">이미 답한 45문항은 다시 묻지 않아요.</strong>
       </p>
       <Link href="/test?continue" className={LINK_CLASS}>
         45문항 더 답하고 정확도 높이기
