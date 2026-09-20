@@ -31,6 +31,7 @@ import type { Likert } from '../lib/types';
  */
 
 export const STORAGE_KEY = 'enneagram-test.progress.v1';
+export const LAST_RESULT_KEY = 'enneagram-test.last-result.v1';
 
 /** 한 묶음의 문항 수. 90 = 10 × 9이므로 나머지 없이 떨어진다. */
 export const SECTION_SIZE = 10;
@@ -150,5 +151,21 @@ export function clearProgress(): void {
     window.sessionStorage.removeItem(STORAGE_KEY);
   } catch {
     // 지우지 못해도 화면 상태는 이미 초기화됐다. 다음 쓰기가 덮어쓴다.
+  }
+}
+
+export function rememberResult(code: string): void {
+  try {
+    window.sessionStorage.setItem(LAST_RESULT_KEY, code);
+  } catch {
+    // 소유자용 이어하기 안내만 포기한다. 결과 페이지 이동 자체는 계속되어야 한다.
+  }
+}
+
+export function ownsResult(code: string): boolean {
+  try {
+    return window.sessionStorage.getItem(LAST_RESULT_KEY) === code;
+  } catch {
+    return false;
   }
 }

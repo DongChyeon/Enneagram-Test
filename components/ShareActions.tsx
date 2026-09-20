@@ -38,6 +38,38 @@ type Status = { kind: 'idle' | 'ok' | 'fail'; message: string };
 const SECONDARY =
   'press flex min-h-[3.25rem] flex-1 items-center justify-center rounded-control bg-sub px-4 text-[0.9375rem] font-bold text-ink-soft hover:bg-line/60';
 
+function isKakaoTalkWebView(): boolean {
+  return /KAKAOTALK/i.test(navigator.userAgent);
+}
+
+async function copyText(text: string): Promise<boolean> {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // 일부 인앱 WebView는 API를 노출하면서 실제 쓰기는 막는다. 구형 복사로 잇는다.
+    }
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.readOnly = true;
+  textarea.style.position = 'fixed';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.select();
+  textarea.setSelectionRange(0, text.length);
+
+  try {
+    return document.execCommand?.('copy') === true;
+  } catch {
+    return false;
+  } finally {
+    textarea.remove();
+  }
+}
+
 export function ShareActions({ code }: ShareActionsProps) {
   const [status, setStatus] = useState<Status>({ kind: 'idle', message: '' });
 
@@ -61,21 +93,24 @@ export function ShareActions({ code }: ShareActionsProps) {
   async function shareLink() {
     const url = window.location.href;
     const title = '애니어그램 유형 테스트';
-    if (typeof navigator.share === 'function') {
+    // 카카오톡 인앱 WebView는 Web Share API 노출 여부와 실제 동작이 일치하지
+    // 않는 버전이 있다. 클릭의 사용자 활성화가 살아 있을 때 복사 경로를 탄다.
+    if (!isKakaoTalkWebView() && typeof navigator.share === 'function') {
       try {
         await navigator.share({ title, text: '내 결과를 확인해 보세요.', url });
         setStatus({ kind: 'ok', message: '공유 시트를 열었습니다.' });
         return;
-      } catch {
-        // 사용자가 시트를 닫은 경우도 여기로 온다 — 실패로 알리지 않고 복사로 잇는다.
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
       }
     }
-    try {
-      await navigator.clipboard.writeText(url);
-      setStatus({ kind: 'ok', message: '링크를 복사했습니다. 카카오톡이나 메시지에 붙여 넣으세요.' });
-    } catch {
-      setStatus({ kind: 'fail', message: '주소창의 URL을 직접 복사해 주세요.' });
-    }
+
+    const copied = await copyText(url);
+    setStatus(
+      copied
+        ? { kind: 'ok', message: '결과 링크를 복사했습니다. 카카오톡 대화방에 붙여 넣으세요.' }
+        : { kind: 'fail', message: '주소창의 결과 링크를 길게 눌러 복사해 주세요.' },
+    );
   }
 
   async function shareCard() {
@@ -112,7 +147,7 @@ export function ShareActions({ code }: ShareActionsProps) {
         onClick={shareLink}
         className="press mt-5 min-h-[3.5rem] w-full rounded-control bg-primary px-6 text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press"
       >
-        카드 공유하기
+        결과 공유하기
       </button>
 
       <div className="mt-2 flex gap-2">

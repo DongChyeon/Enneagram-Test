@@ -135,4 +135,15 @@ describe('ResultView', () => {
     expect(img!.getAttribute('src')).toBe('/result/5w4-TEST0000000/card');
     expect(container.textContent).toContain('길게 눌러 저장');
   });
+
+  it('주유형과 닮은 가상 인물 세 명을 공식 설정이 아닌 해석으로 표시한다', () => {
+    const result = resultFromScores(fixture(3));
+    const { container } = render(<ResultView result={result} code="5w4-TEST0000000" />);
+
+    const section = container.querySelector('section[aria-labelledby="character-heading"]');
+    expect(section).not.toBeNull();
+    expect(section!.querySelectorAll('li')).toHaveLength(3);
+    expect(section!.textContent).toContain('공식 유형 설정이 아니라');
+    expect(section!.textContent).toContain('셜록 홈즈');
+  });
 });

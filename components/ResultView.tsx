@@ -21,13 +21,13 @@
  *     읽는 사람이 누를 곳을 잘못 찾는다.
  */
 
-import Link from 'next/link';
-
 import { typeById } from '../data/types';
 import { wingByLabel } from '../data/wings';
+import { fictionalCharactersByType } from '../data/fictional-characters';
 import type { Result } from '../lib/types';
 import { ScoreBars } from './ScoreBars';
 import { ShareActions } from './ShareActions';
+import { ResultNextStep } from './ResultNextStep';
 import { TypeMark } from './TypeMarkView';
 
 /**
@@ -221,26 +221,27 @@ export function ResultView({ result, code }: ResultViewProps) {
         scoreRange={base ? [5, 25] : [10, 50]}
       />
 
+      <section aria-labelledby="character-heading" className="mt-14">
+        <h2 id="character-heading" className="text-[1.25rem] font-bold text-ink">
+          작품 속에서 찾아보기
+        </h2>
+        <p className="mt-3 text-[0.875rem] leading-[1.7] text-ink-faint">
+          공식 유형 설정이 아니라, 작품 속 행동을 {result.primaryType}유형의 특징으로 읽어 본 예시입니다.
+        </p>
+        <ul className="mt-5 grid gap-3 sm:grid-cols-3">
+          {fictionalCharactersByType[result.primaryType].map((character) => (
+            <li key={`${character.work}-${character.name}`} className="rounded-card bg-sub p-5">
+              <p className="text-[1rem] font-bold leading-[1.45] text-ink">{character.name}</p>
+              <p className="mt-1 text-[0.8125rem] font-medium text-ink-faint">{character.work}</p>
+              <p className="mt-3 text-[0.875rem] leading-[1.7] text-ink-soft">{character.resemblance}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <ShareActions code={code} />
 
-      {base ? (
-        <section aria-labelledby="continue-heading" className="mt-14 rounded-card bg-sub p-5 sm:p-7">
-          <h2 id="continue-heading" className="text-[1.125rem] font-bold tracking-[-0.01em] text-ink">
-            남은 45문항
-          </h2>
-          <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">
-            같은 다섯 개념을 서로 다른 문장으로 한 번 더 묻습니다. 다 답하면 90문항 결과가 되고
-            9유형 점수 분포도 함께 나옵니다.{' '}
-            <strong className="font-bold text-ink">이미 답한 45문항은 다시 묻지 않습니다.</strong>
-          </p>
-          <Link
-            href="/test?continue"
-            className="press mt-5 flex min-h-[3.5rem] w-full items-center justify-center rounded-control bg-primary px-6 text-center text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press"
-          >
-            {CONTINUE_CTA}
-          </Link>
-        </section>
-      ) : null}
+      {base ? <ResultNextStep code={code} /> : null}
 
       {/* ⑥ 면책 고지 */}
       <section
