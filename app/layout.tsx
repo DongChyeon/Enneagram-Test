@@ -20,12 +20,25 @@ import './globals.css';
  * 그러지 않으면 미리보기 카드가 옛 주소를 가리킨다. `docs/deploy.md` 참조.
  */
 const SITE_URL = new URL('https://enneagram-test-one.vercel.app');
+const LANDING_OG_ALT = '애니어그램 유형 테스트 — 나를 이해하는 45문항 또는 90문항 검사';
 
 export const metadata: Metadata = {
   metadataBase: SITE_URL,
   title: '애니어그램 유형 테스트',
   description:
     '90문항으로 애니어그램 주유형과 윙을 확인하는 한국어 검사. 교육·자기이해 목적이며 임상적 진단이 아닙니다.',
+  openGraph: {
+    type: 'website',
+    title: '애니어그램 유형 테스트',
+    description: '45문항 또는 90문항으로 주유형과 윙을 확인해 보세요.',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: LANDING_OG_ALT }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '애니어그램 유형 테스트',
+    description: '45문항 또는 90문항으로 주유형과 윙을 확인해 보세요.',
+    images: ['/opengraph-image'],
+  },
 };
 
 export const viewport: Viewport = {
