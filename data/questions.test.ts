@@ -10,7 +10,6 @@ import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 import { questions } from './questions';
 import { sources } from './sources';
 import { types, facetsByType } from './types';

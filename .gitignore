@@ -3,5 +3,5 @@ node_modules/
 public/og/
 *.tsbuildinfo
 
-# OMC 세션 상태 — 실행 중에만 의미가 있는 임시 파일. 계획/스펙/핸드오프는 추적한다.
-.omc/state/
+# OMC 작업 디렉터리 — 도구의 로컬 상태이지 프로젝트 산출물이 아니다.
+.omc/
