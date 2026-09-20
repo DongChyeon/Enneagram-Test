@@ -5,3 +5,4 @@ public/og/
 
 # OMC 작업 디렉터리 — 도구의 로컬 상태이지 프로젝트 산출물이 아니다.
 .omc/
+_workspace/

@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * 링크 복사 + **3단 저장 폴백** (AC-11, R10).
+ * 링크 공유(공유 시트) + 이미지 **3단 저장 폴백** (AC-11, R10).
  *
  *   ① Web Share — `navigator.canShare({ files })` → `navigator.share({ files })`.
  *      Web Share는 실제 `File` 객체를 요구하므로 이 단계 **안에서만**
@@ -44,12 +44,37 @@ export function ShareActions({ code }: ShareActionsProps) {
   const cardUrl = `/result/${code}/card`;
   const fileName = `enneagram-${code}.png`;
 
-  async function copyLink() {
+  /**
+   * 결과 **링크**를 OS 공유 시트로 보낸다. 시트에는 설치된 앱이 그대로 뜨므로
+   * 카카오톡·인스타그램 전송이 여기서 이뤄진다.
+   *
+   * 카카오톡 SDK를 직접 붙이지 않는 이유: 앱 키가 필요하고 외부 스크립트가
+   * 하나 늘며, 키를 다루려면 런타임 환경변수가 들어와 AC-12와 충돌한다.
+   * 인스타그램은 웹에서 게시하는 API 자체가 없다. 공유 시트가 두 경로 모두를
+   * 커버하는 유일한 방법이고, 의존성도 늘지 않는다.
+   *
+   * 링크를 카카오톡에 보내면 미리보기로 붙는 것이 빌드타임에 만든 OG 카드다.
+   *
+   * 데스크톱에는 공유 시트가 없다. 그 경우에만 클립보드 복사로 떨어진다 —
+   * 별도의 "링크 복사" 버튼을 두지 않고 한 버튼이 환경에 맞게 동작한다.
+   */
+  async function shareLink() {
+    const url = window.location.href;
+    const title = '애니어그램 유형 테스트';
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share({ title, text: '내 결과를 확인해 보세요.', url });
+        setStatus({ kind: 'ok', message: '공유 시트를 열었습니다.' });
+        return;
+      } catch {
+        // 사용자가 시트를 닫은 경우도 여기로 온다 — 실패로 알리지 않고 복사로 잇는다.
+      }
+    }
     try {
-      await navigator.clipboard.writeText(window.location.href);
-      setStatus({ kind: 'ok', message: '링크를 복사했습니다.' });
+      await navigator.clipboard.writeText(url);
+      setStatus({ kind: 'ok', message: '링크를 복사했습니다. 카카오톡이나 메시지에 붙여 넣으세요.' });
     } catch {
-      setStatus({ kind: 'fail', message: '복사에 실패했습니다. 주소창의 URL을 직접 복사해 주세요.' });
+      setStatus({ kind: 'fail', message: '주소창의 URL을 직접 복사해 주세요.' });
     }
   }
 
@@ -84,15 +109,15 @@ export function ShareActions({ code }: ShareActionsProps) {
 
       <button
         type="button"
-        onClick={shareCard}
+        onClick={shareLink}
         className="press mt-5 min-h-[3.5rem] w-full rounded-control bg-primary px-6 text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press"
       >
-        카드 공유
+        카드 공유하기
       </button>
 
       <div className="mt-2 flex gap-2">
-        <button type="button" onClick={copyLink} className={SECONDARY}>
-          링크 복사
+        <button type="button" onClick={shareCard} className={SECONDARY}>
+          이미지로 공유
         </button>
         <a href={`${cardUrl}?dl=1`} download={fileName} className={SECONDARY}>
           카드 내려받기
