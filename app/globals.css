@@ -1,3 +1,62 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/**
+ * 팔레트 정본. 종이색 바탕 + 먹색 본문 + 깊은 소나무색 강조 하나.
+ * 90문항을 연속으로 읽는 화면이므로 채도는 강조 한 곳에만 둔다.
+ */
+@layer base {
+  :root {
+    color-scheme: light;
+
+    --paper: #f5f4f0;
+    --surface: #ffffff;
+    --ink: #191b18;
+    --ink-soft: #55594f;
+    --ink-faint: #85897f;
+    --line: #e2e0d8;
+    --line-strong: #c9c6bb;
+    --accent: #2e5a4b;
+    --accent-strong: #1e3c32;
+    --accent-wash: #e8efe9;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    /* 한국어 줄바꿈: 어절 단위로 끊고, 긴 토큰만 강제 분리한다. */
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+/** 조판용 숫자: 진행률 n/90이 문항마다 폭이 흔들리지 않게 한다. */
+@layer utilities {
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
