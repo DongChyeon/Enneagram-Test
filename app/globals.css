@@ -3,23 +3,44 @@
 @tailwind utilities;
 
 /**
- * 팔레트 정본. 종이색 바탕 + 먹색 본문 + 깊은 소나무색 강조 하나.
- * 90문항을 연속으로 읽는 화면이므로 채도는 강조 한 곳에만 둔다.
+ * 토큰 정본. 팔레트는 여기 한 곳(`:root`)에만 두고, `tailwind.config.ts`의
+ * 색 키는 전부 이 변수를 가리킨다.
+ *
+ * 색 체계는 두 축으로 나뉘며 **섞이지 않는다**:
+ *   ① 행동(action) — `--primary` 계열 파랑 하나. 버튼·선택된 보기·진행률
+ *      채움·링크에만 쓴다. 장식으로 뿌리지 않는다.
+ *   ② 정체(identity) — 아홉 유형의 고유색. 결과 화면·카드에서만 쓰며
+ *      컨트롤에는 절대 얹지 않는다(그 층은 이 파일이 아니라 유형 데이터가 정본).
+ * 나머지 화면은 흰 바탕 + 회색 계단 + 거의 검정인 본문으로만 구성한다.
+ * 면·면의 구분은 1px 선이 아니라 `--bg-sub` 채움과 여백이 맡는다.
+ *
+ * `--paper` / `--surface` / `--accent*`는 기존 클래스 이름을 깨지 않기 위한
+ * 호환 별칭이다 — 값만 새 체계로 다시 가리킨다.
  */
 @layer base {
   :root {
     color-scheme: light;
 
-    --paper: #f5f4f0;
-    --surface: #ffffff;
-    --ink: #191b18;
-    --ink-soft: #55594f;
-    --ink-faint: #85897f;
-    --line: #e2e0d8;
-    --line-strong: #c9c6bb;
-    --accent: #2e5a4b;
-    --accent-strong: #1e3c32;
-    --accent-wash: #e8efe9;
+    --bg: #ffffff;
+    --bg-sub: #f9fafb;
+
+    --ink: #191f28;
+    --ink-soft: #6b7684;
+    --ink-faint: #8b95a1;
+
+    --line: #e5e8eb;
+    --line-strong: #d1d6da;
+
+    --primary: #3182f6;
+    --primary-press: #1b64da;
+    --primary-wash: #e8f3ff;
+
+    /* 호환 별칭 */
+    --paper: var(--bg);
+    --surface: var(--bg);
+    --accent: var(--primary);
+    --accent-strong: var(--primary-press);
+    --accent-wash: var(--primary-wash);
   }
 
   html {
@@ -27,26 +48,53 @@
   }
 
   body {
-    background-color: var(--paper);
+    background-color: var(--bg);
     color: var(--ink);
+    /*
+     * Pretendard는 설치돼 있으면 쓰고, 없으면 각 OS의 시스템 한글 서체로
+     * 내려간다. `assets/fonts/*.otf`는 공유 카드 전용 **서브셋**이라 본문에
+     * 쓸 수 없고(자모가 아니라 카드 문구의 글리프만 담겨 있다), 웹폰트를
+     * 새로 내려받으면 90문항 화면의 첫 렌더가 그만큼 늦어진다.
+     */
+    font-family:
+      'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+      'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
     -webkit-font-smoothing: antialiased;
-    /* 한국어 줄바꿈: 어절 단위로 끊고, 긴 토큰만 강제 분리한다. */
+    /* 한국어는 어절 단위로 끊어야 읽힌다. */
     word-break: keep-all;
     overflow-wrap: anywhere;
   }
 
+  /* 제목은 굵고 자간을 좁힌다. 본문은 1.6 안팎으로 넉넉하게. */
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.02em;
+  }
+
   :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-    border-radius: 2px;
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
 
-/** 조판용 숫자: 진행률 n/90이 문항마다 폭이 흔들리지 않게 한다. */
 @layer utilities {
   .tnum {
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
+  }
+
+  /* 눌림 피드백. 라디오 행·버튼이 공유한다. */
+  .press {
+    transition:
+      background-color 150ms ease,
+      color 150ms ease,
+      transform 120ms ease;
+  }
+
+  .press:active {
+    transform: scale(0.985);
   }
 }
 
@@ -58,5 +106,9 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .press:active {
+    transform: none;
   }
 }

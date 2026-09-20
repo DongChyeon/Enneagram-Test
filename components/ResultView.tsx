@@ -17,6 +17,7 @@ import { wingByLabel } from '../data/wings';
 import type { Result } from '../lib/types';
 import { ScoreBars } from './ScoreBars';
 import { ShareActions } from './ShareActions';
+import { TypeMark } from './TypeMarkView';
 
 /**
  * 윙 블록에 **시각적으로 결합되는** 이론적 해석 마커(확정 문구).
@@ -55,11 +56,19 @@ export function ResultView({ result, code }: ResultViewProps) {
     <main className="mx-auto max-w-2xl px-5 py-8">
       {/* ① 주유형 이름 + 윙 라벨 */}
       <header>
-        <p className="text-sm text-neutral-600">가장 높게 나온 유형</p>
-        <h1 className="mt-1 text-2xl font-bold leading-snug">
-          {result.primaryType}유형 · {type.nameKo}
-        </h1>
-        <p className="mt-1 text-lg font-bold text-emerald-800">{result.wing}</p>
+        {/* 도트 캐릭터는 유형명 **옆**에 둔다. 화면에서 유일하게 채도가 있는 요소이므로
+            주변에 다른 색을 더하지 않는다 — 기존의 절제된 톤을 그대로 둔다.
+            `aria-hidden`은 `TypeMark`가 갖고 있다(유형명이 바로 옆에 텍스트로 있다). */}
+        <div className="flex items-center gap-4">
+          <TypeMark typeId={result.primaryType} dot={6} />
+          <div className="min-w-0">
+            <p className="text-sm text-neutral-600">가장 높게 나온 유형</p>
+            <h1 className="mt-1 text-2xl font-bold leading-snug">
+              {result.primaryType}유형 · {type.nameKo}
+            </h1>
+            <p className="mt-1 text-lg font-bold text-emerald-800">{result.wing}</p>
+          </div>
+        </div>
         <p className="mt-3 text-sm leading-relaxed text-neutral-700">{type.summary}</p>
       </header>
 

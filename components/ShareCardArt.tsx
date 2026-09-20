@@ -22,6 +22,7 @@
 import * as React from 'react';
 
 import type { TypeId } from '../data/schema';
+import { TypeMark, markBox } from './TypeMarkView';
 
 /** 카드에 인쇄되는 윙 마커. 공간 제약 때문에 결과 페이지보다 짧다(확정 문구). */
 export const CARD_WING_MARKER = '윙 — 이론적 해석';
@@ -81,6 +82,7 @@ const MUTED = '#5b6472';
 const PAPER = '#f7f6f2';
 const ACCENT = '#2f5d50';
 const TRACK = '#e2e0d8';
+const RULE = '#dcd9cf';
 
 export function ShareCardArt({
   width,
@@ -93,17 +95,39 @@ export function ShareCardArt({
 }: ShareCardArtProps) {
   // 상대 비율 막대 — 원점수 자체가 아니라 최고점 대비 비율로 그린다.
   const maxScore = bars && bars.length > 0 ? Math.max(...bars.map((b) => b.score)) : 1;
+
+  // 두 판형은 **화면 비율이 다르다**: 가로 1200×630, 세로 1080×1350.
+  // 폭 하나로만 스케일을 잡으면(`width / 1200`) 세로 카드는 630 높이용으로
+  // 조판된 내용이 1350 캔버스에 놓여 절반 가까이가 빈 공간이 된다.
+  // 그래서 세로 판형은 **자체 배율**로 크게 조판하고, 여백은 나눠 뿌리지 않는다.
+  const isPortrait = height > width;
   const scale = width / 1200;
-  const pad = Math.round(64 * scale);
+  /** 글자·간격 배율. 세로 판형은 남는 높이를 본문 크기로 되돌려 받는다. */
+  const ts = scale * (isPortrait ? 1.28 : 1.05);
+  const pad = Math.round(isPortrait ? 66 * ts : 64 * scale);
+  const px = (n: number) => Math.round(n * ts);
 
   // 막대 폭은 **픽셀로 직접 계산한다.** satori(yoga)에서 `width: '<n>%'` 채움은
   // 부모 트랙의 고유 너비를 키워, 채움이 긴 1·2위 줄에서만 라벨 칸을 밀어내고
   // 유형명이 한 글자씩 세로로 접힌다(`flexShrink: 0`으로도 막히지 않았다).
   // 카드 폭이 고정값이므로 퍼센트를 쓸 이유가 없다.
-  const labelWidth = Math.round(300 * scale);
-  const scoreWidth = Math.round(70 * scale);
-  const columnGap = Math.round(12 * scale);
+  const labelWidth = px(268);
+  const scoreWidth = px(70);
+  const columnGap = px(12);
   const trackWidth = width - pad * 2 - labelWidth - scoreWidth - columnGap * 2;
+  const barHeight = px(22);
+  const rowGap = px(28);
+
+  // 도트 캐릭터의 유형 번호는 윙 라벨(`5w4`)의 앞자리다. 별도 prop을 받지 않는 이유는
+  // 두 호출부(`scripts/gen-og.ts`, 카드 라우트)가 이미 윙 라벨을 넘기고 있고,
+  // 윙 라벨의 기준 유형이 곧 주유형이기 때문이다 — 같은 값을 두 번 받을 필요가 없다.
+  const markTypeId = Number.parseInt(wingLabel, 10);
+  // 소셜 피드 썸네일에서도 실루엣이 읽혀야 하므로 카드 폭의 1/5 정도로 잡는다.
+  const markDot = Math.max(1, px(13));
+  const markGap = px(28);
+  // 머리글 텍스트 칸은 **픽셀로 직접 계산한다.** 막대 채움과 같은 이유다 —
+  // satori(yoga)에서 남은 폭에 기대면 긴 유형명이 한 글자씩 세로로 접힌다.
+  const headWidth = width - pad * 2 - markBox(markDot) - markGap;
 
   return (
     <div
@@ -112,107 +136,115 @@ export function ShareCardArt({
         height,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
         backgroundColor: PAPER,
         color: INK,
         padding: pad,
         fontFamily: 'Pretendard',
       }}
     >
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <div style={{ fontSize: Math.round(26 * scale), color: MUTED, letterSpacing: 1 }}>
-          {CARD_BRAND}
-        </div>
+      <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', width: headWidth, flexShrink: 0 }}>
+          <div style={{ fontSize: px(26), color: MUTED, letterSpacing: 1 }}>{CARD_BRAND}</div>
 
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            marginTop: Math.round(28 * scale),
-          }}
-        >
-          <div style={{ fontSize: Math.round(24 * scale), color: MUTED }}>
-            {CARD_PRIMARY_LABEL}
-          </div>
           <div
             style={{
-              fontSize: Math.round(74 * scale),
-              fontWeight: 700,
-              lineHeight: 1.2,
-              marginTop: Math.round(6 * scale),
+              display: 'flex',
+              flexDirection: 'column',
+              marginTop: px(28),
             }}
           >
-            {typeNameKo}
+            <div style={{ fontSize: px(24), color: MUTED }}>{CARD_PRIMARY_LABEL}</div>
+            <div
+              style={{
+                fontSize: px(74),
+                fontWeight: 700,
+                lineHeight: 1.18,
+                marginTop: px(6),
+              }}
+            >
+              {typeNameKo}
+            </div>
           </div>
-        </div>
 
-        {/* 윙 라벨과 이론적 해석 마커는 **한 덩어리**로 붙어 있어야 한다(AC-11). */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            marginTop: Math.round(22 * scale),
-            padding: `${Math.round(12 * scale)}px ${Math.round(20 * scale)}px`,
-            borderRadius: Math.round(999 * scale),
-            backgroundColor: '#e8ece9',
-            border: `${Math.max(1, Math.round(2 * scale))}px solid ${ACCENT}`,
-          }}
-        >
-          <div style={{ fontSize: Math.round(36 * scale), fontWeight: 700, color: ACCENT }}>
-            {wingLabel}
-          </div>
+          {/* 윙 라벨과 이론적 해석 마커는 **한 덩어리**로 붙어 있어야 한다(AC-11).
+              `alignSelf`가 없으면 열 정렬의 stretch 때문에 알약이 카드 폭 전체로
+              늘어나 띠처럼 보인다 — 내용 폭만 차지하게 묶어 둔다. */}
           <div
             style={{
-              fontSize: Math.round(22 * scale),
-              color: ACCENT,
-              marginLeft: Math.round(16 * scale),
+              display: 'flex',
+              alignSelf: 'flex-start',
+              alignItems: 'center',
+              marginTop: px(22),
+              padding: `${px(12)}px ${px(22)}px`,
+              borderRadius: px(999),
+              backgroundColor: '#e8ece9',
+              border: `${Math.max(1, Math.round(2 * scale))}px solid ${ACCENT}`,
             }}
           >
-            {CARD_WING_MARKER}
+            <div style={{ fontSize: px(36), fontWeight: 700, color: ACCENT }}>{wingLabel}</div>
+            <div
+              style={{
+                fontSize: px(22),
+                color: ACCENT,
+                marginLeft: px(16),
+              }}
+            >
+              {CARD_WING_MARKER}
+            </div>
+          </div>
+
+          <div
+            style={{
+              fontSize: px(26),
+              color: MUTED,
+              lineHeight: 1.55,
+              marginTop: px(26),
+            }}
+          >
+            {summary}
           </div>
         </div>
 
-        <div
-          style={{
-            fontSize: Math.round(26 * scale),
-            color: MUTED,
-            lineHeight: 1.5,
-            marginTop: Math.round(26 * scale),
-          }}
-        >
-          {summary}
+        {/* 유형 도트 캐릭터. 카드에서 채도를 가진 유일한 요소이므로 다른 색은 더하지 않는다.
+            새 문구를 만들지 않으므로 `CARD_FIXED_STRINGS`는 그대로다. */}
+        <div style={{ display: 'flex', marginLeft: markGap, marginTop: px(6) }}>
+          <TypeMark typeId={markTypeId} dot={markDot} />
         </div>
       </div>
 
       {bars && bars.length > 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', marginTop: Math.round(24 * scale) }}>
+        <div style={{ display: 'flex', flexDirection: 'column', marginTop: px(40) }}>
+          <div style={{ display: 'flex', height: 1, backgroundColor: RULE }} />
           <div
             style={{
               display: 'flex',
               justifyContent: 'space-between',
-              fontSize: Math.round(24 * scale),
+              fontSize: px(24),
               color: MUTED,
-              marginBottom: Math.round(14 * scale),
+              marginTop: px(22),
+              marginBottom: px(20),
             }}
           >
-            <div>{CARD_SCORES_HEADING}</div>
-            <div>{gap === null ? '' : `${CARD_GAP_LABEL} ${gap}`}</div>
+            <div style={{ display: 'flex' }}>{CARD_SCORES_HEADING}</div>
+            <div style={{ display: 'flex' }}>
+              {gap === null ? '' : `${CARD_GAP_LABEL} ${gap}`}
+            </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {bars.map((bar) => (
+            {bars.map((bar, index) => (
               <div
                 key={bar.typeId}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  marginBottom: Math.round(10 * scale),
+                  marginBottom: index === bars.length - 1 ? 0 : rowGap,
                 }}
               >
                 <div
                   style={{
                     width: labelWidth,
                     flexShrink: 0,
-                    fontSize: Math.round(22 * scale),
+                    fontSize: px(22),
                     color: INK,
                     whiteSpace: 'nowrap',
                   }}
@@ -225,9 +257,9 @@ export function ShareCardArt({
                     width: trackWidth,
                     flexShrink: 0,
                     marginLeft: columnGap,
-                    height: Math.round(20 * scale),
+                    height: barHeight,
                     backgroundColor: TRACK,
-                    borderRadius: Math.round(10 * scale),
+                    borderRadius: Math.round(barHeight / 2),
                   }}
                 >
                   <div
@@ -235,7 +267,7 @@ export function ShareCardArt({
                       width: Math.round(trackWidth * (bar.score / maxScore)),
                       height: '100%',
                       backgroundColor: ACCENT,
-                      borderRadius: Math.round(10 * scale),
+                      borderRadius: Math.round(barHeight / 2),
                     }}
                   />
                 </div>
@@ -246,7 +278,7 @@ export function ShareCardArt({
                     marginLeft: columnGap,
                     display: 'flex',
                     justifyContent: 'flex-end',
-                    fontSize: Math.round(22 * scale),
+                    fontSize: px(22),
                     color: MUTED,
                   }}
                 >
@@ -258,14 +290,21 @@ export function ShareCardArt({
         </div>
       ) : null}
 
-      <div
-        style={{
-          fontSize: Math.round(22 * scale),
-          color: MUTED,
-          marginTop: Math.round(24 * scale),
-        }}
-      >
-        {CARD_DISCLAIMER}
+      {/* 남는 높이는 **한 군데로만** 몬다. 이전에는 루트의 `space-between`이
+          잉여를 두 틈에 반씩 나눠 줘서 카드 한가운데가 비었다. */}
+      <div style={{ display: 'flex', flexGrow: 1, minHeight: px(28) }} />
+
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', height: 1, backgroundColor: RULE }} />
+        <div
+          style={{
+            fontSize: px(22),
+            color: MUTED,
+            marginTop: px(22),
+          }}
+        >
+          {CARD_DISCLAIMER}
+        </div>
       </div>
     </div>
   );

@@ -155,3 +155,173 @@ describe('TestRunner (AC-4)', () => {
     expect(decoded).not.toBeNull();
   });
 });
+
+/**
+ * 묶음(10문항 × 9)과 이어하기 안내 — 90문항의 **체감**을 줄이려고 얹은 층.
+ *
+ * 여기서 고정하는 것은 세 가지다: ① 묶음 표기가 `index`를 따라가고 경계에서만
+ * 완료 리본이 뜬다 ② 건너뛴 묶음을 완료라고 말하지 않는다 ③ 복원된 세션에
+ * 이어하기 안내와 "처음부터"가 붙고, 처음부터를 누르면 저장본이 지워진다.
+ * 위 AC-4 블록은 한 줄도 건드리지 않는다 — 이 층은 AC-4 위에 얹히는 것이지
+ * AC-4를 바꾸는 것이 아니다.
+ */
+describe('TestRunner 묶음 · 이어하기', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    push.mockReset();
+    window.sessionStorage.clear();
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
+
+  it('진행률 바를 9칸으로 쪼개면서도 하나의 progressbar 계약을 유지한다', async () => {
+    const TestRunner = await loadRunner();
+    render(<TestRunner />);
+
+    expect(screen.getAllByRole('progressbar')).toHaveLength(1);
+    expect(progressBar().getAttribute('aria-valuemax')).toBe(String(TOTAL));
+    expect(screen.getByText('묶음 1/9')).toBeTruthy();
+    expect(screen.getByText(/이 묶음에서 0\/10문항/)).toBeTruthy();
+  });
+
+  it('10문항을 채우면 다음 묶음 첫 문항 위에 완료 리본이 뜨고, 11번째를 답하면 사라진다', async () => {
+    const TestRunner = await loadRunner();
+    render(<TestRunner />);
+
+    expect(screen.queryByRole('status')).toBeNull();
+
+    for (let position = 0; position < 10; position += 1) answer(4);
+
+    expect(screen.getByText(questions[10].text)).toBeTruthy();
+    expect(screen.getByText('묶음 2/9')).toBeTruthy();
+    const ribbon = screen.getByRole('status');
+    expect(ribbon.textContent).toContain('1번째 묶음');
+    expect(ribbon.textContent).toContain('8묶음 남았습니다');
+
+    answer(4);
+    expect(screen.queryByRole('status')).toBeNull();
+  });
+
+  it('건너뛴 묶음은 완료라고 말하지 않는다', async () => {
+    const TestRunner = await loadRunner();
+    render(<TestRunner />);
+
+    for (let position = 0; position < 9; position += 1) answer(4);
+    // 10번 문항(index 9)을 비운 채 "다음"으로 경계를 넘는다.
+    fireEvent.click(screen.getByRole('button', { name: '다음' }));
+
+    expect(screen.getByText(questions[10].text)).toBeTruthy();
+    expect(screen.getByText('묶음 2/9')).toBeTruthy();
+    expect(screen.queryByRole('status')).toBeNull();
+  });
+
+  it('묶음 경계를 넘어간 뒤에도 "이전"이 직전 선택값을 복원한다', async () => {
+    const TestRunner = await loadRunner();
+    render(<TestRunner />);
+
+    for (let position = 0; position < 9; position += 1) answer(4);
+    answer(2); // index 9 — 1묶음의 마지막 문항
+
+    expect(screen.getByText(questions[10].text)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: '이전' }));
+
+    expect(screen.getByText(questions[9].text)).toBeTruthy();
+    expect(screen.getByText('묶음 1/9')).toBeTruthy();
+    expect(options().map((input) => input.checked)).toEqual([false, true, false, false, false]);
+  });
+
+  it('복원된 세션에는 이어하기 안내가 붙고, "처음부터"가 저장본을 지우고 1번으로 되돌린다', async () => {
+    const TestRunner = await loadRunner();
+    const first = render(<TestRunner />);
+    answer(3);
+    answer(5);
+    first.unmount();
+
+    render(<TestRunner />);
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+
+    expect(screen.getByText('이어서 답하는 중입니다.')).toBeTruthy();
+    expect(screen.getByText(`${TOTAL}문항 중 2문항을 답해 두었습니다.`)).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: '처음부터 다시 하기' }));
+    fireEvent.click(screen.getByRole('button', { name: '지우고 1번부터' }));
+
+    expect(window.sessionStorage.getItem('enneagram-test.progress.v1')).toBe(
+      JSON.stringify({
+        signature: `${TOTAL}:${questions[0].id}:${questions[TOTAL - 1].id}`,
+        answers: Array.from({ length: TOTAL }, () => null),
+        index: 0,
+      }),
+    );
+    expect(progressBar().getAttribute('aria-valuenow')).toBe('0');
+    expect(screen.getByText(questions[0].text)).toBeTruthy();
+    expect(screen.queryByText('이어서 답하는 중입니다.')).toBeNull();
+  });
+
+  it('한 문항도 답하지 않은 저장본은 이어하기 안내를 띄우지 않는다', async () => {
+    window.sessionStorage.setItem(
+      'enneagram-test.progress.v1',
+      JSON.stringify({
+        signature: `${TOTAL}:${questions[0].id}:${questions[TOTAL - 1].id}`,
+        answers: Array.from({ length: TOTAL }, () => null),
+        index: 0,
+      }),
+    );
+
+    const TestRunner = await loadRunner();
+    render(<TestRunner />);
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+
+    expect(screen.queryByText('이어서 답하는 중입니다.')).toBeNull();
+  });
+
+  it('마지막 묶음에 들어서면 남은 묶음 수 대신 마지막임을 알린다', async () => {
+    const TestRunner = await loadRunner();
+    render(<TestRunner />);
+
+    for (let position = 0; position < TOTAL - 10; position += 1) answer(4);
+
+    expect(screen.getByText(questions[TOTAL - 10].text)).toBeTruthy();
+    expect(screen.getByText('묶음 9/9')).toBeTruthy();
+    const ribbon = screen.getByRole('status');
+    expect(ribbon.textContent).toContain('8번째 묶음');
+    expect(ribbon.textContent).toContain('마지막 묶음');
+  });
+});
+
+describe('TestRunner 배너 겹침', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    push.mockReset();
+    window.sessionStorage.clear();
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
+
+  it('묶음 경계에서 복원해도 배너를 둘 쌓지 않는다 — 이어하기 안내만 남는다', async () => {
+    const TestRunner = await loadRunner();
+    const first = render(<TestRunner />);
+    for (let position = 0; position < 10; position += 1) answer(4);
+    expect(screen.getByRole('status')).toBeTruthy();
+    first.unmount();
+
+    render(<TestRunner />);
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+
+    expect(screen.getByText('이어서 답하는 중입니다.')).toBeTruthy();
+    expect(screen.queryByRole('status')).toBeNull();
+    expect(screen.getByText(questions[10].text)).toBeTruthy();
+  });
+});

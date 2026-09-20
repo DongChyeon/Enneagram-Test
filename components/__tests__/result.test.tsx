@@ -14,6 +14,7 @@ import { wingByLabel } from '../../data/wings';
 import { isAmbiguous, resultFromScores } from '../../lib/scoring';
 import type { Scores } from '../../lib/types';
 import { DISCLAIMER_LAST_LINE, ResultView, WING_INTERPRETATION_MARKER } from '../ResultView';
+import { MARK_SIZE, TYPE_HUES } from '../typeMark';
 
 afterEach(cleanup);
 
@@ -77,6 +78,33 @@ describe('ResultView', () => {
     // ⑥ 면책 고지
     expect(text).toContain(DISCLAIMER_LAST_LINE);
     expect(text).toContain('요인분석');
+  });
+
+  it('주유형 도트 캐릭터를 렌더한다 — 16×16 칸이고, 유형명 옆의 장식이라 낭독되지 않는다', () => {
+    const result = resultFromScores(fixture(3));
+    const { container } = render(<ResultView result={result} code="5w4-TEST0000000" />);
+
+    const mark = container.querySelector(`[data-type-mark="${result.primaryType}"]`);
+    expect(mark).not.toBeNull();
+    // 유형명이 바로 옆에 텍스트로 있으므로 그림이 두 번 읽히면 안 된다.
+    expect(mark!.getAttribute('aria-hidden')).toBe('true');
+
+    // satori에는 grid가 없다 — 행 16개 × 칸 16개의 flex 구조가 유지되는지 본다.
+    const rows = [...mark!.children];
+    expect(rows.length).toBe(MARK_SIZE);
+    for (const row of rows) expect(row.children.length).toBe(MARK_SIZE);
+
+    // 빈칸도 투명 칸으로 남아야 한다(빼면 행이 밀린다) → 전체 칸 수는 항상 256.
+    expect(mark!.querySelectorAll(':scope > div > div').length).toBe(MARK_SIZE * MARK_SIZE);
+
+    // 유형 색이 실제로 쓰인다.
+    const hue = TYPE_HUES[result.primaryType];
+    const painted = [...mark!.querySelectorAll('div')].some(
+      (cell) => (cell as HTMLElement).style.backgroundColor !== '' &&
+        (cell as HTMLElement).style.backgroundColor !== 'transparent',
+    );
+    expect(hue).toBeDefined();
+    expect(painted).toBe(true);
   });
 
   it('AC-8 ⑤: 1위−2위 점수차 2이면 "유형이 뚜렷하지 않음" 안내를 렌더한다', () => {

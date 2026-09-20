@@ -1,6 +1,8 @@
 import Link from 'next/link';
 
 import Disclaimer from '../components/Disclaimer';
+import ResumeNotice from '../components/ResumeNotice';
+import { SECTION_SIZE, questionSetSignature, sectionCount } from '../components/progress';
 import { questions } from '../data/questions';
 
 /**
@@ -13,11 +15,18 @@ import { questions } from '../data/questions';
  */
 
 const TOTAL = questions.length;
+const SECTION_COUNT = sectionCount(TOTAL);
+/**
+ * 이어하기 안내가 쓸 문항 세트 서명. 서버에서 한 번 만들어 문자열로 내려보낸다 —
+ * 클라이언트 컴포넌트가 직접 `data/questions`를 import 하면 90문항 텍스트가
+ * 통째로 랜딩 번들에 실린다.
+ */
+const QUESTION_SET_SIGNATURE = questionSetSignature(TOTAL, questions[0].id, questions[TOTAL - 1].id);
 
 const FACTS: { label: string; value: string }[] = [
   { label: '문항', value: `${TOTAL}문항` },
+  { label: '구성', value: `${SECTION_SIZE}문항 × ${SECTION_COUNT}묶음` },
   { label: '소요 시간', value: '약 10–15분' },
-  { label: '계정', value: '필요 없음' },
   { label: '응답 저장', value: '브라우저 안에만' },
 ];
 
@@ -57,6 +66,11 @@ export default function HomePage() {
           {TOTAL}개의 문장을 읽고 요즘의 자신에게 얼마나 들어맞는지 고르면 됩니다.
           맞히는 시험이 아니라, 스스로를 어떻게 보고 있는지를 정리하는 기록에 가깝습니다.
         </p>
+        <p className="mt-4 text-[0.9375rem] leading-[1.75] text-ink-soft">
+          한 화면에 한 문장씩 나오고, 고르면 다음 문장으로 저절로 넘어갑니다. {SECTION_SIZE}문항씩{' '}
+          {SECTION_COUNT}묶음으로 끊어 보여 주므로 지금 어디쯤인지 늘 보이고, 끝까지 대개{' '}
+          <strong className="font-semibold text-ink">10–15분</strong> 걸립니다.
+        </p>
       </header>
 
       <dl className="mt-9 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line">
@@ -68,6 +82,8 @@ export default function HomePage() {
         ))}
       </dl>
 
+      <ResumeNotice total={TOTAL} signature={QUESTION_SET_SIGNATURE} />
+
       <Link
         href="/test"
         className="mt-7 flex min-h-[3.5rem] w-full items-center justify-center gap-2 rounded-lg bg-accent px-6 text-[1.0625rem] font-semibold text-white transition-colors duration-150 hover:bg-accent-strong active:bg-accent-strong"
@@ -75,8 +91,9 @@ export default function HomePage() {
         검사 시작하기
         <span aria-hidden="true">→</span>
       </Link>
-      <p className="mt-3 text-center text-[0.8125rem] text-ink-faint">
-        중간에 나가도 같은 탭에서는 이어서 답할 수 있습니다.
+      <p className="mt-3 text-center text-[0.8125rem] leading-[1.7] text-ink-faint">
+        한 번에 다 하지 않아도 됩니다. 중간에 나가도, 새로고침해도 같은 탭에서는 멈춘 자리에서
+        이어집니다.
       </p>
 
       <section aria-labelledby="does-heading" className="mt-14">

@@ -30,12 +30,15 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  // 모바일 브라우저 크롬까지 흰 바탕으로 맞춘다 — 상단 바와 sticky 헤더가
+  // 다른 색이면 스크롤할 때 없던 경계선이 하나 생긴 것처럼 보인다.
+  themeColor: '#ffffff',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body className="bg-paper font-sans text-ink antialiased">{children}</body>
     </html>
   );
 }
