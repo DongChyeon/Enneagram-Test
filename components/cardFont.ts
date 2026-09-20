@@ -1,5 +1,5 @@
 /**
- * 공유 카드용 Pretendard 서브셋 로더. **모듈 스코프에서 1회만 읽는다.**
+ * 공유 카드용 Pretendard 서브셋 로더. **이미지 생성 시 처음 한 번만 읽는다.**
  *
  * ## 왜 `new URL(..., import.meta.url)`이 아닌가 (계획서에서 이탈한 지점)
  *
@@ -36,11 +36,32 @@ import { join } from 'node:path';
 
 const FONT_DIR = join(process.cwd(), 'assets', 'fonts');
 
-const regular = readFileSync(join(FONT_DIR, 'pretendard-subset-regular.otf'));
-const bold = readFileSync(join(FONT_DIR, 'pretendard-subset-bold.otf'));
+type CardFont = {
+  name: string;
+  data: Buffer;
+  weight: 400 | 700;
+  style: 'normal';
+};
+
+let cachedFonts: CardFont[] | undefined;
 
 /** `ImageResponse`의 `fonts` 옵션에 그대로 넘기는 값. */
-export const cardFonts = [
-  { name: 'Pretendard', data: regular, weight: 400 as const, style: 'normal' as const },
-  { name: 'Pretendard', data: bold, weight: 700 as const, style: 'normal' as const },
-];
+export function getCardFonts(): CardFont[] {
+  if (cachedFonts !== undefined) return cachedFonts;
+
+  cachedFonts = [
+    {
+      name: 'Pretendard',
+      data: readFileSync(join(FONT_DIR, 'pretendard-subset-regular.otf')),
+      weight: 400,
+      style: 'normal',
+    },
+    {
+      name: 'Pretendard',
+      data: readFileSync(join(FONT_DIR, 'pretendard-subset-bold.otf')),
+      weight: 700,
+      style: 'normal',
+    },
+  ];
+  return cachedFonts;
+}

@@ -26,7 +26,7 @@ import { createElement } from 'react';
 import { ImageResponse } from 'next/og';
 
 import { ShareCardArt } from '../components/ShareCardArt';
-import { cardFonts } from '../components/cardFont';
+import { getCardFonts } from '../components/cardFont';
 import { typeById } from '../data/types';
 import { wings } from '../data/wings';
 
@@ -49,7 +49,7 @@ async function main(): Promise<void> {
         wingLabel: wing.label,
         summary: type.summary,
       }),
-      { width: WIDTH, height: HEIGHT, fonts: cardFonts },
+      { width: WIDTH, height: HEIGHT, fonts: getCardFonts() },
     );
 
     const bytes = Buffer.from(await response.arrayBuffer());

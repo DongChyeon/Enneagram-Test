@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-import { cardFonts } from '../components/cardFont';
+import { getCardFonts } from '../components/cardFont';
 
 export const runtime = 'nodejs';
 export const alt = '애니어그램 유형 테스트 — 나를 이해하는 45문항 또는 90문항 검사';
@@ -83,6 +83,6 @@ export default function OpenGraphImage() {
         </div>
       </div>
     ),
-    { ...size, fonts: cardFonts },
+    { ...size, fonts: getCardFonts() },
   );
 }

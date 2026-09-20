@@ -18,7 +18,7 @@
 import { ImageResponse } from 'next/og';
 
 import { ShareCardArt, type CardBar } from '../../../../components/ShareCardArt';
-import { cardFonts } from '../../../../components/cardFont';
+import { getCardFonts } from '../../../../components/cardFont';
 import { typeById } from '../../../../data/types';
 import { decodeResult } from '../../../../lib/code';
 import { TYPE_IDS } from '../../../../lib/scoring';
@@ -75,6 +75,6 @@ export async function GET(
         gap={gap}
       />
     ),
-    { width: WIDTH, height: HEIGHT, fonts: cardFonts, headers },
+    { width: WIDTH, height: HEIGHT, fonts: getCardFonts(), headers },
   );
 }
