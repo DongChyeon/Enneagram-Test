@@ -1,14 +1,15 @@
 import type { Metadata, Viewport } from 'next';
+import { KakaoSdk } from '../components/KakaoSdk';
 
 import './globals.css';
 
 /**
  * 공유 미리보기(OG)의 절대 URL 기준점.
  *
- * **하드코딩 상수이며 환경변수를 읽지 않는다** — AC-12는 환경변수 런타임 참조
- * 0건을 요구하고(그 grep에 걸리지 않도록 이 주석도 변수명을 적지 않는다),
- * `metadataBase`가 없으면 상대 경로 `og:image`가 빌드 경고를 내 같은 AC의
- * 줄머리 경고 grep에 걸린다. 두 요구의 유일한 교집합이 환경변수 없는 상수다.
+ * **하드코딩 상수이며 환경변수를 읽지 않는다.** 카카오 JavaScript 키는 공개
+ * 클라이언트 설정이라 빌드 시 주입하지만, OG의 기준 주소는 배포마다 흔들리지 않는
+ * 정식 도메인을 그대로 쓴다. `metadataBase`가 없으면 상대 OG 경로를 절대 URL로
+ * 해석할 수 없다.
  *
  * 값은 **반드시 파싱 가능한 실제 URL**이어야 한다. `'https://<production-domain>'`
  * 같은 플레이스홀더는 금지다 — `<`·`>`는 WHATWG URL 파서의 금지 호스트 코드
@@ -52,7 +53,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body className="bg-paper font-sans text-ink antialiased">{children}</body>
+      <body className="bg-paper font-sans text-ink antialiased">
+        {children}
+        <KakaoSdk />
+      </body>
     </html>
   );
 }

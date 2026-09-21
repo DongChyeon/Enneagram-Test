@@ -42,6 +42,27 @@ function isKakaoTalkWebView(): boolean {
   return /KAKAOTALK/i.test(navigator.userAgent);
 }
 
+function shareWithKakao(url: string, imageUrl: string): boolean {
+  const kakao = window.Kakao;
+  if (!isKakaoTalkWebView() || !kakao?.isInitialized()) return false;
+
+  try {
+    kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '애니어그램 유형 테스트 결과',
+        description: '내 결과를 확인해 보세요.',
+        imageUrl,
+        link: { mobileWebUrl: url, webUrl: url },
+      },
+      buttons: [{ title: '결과 보기', link: { mobileWebUrl: url, webUrl: url } }],
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function copyText(text: string): Promise<boolean> {
   if (navigator.clipboard?.writeText) {
     try {
@@ -77,13 +98,9 @@ export function ShareActions({ code }: ShareActionsProps) {
   const fileName = `enneagram-${code}.png`;
 
   /**
-   * 결과 **링크**를 OS 공유 시트로 보낸다. 시트에는 설치된 앱이 그대로 뜨므로
-   * 카카오톡·인스타그램 전송이 여기서 이뤄진다.
-   *
-   * 카카오톡 SDK를 직접 붙이지 않는 이유: 앱 키가 필요하고 외부 스크립트가
-   * 하나 늘며, 키를 다루려면 런타임 환경변수가 들어와 AC-12와 충돌한다.
-   * 인스타그램은 웹에서 게시하는 API 자체가 없다. 공유 시트가 두 경로 모두를
-   * 커버하는 유일한 방법이고, 의존성도 늘지 않는다.
+   * 카카오톡 인앱 WebView에서는 카카오톡 공유 대화상자를 먼저 연다. SDK가 아직
+   * 준비되지 않았거나 설정이 빠졌다면 Web Share API, 링크 복사 순으로 내려간다.
+   * 일반 브라우저와 다른 인앱 WebView에서는 곧바로 Web Share API를 사용한다.
    *
    * 링크를 카카오톡에 보내면 미리보기로 붙는 것이 빌드타임에 만든 OG 카드다.
    *
@@ -92,10 +109,14 @@ export function ShareActions({ code }: ShareActionsProps) {
    */
   async function shareLink() {
     const url = window.location.href;
+    const imageUrl = new URL(cardUrl, window.location.origin).href;
     const title = '애니어그램 유형 테스트';
-    // 카카오톡 인앱 WebView는 Web Share API 노출 여부와 실제 동작이 일치하지
-    // 않는 버전이 있다. 클릭의 사용자 활성화가 살아 있을 때 복사 경로를 탄다.
-    if (!isKakaoTalkWebView() && typeof navigator.share === 'function') {
+    if (shareWithKakao(url, imageUrl)) {
+      setStatus({ kind: 'ok', message: '카카오톡 공유창을 열었어요.' });
+      return;
+    }
+
+    if (typeof navigator.share === 'function') {
       try {
         await navigator.share({ title, text: '내 결과를 확인해 보세요.', url });
         setStatus({ kind: 'ok', message: '공유 시트를 열었어요.' });
@@ -108,7 +129,7 @@ export function ShareActions({ code }: ShareActionsProps) {
     const copied = await copyText(url);
     setStatus(
       copied
-        ? { kind: 'ok', message: '결과 링크를 복사했어요. 카카오톡 대화방에 붙여 넣으세요.' }
+        ? { kind: 'ok', message: '결과 링크를 복사했어요. 원하는 앱에 붙여 넣으세요.' }
         : { kind: 'fail', message: '주소창의 결과 링크를 길게 눌러 복사해 주세요.' },
     );
   }
