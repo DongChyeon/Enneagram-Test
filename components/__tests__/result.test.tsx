@@ -7,7 +7,7 @@
  */
 
 import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 
 import { types } from '../../data/types';
 import { wingByLabel } from '../../data/wings';
@@ -94,6 +94,19 @@ describe('ResultView', () => {
     const { container } = render(<ResultView result={resultFromScores(scores, 'legacy-base')} code="legacy-test" />);
     expect(container.textContent).toContain('45문항에서 가장 높게 나온 유형');
     expect(container.textContent).not.toContain('27문항으로 살펴본 유형 후보예요');
+  });
+
+  it('9유형 점수 분포에서 다른 유형을 누르면 해당 유형 설명을 펼친다', () => {
+    const result = resultFromScores(fixture(3));
+    render(<ResultView result={result} code="5w4-TEST0000000" />);
+
+    const button = screen.getByRole('button', { name: /4\. 고유함을 찾는 사람.*설명 보기/ });
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+    fireEvent.click(button);
+
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+    expect(screen.getByText(types.find((type) => type.id === 4)!.summary)).toBeTruthy();
+    expect(screen.getByText('중요하게 여기는 것:')).toBeTruthy();
   });
 
   it('주유형 도트 캐릭터를 렌더한다 — 16×16 칸이고, 유형명 옆의 장식이라 낭독되지 않는다', () => {

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * 9유형 **상대 비율 막대** + 각 막대의 유형명·원점수 + 1위–2위 점수차 (AC-8 ④).
  *
@@ -26,19 +28,21 @@ import type { TypeId } from '../data/schema';
 import { typeById } from '../data/types';
 import { TYPE_IDS } from '../lib/scoring';
 import type { Scores } from '../lib/types';
+import { useState } from 'react';
 
 export type ScoreBarsProps = {
   scores: Scores;
   primaryType: TypeId;
   /**
-   * 원점수의 가능 범위. 45문항 결과는 유형당 5문항이라 5~25,
-   * 90문항 결과는 10문항이라 10~50이다. 각주에 범위를 하드코딩하면
-   * 한쪽 경로에 틀린 숫자가 표시되므로 호출부가 넘긴다.
+   * 원점수의 가능 범위. 27문항 결과는 3~15, 기존 45문항 결과는 5~25,
+   * 90문항 결과는 10~50이다. 각주에 범위를 하드코딩하면 경로에 따라
+   * 틀린 숫자가 표시되므로 호출부가 넘긴다.
    */
   scoreRange: readonly [number, number];
 };
 
 export function ScoreBars({ scores, primaryType, scoreRange }: ScoreBarsProps) {
+  const [openType, setOpenType] = useState<TypeId | null>(null);
   const ordered = [...TYPE_IDS].sort((a, b) => scores[b] - scores[a]);
   const max = scores[ordered[0]];
   const gap = scores[ordered[0]] - scores[ordered[1]];
@@ -56,51 +60,76 @@ export function ScoreBars({ scores, primaryType, scoreRange }: ScoreBarsProps) {
 
       <ul className="mt-6 space-y-4">
         {ordered.map((typeId) => {
-          const name = typeById.get(typeId)?.nameKo ?? String(typeId);
+          const type = typeById.get(typeId);
+          const name = type?.nameKo ?? String(typeId);
           const ratio = Math.round((scores[typeId] / max) * 100);
           const top = typeId === primaryType;
+          const open = openType === typeId;
           return (
-            <li key={typeId}>
-              <div className="flex items-baseline justify-between gap-3">
-                <span
-                  className={
-                    top
-                      ? 'truncate text-[0.9375rem] font-bold tracking-[-0.01em] text-ink'
-                      : 'truncate text-[0.9375rem] font-medium tracking-[-0.01em] text-ink-soft'
-                  }
-                >
-                  {typeId}. {name}
-                </span>
-                <span
-                  className={
-                    top
-                      ? 'tnum shrink-0 text-[0.875rem] font-bold text-ink'
-                      : 'tnum shrink-0 text-[0.875rem] font-medium text-ink-faint'
-                  }
-                >
-                  {scores[typeId]}
-                </span>
-              </div>
-              <span
-                className="mt-2 flex h-2 w-full overflow-hidden rounded-full bg-line"
-                role="img"
-                aria-label={`${name} 상대 비율 ${ratio}퍼센트`}
+            <li key={typeId} className="rounded-control">
+              <button
+                type="button"
+                aria-expanded={open}
+                aria-controls={`type-${typeId}-summary`}
+                onClick={() => setOpenType(open ? null : typeId)}
+                className="press block w-full rounded-control text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
               >
+                <div className="flex items-baseline justify-between gap-3">
+                  <span
+                    className={
+                      top
+                        ? 'truncate text-[0.9375rem] font-bold tracking-[-0.01em] text-ink'
+                        : 'truncate text-[0.9375rem] font-medium tracking-[-0.01em] text-ink-soft'
+                    }
+                  >
+                    {typeId}. {name}
+                    <span className="ml-2 text-[0.75rem] font-medium text-ink-faint">
+                      {open ? '접기' : '설명 보기'}
+                    </span>
+                  </span>
+                  <span
+                    className={
+                      top
+                        ? 'tnum shrink-0 text-[0.875rem] font-bold text-ink'
+                        : 'tnum shrink-0 text-[0.875rem] font-medium text-ink-faint'
+                    }
+                  >
+                    {scores[typeId]}
+                  </span>
+                </div>
                 <span
-                  className={
-                    top
-                      ? 'h-full rounded-full bg-ink transition-[width] duration-500 ease-out'
-                      : 'h-full rounded-full bg-ink-faint transition-[width] duration-500 ease-out'
-                  }
-                  style={{ width: `${ratio}%` }}
-                />
-              </span>
+                  className="mt-2 flex h-2 w-full overflow-hidden rounded-full bg-line"
+                  aria-hidden="true"
+                >
+                  <span
+                    className={
+                      top
+                        ? 'h-full rounded-full bg-ink transition-[width] duration-500 ease-out'
+                        : 'h-full rounded-full bg-ink-faint transition-[width] duration-500 ease-out'
+                    }
+                    style={{ width: `${ratio}%` }}
+                  />
+                </span>
+              </button>
+              {open && type ? (
+                <div
+                  id={`type-${typeId}-summary`}
+                  className="mt-3 rounded-control bg-sub px-4 py-3.5 text-[0.875rem] leading-[1.7] text-ink-soft"
+                >
+                  <p>{type.summary}</p>
+                  <p className="mt-2">
+                    <strong className="font-bold text-ink">중요하게 여기는 것:</strong>{' '}
+                    {type.coreMotivation}
+                  </p>
+                </div>
+              ) : null}
             </li>
           );
         })}
       </ul>
 
       <p className="mt-5 text-[0.8125rem] leading-[1.7] text-ink-faint">
+        유형 이름을 누르면 각 유형의 설명을 확인할 수 있어요.{' '}
         막대 길이는 가장 높은 유형을 100%로 둔 상대 비율이며, 오른쪽 숫자는 원점수({scoreRange[0]}~{scoreRange[1]})이에요.
         원점수는 다른 사람과 비교하는 규준 점수가 아니에요.
       </p>

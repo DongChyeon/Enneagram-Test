@@ -32,13 +32,13 @@ export const metadata: Metadata = {
     type: 'website',
     title: '애니어그램 유형 테스트',
     description: '27문항 또는 90문항으로 주유형과 날개 유형을 확인해 보세요.',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: LANDING_OG_ALT }],
+    images: [{ url: '/og/landing-v27.png', width: 1200, height: 630, alt: LANDING_OG_ALT }],
   },
   twitter: {
     card: 'summary_large_image',
     title: '애니어그램 유형 테스트',
     description: '27문항 또는 90문항으로 주유형과 날개 유형을 확인해 보세요.',
-    images: ['/opengraph-image'],
+    images: ['/og/landing-v27.png'],
   },
 };
 
