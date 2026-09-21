@@ -1,11 +1,9 @@
 import { ImageResponse } from 'next/og';
 
-import { getCardFonts } from '../components/cardFont';
+import { getCardFonts } from '../../../components/cardFont';
 
 export const runtime = 'nodejs';
-export const alt = '애니어그램 유형 테스트 — 나를 이해하는 27문항 또는 90문항 검사';
-export const size = { width: 1200, height: 630 };
-export const contentType = 'image/png';
+const size = { width: 1200, height: 630 };
 
 const TYPE_COLORS = [
   '#d66b65',
@@ -20,7 +18,7 @@ const TYPE_COLORS = [
 ] as const;
 
 /** 랜딩 URL 공유 전용 카드. 결과별 OG 이미지와 역할을 섞지 않는다. */
-export default function OpenGraphImage() {
+export function GET() {
   return new ImageResponse(
     (
       <div

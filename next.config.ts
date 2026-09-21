@@ -20,9 +20,6 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     'app/result/[code]/card/route': ['./assets/fonts/**'],
   },
-  async rewrites() {
-    return [{ source: '/og/landing-v27.png', destination: '/opengraph-image' }];
-  },
 };
 
 export default nextConfig;
