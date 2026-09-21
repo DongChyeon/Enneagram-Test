@@ -6,6 +6,7 @@ import {
   CONTINUE_PLAN,
   FULL_PLAN,
   baseQuestions,
+  legacyBaseQuestions,
   questions,
 } from '../data/questions';
 import type { FacetKind, TypeId } from '../data/schema';
@@ -292,40 +293,34 @@ describe('문항 제시 순서 — 인접 문항이 같은 유형이 아니다',
 });
 
 /**
- * 기본 45문항과 이어하기 45문항 — **좌표가 겹치지 않는다**가 핵심이다.
+ * 기본 27문항과 이어하기 63문항 — **좌표가 겹치지 않는다**가 핵심이다.
  * 겹치는 순간 이어하기가 이미 답한 문항을 다시 묻거나, 90칸 중 빈 칸이 남는다.
  */
-describe('기본 45문항 / 이어하기 45문항', () => {
+describe('기본 27문항 / 이어하기 63문항', () => {
   const kindByFacet = new Map<string, FacetKind>(facets.map((f) => [f.id, f.kind]));
 
-  it('90문항의 진부분집합이며 유형당 5문항이다', () => {
-    expect(BASE_PLAN).toHaveLength(45);
-    expect(BASE_ITEMS_PER_TYPE).toBe(5);
-    expect(new Set(BASE_PLAN).size).toBe(45);
+  it('90문항의 진부분집합이며 유형당 3문항이다', () => {
+    expect(BASE_PLAN).toHaveLength(27);
+    expect(BASE_ITEMS_PER_TYPE).toBe(3);
+    expect(new Set(BASE_PLAN).size).toBe(27);
     for (const typeId of TYPE_IDS) {
-      expect(baseQuestions.filter((q) => q.typeId === typeId)).toHaveLength(5);
+      expect(baseQuestions.filter((q) => q.typeId === typeId)).toHaveLength(3);
     }
     for (const question of baseQuestions) {
       expect(questions.some((q) => q.id === question.id)).toBe(true);
     }
   });
 
-  it('다섯 facet 축을 하나도 빠뜨리지 않는다 — 유형마다 축당 정확히 1문항', () => {
+  it('유형마다 세 가지 측면을 살피며 주의 초점을 포함한다', () => {
     for (const typeId of TYPE_IDS) {
       const items = baseQuestions.filter((q) => q.typeId === typeId);
-      expect(items.map((q) => kindByFacet.get(q.facet)).sort()).toEqual([
-        'attention',
-        'fear',
-        'interpersonal',
-        'motivation',
-        'stress',
-      ]);
-      expect(new Set(items.map((q) => q.facet)).size).toBe(5);
+      expect(items.map((q) => kindByFacet.get(q.facet))).toContain('attention');
+      expect(new Set(items.map((q) => q.facet)).size).toBe(3);
     }
   });
 
   /**
-   * 유형당 역채점은 2문항이고 둘 다 한쪽으로 몰릴 수 있다. 몰리면 다른 쪽 45문항의
+   * 유형당 역채점은 2문항이고 둘 다 한쪽으로 몰릴 수 있다. 몰리면 다른 쪽 문항의
    * 묵종 편향 방어가 0이 된다. 양쪽 다 유형당 1문항이어야 한다.
    */
   it('역채점이 양쪽에 유형당 정확히 1문항씩 들어간다', () => {
@@ -337,17 +332,14 @@ describe('기본 45문항 / 이어하기 45문항', () => {
     }
   });
 
-  it('45문항도 인접 유형·인접 축이 겹치지 않게 엮여 있다', () => {
+  it('27문항도 인접 유형이 겹치지 않게 엮여 있다', () => {
     for (let at = 1; at < baseQuestions.length; at += 1) {
       expect(baseQuestions[at].typeId).not.toBe(baseQuestions[at - 1].typeId);
-      expect(kindByFacet.get(baseQuestions[at].facet)).not.toBe(
-        kindByFacet.get(baseQuestions[at - 1].facet),
-      );
     }
   });
 
-  it('이어하기 45문항은 기본 검사와 한 문항도 겹치지 않고, 둘을 합치면 90이다', () => {
-    expect(CONTINUE_PLAN).toHaveLength(45);
+  it('이어하기 63문항은 기본 검사와 한 문항도 겹치지 않고, 둘을 합치면 90이다', () => {
+    expect(CONTINUE_PLAN).toHaveLength(63);
     const base = new Set(BASE_PLAN);
     for (const position of CONTINUE_PLAN) {
       expect(base.has(position)).toBe(false);
@@ -355,19 +347,41 @@ describe('기본 45문항 / 이어하기 45문항', () => {
     expect(new Set([...BASE_PLAN, ...CONTINUE_PLAN])).toEqual(new Set(FULL_PLAN));
   });
 
-  it('이어하기 45문항도 인접 유형이 겹치지 않는다', () => {
+  it('이어하기 63문항도 인접 유형이 겹치지 않는다', () => {
     for (let at = 1; at < CONTINUE_PLAN.length; at += 1) {
       expect(questions[CONTINUE_PLAN[at]].typeId).not.toBe(questions[CONTINUE_PLAN[at - 1]].typeId);
     }
   });
 
-  it('기본 검사 채점은 유형당 5~25점이다', () => {
+  it('역채점까지 반영한 단축판의 실제 최저·최고 점수는 3과 15다', () => {
+    for (const contribution of [1, 5]) {
+      const answers = baseQuestions.map((q) => ({
+        questionId: q.id,
+        value: (q.reverse ? 6 - contribution : contribution) as Likert,
+      }));
+      expect(Object.values(scoreAnswers(answers, 'base'))).toEqual(Array(9).fill(contribution * 3));
+    }
+  });
+
+  it('단축판 답변에 남은 63개를 더하면 처음부터 90개를 답한 결과와 같다', () => {
+    const answers = questions.map((q, at) => ({ questionId: q.id, value: ((at % 5) + 1) as Likert }));
+    const splitAnswers = [...BASE_PLAN, ...CONTINUE_PLAN].map((at) => answers[at]);
+    expect(buildResult(splitAnswers, 'full')).toEqual(buildResult(answers, 'full'));
+  });
+
+  it('기존 45문항의 채점 척도도 유지한다', () => {
+    expect(legacyBaseQuestions).toHaveLength(45);
+    const answers = legacyBaseQuestions.map((q) => ({ questionId: q.id, value: 3 as Likert }));
+    expect(Object.values(scoreAnswers(answers, 'legacy-base'))).toEqual(Array(9).fill(15));
+  });
+
+  it('기본 검사 채점은 유형당 3~15점이다', () => {
     for (const value of [1, 5] as Likert[]) {
       const answers = baseQuestions.map((q) => ({ questionId: q.id, value }));
       const scores = scoreAnswers(answers, 'base');
       for (const typeId of TYPE_IDS) {
-        expect(scores[typeId]).toBeGreaterThanOrEqual(5);
-        expect(scores[typeId]).toBeLessThanOrEqual(25);
+        expect(scores[typeId]).toBeGreaterThanOrEqual(3);
+        expect(scores[typeId]).toBeLessThanOrEqual(15);
       }
     }
     const answers = baseQuestions.map((q) => ({ questionId: q.id, value: 5 as Likert }));
@@ -375,12 +389,8 @@ describe('기본 45문항 / 이어하기 45문항', () => {
   });
 });
 
-/**
- * 모호성 임계값은 **결과 종류에 따라 갈린다.** 폭 41(10~50)의 3점과 폭 21(5~25)의
- * 2점은 같은 비율이다. 한쪽 값을 다른 쪽에 그대로 쓰면 절반 폭 척도에서 두 배로
- * 관대해진다.
- */
-describe('isAmbiguous — 세트별 임계값 (45 → 2 / 90 → 3)', () => {
+/** 세트별 휴리스틱이며 통계적 정확도를 보장하는 기준은 아니다. */
+describe('isAmbiguous — 세트별 임계값 (27 → 2 / 90 → 3)', () => {
   function withGap(kind: 'base' | 'full', gap: number): Scores {
     const top = SCALES[kind].max;
     return Object.fromEntries(
@@ -388,12 +398,12 @@ describe('isAmbiguous — 세트별 임계값 (45 → 2 / 90 → 3)', () => {
     ) as Scores;
   }
 
-  it('임계값이 45문항은 2, 90문항은 3이다', () => {
+  it('임계값이 27문항은 2, 90문항은 3이다', () => {
     expect(SCALES.base.ambiguityBand).toBe(2);
     expect(SCALES.full.ambiguityBand).toBe(3);
   });
 
-  it('45문항: 차이 1이면 모호, 2면 아니다', () => {
+  it('27문항: 차이 1이면 모호, 2면 아니다', () => {
     expect(isAmbiguous(withGap('base', 1), 'base')).toBe(true);
     expect(isAmbiguous(withGap('base', 2), 'base')).toBe(false);
   });

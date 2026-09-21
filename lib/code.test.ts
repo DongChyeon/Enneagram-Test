@@ -61,7 +61,7 @@ describe('encodeResult / decodeResult — 라운드트립 (AC-9)', () => {
     const random = makeRandom(20260921);
     for (let i = 0; i < 1000; i += 1) {
       const values = TYPE_IDS.map(() => 5 + Math.floor(random() * 21));
-      roundTrip(makeScores(values), 'base');
+      roundTrip(makeScores(values), 'legacy-base');
     }
   });
 
@@ -74,16 +74,34 @@ describe('encodeResult / decodeResult — 라운드트립 (AC-9)', () => {
       [25, 24, 5, 5, 5, 5, 5, 5, 5],
     ];
     for (const values of boundaries) {
-      roundTrip(makeScores(values), 'base');
+      roundTrip(makeScores(values), 'legacy-base');
     }
   });
 
   it('45문항 코드도 20자 이하다', () => {
     const code = encodeResult(
-      resultFromScores(makeScores([25, 25, 25, 25, 25, 25, 25, 25, 25]), 'base'),
+      resultFromScores(makeScores([25, 25, 25, 25, 25, 25, 25, 25, 25]), 'legacy-base'),
     );
     expect(code.length).toBe(18);
     expect(code.length).toBeLessThanOrEqual(20);
+  });
+
+  it('27문항 v3 점수 조합과 경계값을 무손실로 보존한다', () => {
+    const random = makeRandom(20260922);
+    for (let i = 0; i < 1000; i += 1) {
+      roundTrip(makeScores(TYPE_IDS.map(() => 3 + Math.floor(random() * 13))), 'base');
+    }
+    for (const value of [3, 15]) roundTrip(makeScores(TYPE_IDS.map(() => value)), 'base');
+    const code = encodeResult(resultFromScores(makeScores(TYPE_IDS.map(() => 9)), 'base'));
+    expect(atob(code.slice(4).replace(/-/g, '+').replace(/_/g, '/') + '==').charCodeAt(0)).toBe(3);
+  });
+
+  it('기존 운영 45문항 링크는 재채점 없이 같은 점수와 유형으로 읽는다', () => {
+    const result = decodeResult('3w4-AhUNFxMWFg0QEQ');
+    expect(result?.kind).toBe('legacy-base');
+    expect(result?.wing).toBe('3w4');
+    expect(result?.scores).toEqual(makeScores([21, 13, 23, 19, 22, 22, 13, 16, 17]));
+    expect(encodeResult(result!)).toBe('3w4-AhUNFxMWFg0QEQ');
   });
 
   it('코드 길이는 항상 20자 이하다', () => {
@@ -118,7 +136,7 @@ describe('decodeResult — 거부 조건 (AC-9)', () => {
   });
 
   it('모르는 버전 바이트는 null', () => {
-    for (const version of [0, 3, 9, 255]) {
+    for (const version of [0, 4, 9, 255]) {
       const bytes = new Uint8Array([version, 50, 30, 20, 20, 20, 20, 20, 20, 30]);
       expect(decodeResult(`1w9-${toBase64Url(bytes)}`)).toBeNull();
     }
@@ -143,7 +161,14 @@ describe('decodeResult — 거부 조건 (AC-9)', () => {
     const inRange = new Uint8Array([2, 25, 15, 9, 9, 9, 9, 9, 9, 15]);
     expect(decodeResult(`1w9-${toBase64Url(tooLow)}`)).toBeNull();
     expect(decodeResult(`1w9-${toBase64Url(tooHigh)}`)).toBeNull();
-    expect(decodeResult(`1w9-${toBase64Url(inRange)}`)?.kind).toBe('base');
+    expect(decodeResult(`1w9-${toBase64Url(inRange)}`)?.kind).toBe('legacy-base');
+  });
+
+  it('27문항 v3은 3~15 범위만 허용한다', () => {
+    for (const value of [2, 16]) {
+      const bytes = new Uint8Array([3, value, 9, 9, 9, 9, 9, 9, 9, 9]);
+      expect(decodeResult(`1w9-${toBase64Url(bytes)}`)).toBeNull();
+    }
   });
 
   it('점수가 10~50 범위를 벗어나면 null', () => {

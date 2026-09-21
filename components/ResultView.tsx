@@ -25,6 +25,7 @@ import { typeById } from '../data/types';
 import { formatWingLabel, wingByLabel } from '../data/wings';
 import { fictionalCharactersByType } from '../data/fictional-characters';
 import { typeRelationships } from '../data/type-relationships';
+import { SCALES } from '../lib/scoring';
 import type { Result } from '../lib/types';
 import { ScoreBars } from './ScoreBars';
 import { ShareActions } from './ShareActions';
@@ -49,33 +50,12 @@ export const DISCLAIMER_PARAGRAPHS: readonly string[] = [
 /** 면책 고지의 마지막 한 줄. 카드(`ShareCardArt`)가 싣는 것과 같은 문자열이다. */
 export const DISCLAIMER_LAST_LINE = '교육·자기이해 목적이며 임상적 진단이 아니에요.';
 
-/**
- * 45문항 결과의 **신뢰도 한계 고지** 확정 문구.
- *
- * 이 블록은 면책 고지를 대체하지 않는다 — 면책 고지는 그대로 아래에 있고, 이것이
- * 하나 더 얹힌다. 표준화·타당화를 거치지 않았다는 한계는 45와 90에 **똑같이**
- * 해당하므로 그 말은 여기 옮겨 적지 않는다. 여기 적는 것은 45문항에만 해당하는
- * 것, 곧 **척도당 문항 수가 절반이라는 사실과 그 결과**뿐이다.
- *
- * .54는 Spearman-Brown 예언 공식으로 환산한 값이다 — 10문항 척도의 내적 일관성을
- * .70으로 잡아도 문항을 5/10으로 줄이면
- * `(0.5 × .70) / (1 + (0.5 − 1) × .70) ≈ .54`가 된다. 통상 쓰는 최소선 .70에는
- * 미치지 못한다. 숫자를 적는 이유는 "조금 덜 정확하다"가 얼마나 덜인지를 읽는
- * 사람이 스스로 판단할 수 있게 하기 위해서다.
- *
- * 말투는 **깎아내리지 않는다.** 45문항은 잠정치가 아니라 이 검사의 한 경로이고,
- * 90문항은 같은 것을 두 번 물어 흔들림을 줄이는 다른 경로다.
- */
-export const BASE_LIMIT_HEADING = '45문항으로 나온 결과예요';
-
+/** 단축판은 유형별 세 문항으로 얻은 탐색용 결과다. */
+export const BASE_LIMIT_HEADING = '27문항으로 살펴본 유형 후보예요';
 export const BASE_LIMIT_PARAGRAPHS: readonly string[] = [
-  '아홉 유형의 다섯 개념을 한 번씩, 유형당 5문항으로 물었어요. 유형 점수는 5~25점 범위이고, 문항 하나가 그 점수의 5분의 1을 쥐고 있어요.',
-  '그래서 1위와 2위가 가깝게 나왔다면 문항 한두 개로 순서가 뒤집힐 수 있어요. 5문항 척도의 내적 일관성은 전체 90문항을 .70으로 놓고 Spearman-Brown 공식으로 환산하면 약 .54로, 통상 쓰는 최소 기준 .70에는 미치지 못해요.',
-  '나머지 45문항은 같은 개념을 다른 문장으로 한 번 더 물어요. 한 문항을 잘못 읽었거나 그날 기분에 끌려 답했더라도 짝이 되는 문항이 상쇄하므로, 다 답하면 결과가 지금과 달라질 수 있어요.',
+  '유형마다 세 문항씩 답한 결과예요. 짧게 살펴본 만큼 답변 하나에 따라 유형의 순서가 달라질 수 있어요.',
+  '더 자세히 알아보고 싶다면 아래에서 남은 63문항을 이어서 답해 보세요. 총 90문항으로 더 다양한 상황을 살펴볼 수 있지만, 유형이 확정되거나 정확도가 보장되는 것은 아니에요.',
 ];
-
-/** 이어하기 버튼 문구. `/test?continue`는 이미 답한 45문항을 다시 묻지 않는다. */
-export const CONTINUE_CTA = '45문항 더 답하고 정확도 높이기';
 
 export type ResultViewProps = {
   result: Result;
@@ -88,6 +68,8 @@ type DetailBlock = { title: string; body: string | readonly string[] };
 
 export function ResultView({ result, code }: ResultViewProps) {
   const base = result.kind === 'base';
+  const scale = SCALES[result.kind];
+  const items = scale.itemsPerType * 9;
   const type = typeById.get(result.primaryType);
   const wing = wingByLabel.get(result.wing);
   const relationships = typeRelationships[result.primaryType];
@@ -117,7 +99,7 @@ export function ResultView({ result, code }: ResultViewProps) {
           <TypeMark typeId={result.primaryType} dot={6} />
           <div className="min-w-0">
             <p className="text-[0.875rem] font-medium text-ink-faint">
-              {base ? '45문항에서 가장 높게 나온 유형' : '90문항에서 가장 높게 나온 유형'}
+              {items}문항에서 가장 높게 나온 {base ? '유형 후보' : '유형'}
             </p>
             <h1 className="mt-1.5 text-[1.625rem] font-bold leading-[1.35] tracking-[-0.03em] text-ink sm:text-[2rem]">
               {result.primaryType}유형 · {type.nameKo}
@@ -158,10 +140,10 @@ export function ResultView({ result, code }: ResultViewProps) {
             !
           </span>
           <div className="min-w-0">
-            <p className="text-[1rem] font-bold leading-[1.5] text-ink">유형이 뚜렷하지 않음</p>
+            <p className="text-[1rem] font-bold leading-[1.5] text-ink">{base ? '유형을 더 살펴보려면 추가 질문이 필요해요' : '유형이 뚜렷하지 않음'}</p>
             <p className="mt-1.5 text-[0.9375rem] leading-[1.7] text-ink-soft">
-              1위와 2위의 점수차가 3점 미만이에요. 한 유형으로 좁히기보다 상위 두세 유형의 설명을
-              함께 읽어 보세요.
+              1위와 2위의 점수차가 {scale.ambiguityBand}점 미만이에요. 한 유형으로 좁히기보다 상위 두세 유형의 설명을
+              함께 읽어 보세요. {base ? '아래에서 남은 63문항을 이어서 답할 수 있어요. 추가 질문은 선택사항이에요.' : null}
             </p>
           </div>
         </aside>
@@ -222,7 +204,7 @@ export function ResultView({ result, code }: ResultViewProps) {
       <ScoreBars
         scores={result.scores}
         primaryType={result.primaryType}
-        scoreRange={base ? [5, 25] : [10, 50]}
+        scoreRange={[scale.min, scale.max]}
       />
 
       <section aria-labelledby="relationship-heading" className="mt-14">

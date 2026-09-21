@@ -115,27 +115,7 @@ function positionsOf(items: readonly Question[]): readonly number[] {
   });
 }
 
-/**
- * ## 기본 45문항의 선택 규칙
- *
- * 새 문항을 쓰지 않는다. **90문항의 진부분집합**이고, 유형당 5문항이다.
- *
- * 1. `facet`은 유형마다 다섯 개이고 문항이 둘씩 붙어 있다. **다섯 facet에서
- *    각각 한 문항씩** 뽑는다 — 축을 빼지 않으므로 동기·두려움·주의 초점·관계·
- *    부하가 전부 한 번씩 측정된다. 45문항이 "빠른 판"이 아니라 **기본 검사**인
- *    이유가 이것이다: 재는 축의 구성이 90문항과 같고, 축당 문항 수만 절반이다.
- * 2. 한 facet의 두 문항 중 어느 쪽인가. 유형마다 동기→두려움→주의 초점→관계→
- *    부하 순으로 훑으며 **역채점 문항을 만나는 첫 facet에서만** 그 역채점 문항을
- *    채택하고, 나머지 facet에서는 그 facet의 첫 문항을 쓴다.
- *
- * 규칙 2가 있어야 하는 이유: 유형당 역채점은 2문항인데 둘 다 빠지면 기본 검사의
- * 묵종 편향 방어가 **0**이 된다. 아홉 유형 모두 두 역채점이 서로 다른 facet에
- * 있으므로, 이 규칙은 기본 45문항에 유형당 정확히 1문항(총 9문항), 남는 45문항에도
- * 유형당 1문항을 넣는다 — 양쪽 어느 쪽도 방어가 비지 않는다.
- *
- * 규칙이 데이터에서 계산되므로, 문항 파일에서 `reverse`나 `facet`이 바뀌면
- * 선택도 따라 바뀐다. 손으로 맞춰 둔 id 목록은 어디에도 없다.
- */
+/** 기존 45문항의 선택 순서는 v2 결과와 채점 호환을 위해 보존한다. */
 const FACET_KIND_ORDER: readonly FacetKind[] = [
   'motivation',
   'fear',
@@ -144,9 +124,9 @@ const FACET_KIND_ORDER: readonly FacetKind[] = [
   'stress',
 ];
 
-export const BASE_ITEMS_PER_TYPE = FACET_KIND_ORDER.length;
+export const BASE_ITEMS_PER_TYPE = 3;
 
-function pickBaseItems(items: readonly Question[]): Question[] {
+function pickLegacyBaseItems(items: readonly Question[]): Question[] {
   const picked: Question[] = [];
   let tookReverse = false;
   for (const kind of FACET_KIND_ORDER) {
@@ -164,6 +144,28 @@ function pickBaseItems(items: readonly Question[]): Question[] {
   return picked;
 }
 
+const LEGACY_BASE_BY_TYPE = QUESTIONS_BY_TYPE.map(pickLegacyBaseItems);
+export const LEGACY_BASE_PLAN: readonly number[] = positionsOf(interleave(LEGACY_BASE_BY_TYPE, 3));
+export const legacyBaseQuestions: Question[] = LEGACY_BASE_PLAN.map((at) => questions[at]);
+
+/**
+ * 단축판은 유형당 세 가지 측면만 살펴본다. 기존 선택에서 역채점 1개,
+ * 주의 초점 1개, 나머지 측면 1개를 고른다. 문항 수를 균등하게 유지하지만
+ * 45/90문항과 같은 내용 범위나 정확도를 보장하지 않는 탐색용 구성이다.
+ */
+function pickBaseItems(items: readonly Question[]): Question[] {
+  const candidates = pickLegacyBaseItems(items);
+  const reverse = candidates.find((question) => question.reverse)!;
+  const attention = candidates.find((question) => facetKindById.get(question.facet) === 'attention')!;
+  const picked = [reverse];
+  if (attention.id !== reverse.id) picked.push(attention);
+  for (const candidate of candidates) {
+    if (picked.length === BASE_ITEMS_PER_TYPE) break;
+    if (!picked.some((question) => question.facet === candidate.facet)) picked.push(candidate);
+  }
+  return picked;
+}
+
 const BASE_BY_TYPE = QUESTIONS_BY_TYPE.map(pickBaseItems);
 const BASE_IDS = new Set(BASE_BY_TYPE.flat().map((question) => question.id));
 
@@ -172,15 +174,15 @@ const BASE_IDS = new Set(BASE_BY_TYPE.flat().map((question) => question.id));
  * 배열의 순서가 화면에 나오는 순서다.
  *
  * 응답은 언제나 길이 90의 배열 하나에 정본 좌표로 담긴다. 기본 검사는 그 90칸
- * 중 45칸만 채우고, 이어하기는 **남은 45칸만** 묻는다 — 계획이 서로 겹치지
+ * 중 27칸만 채우고, 이어하기는 **남은 63칸만** 묻는다 — 계획이 서로 겹치지
  * 않는 좌표 집합이므로 이미 답한 문항을 다시 물을 방법이 구조적으로 없다.
  */
 export const FULL_PLAN: readonly number[] = questions.map((_, at) => at);
 
-/** 기본 45문항. 유형당 5문항을 보폭 3 라운드로빈으로 엮는다(`gcd(3, 5) = 1`). */
-export const BASE_PLAN: readonly number[] = positionsOf(interleave(BASE_BY_TYPE, 3));
+/** 기본 27문항. 유형당 3문항, 보폭 2 (`gcd(2, 3) = 1`). */
+export const BASE_PLAN: readonly number[] = positionsOf(interleave(BASE_BY_TYPE, 2));
 
-/** 기본 검사가 묻지 않은 45문항. 유형당 5문항, 보폭 3. */
+/** 기본 검사가 묻지 않은 63문항. 유형당 7문항, 보폭 3. */
 export const CONTINUE_PLAN: readonly number[] = positionsOf(
   interleave(
     QUESTIONS_BY_TYPE.map((items) => items.filter((question) => !BASE_IDS.has(question.id))),
@@ -188,5 +190,5 @@ export const CONTINUE_PLAN: readonly number[] = positionsOf(
   ),
 );
 
-/** 기본 45문항의 문항들. 채점(`lib/scoring.ts`)이 이 배열로 합산한다. */
+/** 기본 27문항의 문항들. 채점(`lib/scoring.ts`)이 이 배열로 합산한다. */
 export const baseQuestions: Question[] = BASE_PLAN.map((at) => questions[at]);

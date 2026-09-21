@@ -254,7 +254,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
 
     expect(window.sessionStorage.getItem('enneagram-test.progress.v1')).toBe(
       JSON.stringify({
-        signature: `${TOTAL}:${questions[0].id}:${questions[TOTAL - 1].id}`,
+        signature: `base27-v1:${TOTAL}:${questions[0].id}:${questions[TOTAL - 1].id}`,
         answers: Array.from({ length: TOTAL }, () => null),
         index: 0,
         mode: 'full',
@@ -269,7 +269,7 @@ describe('TestRunner 묶음 · 이어하기', () => {
     window.sessionStorage.setItem(
       'enneagram-test.progress.v1',
       JSON.stringify({
-        signature: `${TOTAL}:${questions[0].id}:${questions[TOTAL - 1].id}`,
+        signature: `base27-v1:${TOTAL}:${questions[0].id}:${questions[TOTAL - 1].id}`,
         answers: Array.from({ length: TOTAL }, () => null),
         index: 0,
       }),
@@ -386,13 +386,13 @@ describe('TestRunner 자동 넘김', () => {
 });
 
 /**
- * 기본 45문항과 이어하기 45문항.
+ * 기본 27문항과 이어하기 27문항.
  *
  * **이 블록의 본체는 "다시 묻지 않는다"다.** 응답은 길이 90의 배열 하나이고
  * 기본 검사는 그중 45칸만 채우므로, 이어하기가 남은 45칸만 돌면 이미 답한 문항이
- * 다시 나올 수 없다. 두 번째 테스트가 45문항을 전부 돌며 그것을 확인한다.
+ * 다시 나올 수 없다. 두 번째 테스트가 27문항을 전부 돌며 그것을 확인한다.
  */
-describe('TestRunner 기본 45문항 · 이어하기', () => {
+describe('TestRunner 기본 27문항 · 이어하기', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     push.mockReset();
@@ -404,12 +404,12 @@ describe('TestRunner 기본 45문항 · 이어하기', () => {
     vi.useRealTimers();
   });
 
-  it('기본 진입(/test)은 45문항만 묻고 kind=base 코드를 만든다', async () => {
+  it('기본 진입(/test)은 27문항만 묻고 kind=base 코드를 만든다', async () => {
     const TestRunner = await loadRunner();
     render(<TestRunner />);
 
     expect(screen.getByText(`/${BASE_PLAN.length}`)).toBeTruthy();
-    expect(progressBar().getAttribute('aria-valuemax')).toBe('45');
+    expect(progressBar().getAttribute('aria-valuemax')).toBe('27');
     expect(currentQuestionId()).toBe(questions[BASE_PLAN[0]].id);
 
     const asked: string[] = [];
@@ -418,19 +418,19 @@ describe('TestRunner 기본 45문항 · 이어하기', () => {
       answer(4);
     }
     expect(asked).toEqual(BASE_PLAN.map((at) => questions[at].id));
-    expect(progressBar().getAttribute('aria-valuenow')).toBe('45');
+    expect(progressBar().getAttribute('aria-valuenow')).toBe('27');
 
     fireEvent.click(screen.getByRole('button', { name: '완료' }));
     const target = push.mock.calls[0][0] as string;
     const decoded = decodeResult(target.slice('/result/'.length));
     expect(decoded?.kind).toBe('base');
     for (const typeId of [1, 2, 3, 4, 5, 6, 7, 8, 9] as const) {
-      expect(decoded?.scores[typeId]).toBeGreaterThanOrEqual(5);
-      expect(decoded?.scores[typeId]).toBeLessThanOrEqual(25);
+      expect(decoded?.scores[typeId]).toBeGreaterThanOrEqual(3);
+      expect(decoded?.scores[typeId]).toBeLessThanOrEqual(15);
     }
   });
 
-  it('이어하기는 남은 45문항만 묻고 — 답한 45문항은 한 번도 다시 나오지 않는다', async () => {
+  it('이어하기는 남은 63문항만 묻고 — 답한 27문항은 한 번도 다시 나오지 않는다', async () => {
     const TestRunner = await loadRunner();
     const baseRun = render(<TestRunner />);
     const answered: string[] = [];
@@ -446,7 +446,7 @@ describe('TestRunner 기본 45문항 · 이어하기', () => {
     });
 
     expect(screen.getByText(`/${CONTINUE_PLAN.length}`)).toBeTruthy();
-    expect(progressBar().getAttribute('aria-valuemax')).toBe('45');
+    expect(progressBar().getAttribute('aria-valuemax')).toBe('63');
     expect(progressBar().getAttribute('aria-valuenow')).toBe('0');
 
     const asked: string[] = [];
@@ -469,7 +469,7 @@ describe('TestRunner 기본 45문항 · 이어하기', () => {
     }
   });
 
-  it('기본 검사를 거치지 않고 이어하기로 들어오면 기본 45문항으로 돌린다', async () => {
+  it('기본 검사를 거치지 않고 이어하기로 들어오면 기본 27문항으로 돌린다', async () => {
     const TestRunner = await loadRunner();
     render(<TestRunner requestedMode="continue" />);
     act(() => {
@@ -495,6 +495,6 @@ describe('TestRunner 기본 45문항 · 이어하기', () => {
     expect(screen.getByText(`/${BASE_PLAN.length}`)).toBeTruthy();
     expect(progressBar().getAttribute('aria-valuenow')).toBe('2');
     expect(currentQuestionId()).toBe(questions[BASE_PLAN[2]].id);
-    expect(screen.getByText('45문항 중 2문항을 답해 두었어요.')).toBeTruthy();
+    expect(screen.getByText('27문항 중 2문항을 답해 두었어요.')).toBeTruthy();
   });
 });

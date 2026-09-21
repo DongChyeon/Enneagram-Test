@@ -17,10 +17,10 @@
  * 화면을 그리지 않는다 — 디코드 실패는 404다.
  *
  * 버전 바이트는 **채점 규칙 + 문항 세트**를 가리킨다. 둘 중 하나라도 바뀌면
- * 버전을 올려야 하고, 그 순간 기존 공유 링크는 무효가 된다(DB를 두지 않는 대가).
+ * 버전을 올려야 하고, 기존 버전의 척도와 판별 규칙을 보존해 공유 링크를 계속 읽는다.
  *
- * ## 45문항 결과와 90문항 결과는 다른 것이다
- * 그래서 **버전 값을 갈라 쓴다** — 전체 90문항 `1`, 기본 45문항 `2`. 한 바이트가
+ * ## 27·45·90문항 결과를 별도 버전으로 구분한다
+ * 그래서 **버전 값을 갈라 쓴다** — 전체 90문항 `1`, 기존 45문항 `2`, 기본 27문항 `3`. 한 바이트가
  * 세트를 가리키므로 두 결과가 같은 URL 공간에 있어도 서로로 오해될 길이 없다.
  * 점수 범위 검증도 버전이 고른 세트의 범위(`SCALES[kind]`)로 한다: 기본 검사의
  * 5~25가 90문항 코드로 읽히거나 그 반대가 되는 일이 검증 단계에서 막힌다.
@@ -33,9 +33,9 @@ import type { Result, ResultKind, Scores } from './types';
 
 /**
  * 문항 세트 → 버전 바이트. 값을 **재사용하지 않는다** — 채점 규칙이나 문항
- * 세트가 바뀌면 새 값을 쓰고, 그 순간 그 세트의 기존 링크는 404가 된다.
+ * 세트가 바뀌면 새 값을 쓰고, 기존 버전의 디코딩은 보존한다.
  */
-const VERSION_BY_KIND: Record<ResultKind, number> = { full: 1, base: 2 };
+const VERSION_BY_KIND: Record<ResultKind, number> = { full: 1, 'legacy-base': 2, base: 3 };
 
 const KIND_BY_VERSION = new Map<number, ResultKind>(
   (Object.keys(VERSION_BY_KIND) as ResultKind[]).map((kind) => [VERSION_BY_KIND[kind], kind]),

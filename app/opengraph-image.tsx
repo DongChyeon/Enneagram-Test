@@ -3,7 +3,7 @@ import { ImageResponse } from 'next/og';
 import { getCardFonts } from '../components/cardFont';
 
 export const runtime = 'nodejs';
-export const alt = '애니어그램 유형 테스트 — 나를 이해하는 45문항 또는 90문항 검사';
+export const alt = '애니어그램 유형 테스트 — 나를 이해하는 27문항 또는 90문항 검사';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -63,7 +63,7 @@ export default function OpenGraphImage() {
             애니어그램 유형 테스트
           </div>
           <div style={{ marginTop: 24, fontSize: 31, color: '#66645f', lineHeight: 1.45 }}>
-            45문항 또는 90문항으로 알아보는 주유형과 날개 유형
+            27문항 또는 90문항으로 알아보는 주유형과 날개 유형
           </div>
         </div>
 

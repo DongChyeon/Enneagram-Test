@@ -80,6 +80,22 @@ describe('ResultView', () => {
     expect(text).toContain('요인분석');
   });
 
+  it('27문항의 애매한 결과는 추가 질문을 안내하고 3~15점 척도를 사용한다', () => {
+    const scores: Scores = {1: 8, 2: 8, 3: 8, 4: 11, 5: 12, 6: 8, 7: 8, 8: 8, 9: 8};
+    const { container } = render(<ResultView result={resultFromScores(scores, 'base')} code="base-test" />);
+    expect(container.textContent).toContain('27문항으로 살펴본 유형 후보예요');
+    expect(container.textContent).toContain('추가 질문이 필요해요');
+    expect(container.textContent).toContain('점수차가 2점 미만');
+    expect(container.textContent).toContain('63문항');
+  });
+
+  it('예전 45문항 결과도 45문항으로 표시한다', () => {
+    const scores: Scores = {1: 8, 2: 8, 3: 8, 4: 11, 5: 15, 6: 8, 7: 8, 8: 8, 9: 8};
+    const { container } = render(<ResultView result={resultFromScores(scores, 'legacy-base')} code="legacy-test" />);
+    expect(container.textContent).toContain('45문항에서 가장 높게 나온 유형');
+    expect(container.textContent).not.toContain('27문항으로 살펴본 유형 후보예요');
+  });
+
   it('주유형 도트 캐릭터를 렌더한다 — 16×16 칸이고, 유형명 옆의 장식이라 낭독되지 않는다', () => {
     const result = resultFromScores(fixture(3));
     const { container } = render(<ResultView result={result} code="5w4-TEST0000000" />);

@@ -19,6 +19,7 @@ import { notFound } from 'next/navigation';
 import { ResultView } from '../../../components/ResultView';
 import { typeById } from '../../../data/types';
 import { formatWingLabel } from '../../../data/wings';
+import { SCALES } from '../../../lib/scoring';
 import { decodeResult } from '../../../lib/code';
 
 type PageProps = { params: Promise<{ code: string }> };
@@ -32,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // 어느 경로로 나온 결과인지 제목에서부터 밝힌다 — 링크만 보고 지나가는
   // 사람에게도 45문항 결과와 90문항 결과가 같은 것으로 보여서는 안 된다.
-  const items = result.kind === 'base' ? 45 : 90;
+  const items = SCALES[result.kind].itemsPerType * 9;
   const type = typeById.get(result.primaryType);
   const title = `[${items}문항] ${formatWingLabel(result.wing)} · ${type?.nameKo ?? ''} — 애니어그램 유형 테스트`;
   const description = `${items}문항 자기보고 결과예요. ${type?.summary ?? ''} 교육·자기이해 목적이며 임상적 진단이 아니에요.`;

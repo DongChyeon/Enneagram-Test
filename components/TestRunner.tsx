@@ -42,8 +42,8 @@ import {
  * ## 진행 계획(plan)
  * 이 러너는 "90문항을 1번부터 센다"가 아니라 **위치 목록 하나를 순서대로
  * 돈다**. 목록은 셋이고 전부 `data/questions.ts`가 계산한다.
- *   - `base`     기본 45칸 (유형당 5문항, 다섯 facet 각 1문항)
- *   - `continue` 기본 검사가 묻지 않은 45칸
+ *   - `base`     기본 27칸 (유형당 3문항)
+ *   - `continue` 기본 검사가 묻지 않은 63칸
  *   - `full`     90칸 전부
  *
  * 세 목록이 같은 90칸 좌표를 가리키므로 **이어하기가 이미 답한 문항을 다시
@@ -52,7 +52,7 @@ import {
  * 돌 때 그것은 예전 그대로 90분율이다.
  *
  * **도중에 계획을 바꾸는 길은 두지 않는다.** 진행률과 묶음 분할이 도중에 달라지면
- * 지금 어디쯤인지 읽을 수 없게 된다. 45를 고른 사람은 결과 화면에서 이어한다.
+ * 지금 어디쯤인지 읽을 수 없게 된다. 27을 고른 사람은 결과 화면에서 이어한다.
  *
  * ## 영속화 (R11)
  * 긴 모바일 세션은 언젠가 반드시 끊긴다(전화 수신, 탭 회수, 새로고침).
@@ -103,7 +103,7 @@ function isBaseComplete(answers: readonly AnswerSlot[]): boolean {
 
 /**
  * 주소가 지정한 계획. `/test?continue` · `/test?full`과 값 형태(`?mode=full`)를
- * 둘 다 받는다. 아무것도 없으면 **기본 검사 45문항**이다.
+ * 둘 다 받는다. 아무것도 없으면 **기본 검사 27문항**이다.
  *
  * 마운트 뒤 effect 안에서만 읽는다 — 서버 렌더에는 주소의 질의 문자열이 없고,
  * 여기서 읽지 않는 덕분에 `/test`가 정적 페이지로 남는다.
@@ -122,9 +122,9 @@ export type TestRunnerProps = {
    * 계획을 주소 대신 직접 지정한다(테스트용). 지정하지 않으면 주소 → 저장본 →
    * 전체판 순으로 정해진다.
    *
-   * `continue`는 **기본 45문항이 실제로 채워져 있을 때만** 받아들인다. 저장본 없이
+   * `continue`는 **기본 27문항이 실제로 채워져 있을 때만** 받아들인다. 저장본 없이
    * 이 주소로 바로 들어온 사람(다른 탭·다른 기기에서 결과 링크를 연 경우)에게
-   * 남은 45문항만 묻고 끝내면 채점이 불가능한 응답이 남는다. 그때는 기본 검사로 돌린다.
+   * 남은 63문항만 묻고 끝내면 채점이 불가능한 응답이 남는다. 그때는 기본 검사로 돌린다.
    */
   requestedMode?: RunMode;
 };
@@ -217,7 +217,7 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
     cancelAdvance();
     clearProgress();
     setAnswers(blankAnswers());
-    // 이어하기를 지우면 근거였던 45문항도 함께 사라진다 → 기본 검사로 되돌린다.
+    // 이어하기를 지우면 근거였던 27문항도 함께 사라진다 → 기본 검사로 되돌린다.
     setMode((current) => (current === 'continue' ? 'base' : current));
     setIndex(0);
     setError(null);
@@ -246,7 +246,7 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
   const allAnswered = answeredCount === planSize;
   const firstUnanswered = planSlots.findIndex((slot) => slot === null);
 
-  /** 기본 검사만 45문항 결과다. 이어하기는 90칸이 다 차므로 전체 결과를 낸다. */
+  /** 기본 검사만 27문항 결과다. 이어하기는 90칸이 다 차므로 전체 결과를 낸다. */
   const resultKind: ResultKind = mode === 'base' ? 'base' : 'full';
 
   const submit = useCallback(() => {
@@ -453,7 +453,7 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
                 {allAnswered ? (
                   <p className="text-[0.9375rem] leading-[1.6] text-ink-soft">
                     {mode === 'base'
-                      ? `${planSize}문항에 모두 답했어요. 결과는 링크 주소 안에 담기며 서버에 저장되지 않아요. 이어서 나머지 ${TOTAL - planSize}문항을 답하면 더 정확한 결과가 돼요.`
+                      ? `${planSize}문항에 모두 답했어요. 결과는 링크 주소 안에 담기며 서버에 저장되지 않아요. 이어서 나머지 ${TOTAL - planSize}문항을 답하면 더 다양한 상황을 살펴볼 수 있어요.`
                       : `${TOTAL}문항에 모두 답했어요. 결과는 링크 주소 안에 담기며 서버에 저장되지 않아요.`}
                   </p>
                 ) : (

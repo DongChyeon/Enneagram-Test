@@ -35,11 +35,11 @@
  * 분포는 모호하지 않다고 판정된다.
  *
  * **동점 규칙과 문항 세트는 URL 계약의 일부다** — 둘 중 하나라도 바꾸면
- * `lib/code.ts`의 버전 바이트를 올려야 하고, 기존 공유 링크는 무효가 된다.
+ * `lib/code.ts`의 버전 바이트를 올리고 기존 버전의 해석은 보존한다.
  * 같은 내용이 `README.md`에도 기록돼 있다.
  */
 
-import { baseQuestions, questions } from '../data/questions';
+import { baseQuestions, legacyBaseQuestions, questions } from '../data/questions';
 import type { Question, TypeId } from '../data/schema';
 import type { Answer, Result, ResultKind, Scores } from './types';
 
@@ -49,24 +49,20 @@ import type { Answer, Result, ResultKind, Scores } from './types';
  * `itemsPerType`만 바뀌고 나머지는 거기서 따라 나온다 — 점수 범위는
  * `[n, 5n]`이고, 이 범위가 `lib/code.ts`의 1바이트/유형 인코딩 검증에 그대로 쓰인다.
  *
- * ## `ambiguityBand`가 왜 세트마다 다른가
- * **같은 비율을 유지한 것이다.** 전체 90문항의 3점은 폭 41(10~50) 위의 값이고,
- * "리커트 한 칸 수준의 흔들림 세 번으로는 순위가 뒤집히지 않는다"고 말할 수 있는
- * 최소선으로 고른 값이다. 기본 45문항의 폭은 21(5~25)이므로 같은 비율이면
- * `3 × 21 / 41 ≈ 1.5`, 정수로 올려 **2**다. 같은 절대값 3을 그대로 쓰면 폭이
- * 절반인 척도에서 두 배로 관대해진다.
- *
- * 두 값 모두 통계적으로 유도된 컷오프가 아니라 판단이다. 결과 종류에 따라
- * 임계값이 갈린다는 사실은 `lib/scoring.test.ts`가 고정한다.
+ * `ambiguityBand`는 검증된 정확도 기준이 아닌 추가 질문 안내용 휴리스틱이다.
+ * 27문항은 상위 두 유형의 차이가 0~1점이면 모호하다고 안내한다.
+ * 기존 45문항은 2, 전체 90문항은 3이라는 이전 기준을 유지한다.
  */
 export const SCALES: Record<ResultKind, { itemsPerType: number; min: number; max: number; ambiguityBand: number }> = {
-  base: { itemsPerType: 5, min: 5, max: 25, ambiguityBand: 2 },
+  base: { itemsPerType: 3, min: 3, max: 15, ambiguityBand: 2 },
+  'legacy-base': { itemsPerType: 5, min: 5, max: 25, ambiguityBand: 2 },
   full: { itemsPerType: 10, min: 10, max: 50, ambiguityBand: 3 },
 };
 
 /** 그 세트가 채점하는 문항들. 제시 순서는 무관하다 — `typeId`로만 합산한다. */
 export function itemsFor(kind: ResultKind): readonly Question[] {
-  return kind === 'base' ? baseQuestions : questions;
+  if (kind === 'base') return baseQuestions;
+  return kind === 'legacy-base' ? legacyBaseQuestions : questions;
 }
 
 /** 1~9. 순회 순서를 고정하기 위한 단일 정본. */
@@ -94,7 +90,7 @@ export function adjacentSum(scores: Scores, n: TypeId): number {
  * 부분 응답을 조용히 채점하면 하한 미만의 점수가 나와 인코딩(1바이트)이
  * 깨진다. 결과 페이지는 그 세트를 완주해야만 도달 가능하므로 이는 버그 신호다.
  *
- * 세트가 달라도 코드는 하나다. 기본 45문항은 90문항의 **진부분집합**이므로
+ * 세트가 달라도 코드는 하나다. 기본 27문항은 90문항의 **진부분집합**이므로
  * 같은 `typeId` 합산 규칙과 같은 역채점 규칙이 그대로 적용된다.
  */
 export function scoreAnswers(answers: Answer[], kind: ResultKind = 'full'): Scores {
