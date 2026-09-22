@@ -28,7 +28,7 @@ import { typeRelationships } from '../data/type-relationships';
 import { SCALES } from '../lib/scoring';
 import type { Result } from '../lib/types';
 import { ScoreBars } from './ScoreBars';
-import { ShareActions } from './ShareActions';
+import { ShareActions, ShareTools } from './ShareActions';
 import { ResultNextStep } from './ResultNextStep';
 import { TypeMark } from './TypeMarkView';
 
@@ -111,6 +111,8 @@ export function ResultView({ result, code }: ResultViewProps) {
         </div>
         <p className="mt-6 text-[1.0625rem] leading-[1.65] text-ink-soft">{type.summary}</p>
       </header>
+
+      <ShareActions code={code} typeId={result.primaryType} />
 
       {/* ⑤ 모호성 안내 — isAmbiguous(1위−2위 < 3)일 때만.
           경고가 아니라 **읽을 것**이므로 노랑도 파랑도 쓰지 않는다. 회색 면 위에
@@ -255,7 +257,7 @@ export function ResultView({ result, code }: ResultViewProps) {
         </ul>
       </section>
 
-      <ShareActions code={code} />
+      <ShareTools code={code} />
 
       {base ? <ResultNextStep code={code} /> : null}
 
