@@ -46,6 +46,20 @@ describe('ShareActions', () => {
     });
   });
 
+  it('아이폰에서는 대상 앱이 문구만 받지 않도록 결과 URL만 공유한다', async () => {
+    setUserAgent(
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1',
+    );
+    const share = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(window.navigator, 'share', { configurable: true, value: share });
+    render(<ShareActions code="test-code" typeId={5} />);
+
+    fireEvent.click(screen.getByRole('button', { name: '내 5유형 결과 공유하기' }));
+
+    await waitFor(() => expect(share).toHaveBeenCalledTimes(1));
+    expect(share).toHaveBeenCalledWith({ url: window.location.href });
+  });
+
   it('카카오톡 인앱 WebView에서는 카카오톡 공유창을 먼저 연다', async () => {
     setUserAgent('Mozilla/5.0 KAKAOTALK 11.0.0');
     const share = vi.fn();

@@ -29,6 +29,15 @@ function isKakaoTalkWebView(): boolean {
   return /KAKAOTALK/i.test(navigator.userAgent);
 }
 
+/**
+ * iOS 공유 시트는 `text`와 `url`을 함께 넘기면 일부 대상 앱에서 `text`만
+ * 전달한다. iPadOS의 데스크톱 UA도 터치 포인트로 함께 잡는다.
+ */
+function isAppleMobile(): boolean {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent)
+    || (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+}
+
 function shareWithKakao(url: string, imageUrl: string, typeId: number): boolean {
   const kakao = window.Kakao;
   if (!isKakaoTalkWebView() || !kakao?.isInitialized()) return false;
@@ -109,11 +118,15 @@ export function ShareActions({ code, typeId }: ShareActionsProps) {
 
     if (typeof navigator.share === 'function') {
       try {
-        await navigator.share({
-          title: `내 애니어그램 ${typeId}유형 결과`,
-          text: '친구와 결과를 비교해 보세요.',
-          url,
-        });
+        await navigator.share(
+          isAppleMobile()
+            ? { url }
+            : {
+                title: `내 애니어그램 ${typeId}유형 결과`,
+                text: '친구와 결과를 비교해 보세요.',
+                url,
+              },
+        );
         setShared(true);
         setStatus({ kind: 'ok', message: '공유 시트를 열었어요.' });
         return;
