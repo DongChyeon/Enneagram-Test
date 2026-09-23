@@ -30,6 +30,7 @@ import type { Result } from '../lib/types';
 import { ScoreBars } from './ScoreBars';
 import { ShareActions, ShareTools } from './ShareActions';
 import { ResultNextStep } from './ResultNextStep';
+import { PersonalizedInsights } from './PersonalizedInsights';
 import { TypeMark } from './TypeMarkView';
 
 /**
@@ -151,6 +152,8 @@ export function ResultView({ result, code }: ResultViewProps) {
         </aside>
       ) : null}
 
+      <PersonalizedInsights result={result} code={code} />
+
       {/* ② 핵심 동기 / 핵심 두려움 / 강점 / 성장 포인트 */}
       <section aria-labelledby="detail-heading" className="mt-14">
         <h2 id="detail-heading" className="text-[1.25rem] font-bold text-ink">
@@ -208,6 +211,7 @@ export function ResultView({ result, code }: ResultViewProps) {
         primaryType={result.primaryType}
         scoreRange={[scale.min, scale.max]}
       />
+
 
       <section aria-labelledby="relationship-heading" className="mt-14">
         <h2 id="relationship-heading" className="text-[1.25rem] font-bold text-ink">

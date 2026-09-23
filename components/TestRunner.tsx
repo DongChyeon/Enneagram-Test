@@ -27,6 +27,7 @@ import {
   toAnswerSlot,
   writeProgress,
   rememberResult,
+  rememberAnswerProfile,
 } from './progress';
 
 /**
@@ -273,6 +274,7 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
     try {
       const code = encodeResult(buildResult(payload, resultKind));
       rememberResult(code);
+      rememberAnswerProfile(code, answers);
       router.push(`/result/${code}`);
     } catch {
       setSubmitting(false);
