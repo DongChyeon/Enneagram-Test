@@ -21,24 +21,24 @@ import './globals.css';
  * 그러지 않으면 미리보기 카드가 옛 주소를 가리킨다. `docs/deploy.md` 참조.
  */
 const SITE_URL = new URL('https://enneagram-test-one.vercel.app');
-const LANDING_OG_ALT = '애니어그램 유형 테스트 — 나를 이해하는 27문항 또는 90문항 검사';
+const LANDING_OG_ALT = '애니어그램 유형 테스트 — 가볍게 시작하는 나의 동기 패턴';
 
 export const metadata: Metadata = {
   metadataBase: SITE_URL,
   title: '애니어그램 유형 테스트',
   description:
-    '27문항으로 가볍게 시작하고 90문항까지 이어서 답할 수 있는 한국어 애니어그램 검사. 교육·자기이해 목적이며 임상적 진단이 아니에요.',
+    '가볍게 시작해 나와 가까운 동기 패턴을 살펴보는 한국어 애니어그램 테스트. 교육·자기이해 목적이며 임상적 진단이 아니에요.',
   openGraph: {
     type: 'website',
     title: '애니어그램 유형 테스트',
-    description: '27문항 또는 90문항으로 주유형과 날개 유형을 확인해 보세요.',
-    images: [{ url: '/og/landing-v27.png', width: 1200, height: 630, alt: LANDING_OG_ALT }],
+    description: '가볍게 시작해 나와 가까운 유형과 날개 유형을 살펴보세요.',
+    images: [{ url: '/og/landing-light.png', width: 1200, height: 630, alt: LANDING_OG_ALT }],
   },
   twitter: {
     card: 'summary_large_image',
     title: '애니어그램 유형 테스트',
-    description: '27문항 또는 90문항으로 주유형과 날개 유형을 확인해 보세요.',
-    images: ['/og/landing-v27.png'],
+    description: '가볍게 시작해 나와 가까운 유형과 날개 유형을 살펴보세요.',
+    images: ['/og/landing-light.png'],
   },
 };
 

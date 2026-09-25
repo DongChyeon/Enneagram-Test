@@ -38,14 +38,13 @@ describe('ResumeNotice', () => {
     expect(container.innerHTML).toBe('');
   });
 
-  it('진행 중인 응답이 있으면 남은 문항 수와 묶음 위치를 보여준다', () => {
+  it('진행 중인 응답이 있으면 문항 수를 다시 강조하지 않고 이어하기를 안내한다', () => {
     save(24);
     render(<ResumeNotice total={TOTAL} signature={SIGNATURE} />);
 
     expect(screen.getByText('답하다 만 기록이 남아 있어요')).toBeTruthy();
-    expect(
-      screen.getByText(`${TOTAL}문항 중 24문항 · 9묶음 중 3번째 묶음까지 왔어요. 아래 버튼을 누르면 멈춘 자리에서 이어서 답해요.`),
-    ).toBeTruthy();
+    expect(screen.getByText('아래 버튼을 누르면 멈춘 자리에서 이어서 답할 수 있어요.')).toBeTruthy();
+    expect(document.body.textContent).not.toContain(`${TOTAL}문항`);
   });
 
   it('"처음부터 다시 하기"는 확인을 거쳐야 저장본을 지운다', () => {

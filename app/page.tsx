@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 import Disclaimer from '../components/Disclaimer';
 import ResumeNotice from '../components/ResumeNotice';
-import { SECTION_SIZE, questionSetSignature, sectionCount } from '../components/progress';
-import { BASE_PLAN, questions } from '../data/questions';
+import { questionSetSignature } from '../components/progress';
+import { questions } from '../data/questions';
 
 /**
  * 랜딩 (Step 4.2).
@@ -15,9 +15,6 @@ import { BASE_PLAN, questions } from '../data/questions';
  */
 
 const TOTAL = questions.length;
-const BASE_TOTAL = BASE_PLAN.length;
-const SECTION_COUNT = sectionCount(TOTAL);
-const BASE_SECTION_COUNT = sectionCount(BASE_TOTAL);
 /**
  * 이어하기 안내가 쓸 문항 세트 서명. 서버에서 한 번 만들어 문자열로 내려보낸다 —
  * 클라이언트 컴포넌트가 직접 `data/questions`를 import 하면 90문항 텍스트가
@@ -25,47 +22,10 @@ const BASE_SECTION_COUNT = sectionCount(BASE_TOTAL);
  */
 const QUESTION_SET_SIGNATURE = questionSetSignature(TOTAL, questions[0].id, questions[TOTAL - 1].id);
 
-/**
- * 짧게 시작하거나 처음부터 전체 문항에 답할 수 있다.
- * 소요 시간은 예상치이며 문항 수를 정확도 보장으로 표현하지 않는다.
- */
-type Route = {
-  href: string;
-  total: number;
-  sections: number;
-  minutes: string;
-  perType: string;
-  accuracy: string;
-  cta: string;
-};
-
-const ROUTES: Route[] = [
-  {
-    href: '/test',
-    total: BASE_TOTAL,
-    sections: BASE_SECTION_COUNT,
-    minutes: '예상 3–5분',
-    perType: '유형당 3문항',
-    accuracy:
-      '유형마다 세 문항씩 답하며 나와 가까운 유형을 가볍게 살펴봐요. 점수가 비슷한 유형이 있으면 추가 질문이 필요할 수 있다고 알려드려요.',
-    cta: `${BASE_TOTAL}문항으로 시작하기`,
-  },
-  {
-    href: '/test?full',
-    total: TOTAL,
-    sections: SECTION_COUNT,
-    minutes: '약 10–15분',
-    perType: '유형당 10문항',
-    accuracy:
-      '동기·두려움·관심사·관계·부담을 느낄 때의 모습을 더 다양한 질문으로 살펴봐요. 짧은 검사보다 유형마다 답하는 문항이 많지만, 결과의 정확도를 보장하는 검사는 아니에요.',
-    cta: `${TOTAL}문항으로 시작하기`,
-  },
-];
-
 const DOES: { title: string; body: string }[] = [
   {
     title: '아홉 유형의 점수를 계산해요',
-    body: '각 답변의 점수를 유형별로 더해요(27문항은 유형당 3문항으로 3~15점, 90문항은 유형당 10문항으로 10~50점이에요). 가장 점수가 높은 유형과, 그 유형의 양옆 번호 중 점수가 높은 날개 유형을 함께 보여줘요.',
+    body: '각 답변을 아홉 유형의 점수로 정리해요. 가장 점수가 높은 유형과, 그 유형의 양옆 번호 중 점수가 높은 날개 유형을 함께 보여줘요.',
   },
   {
     title: '문항은 전부 새로 썼어요',
@@ -78,7 +38,7 @@ const DOES: { title: string; body: string }[] = [
 ];
 
 const DOES_NOT = [
-  '표준화·타당화 절차를 거치지 않았어요. 규준 집단도, 공개된 신뢰도·타당도 계수도 없어요. 27문항과 90문항 모두 마찬가지예요. 90문항을 고른다고 검증된 검사가 되지는 않아요.',
+  '표준화·타당화 절차를 거치지 않았어요. 규준 집단도, 공개된 신뢰도·타당도 계수도 없으며 자세히 살펴본다고 검증된 검사가 되지는 않아요.',
   '당신의 유형을 확정해 주지 않아요. 점수가 촘촘하면 결과 화면이 그 사실을 먼저 알려 줘요.',
   '날개는 측정한 값이 아니라 이론에 따른 해석이에요. 결과 화면도 그렇게 표시해요.',
 ];
@@ -96,48 +56,30 @@ export default function HomePage() {
           스스로를 어떻게 보고 있는지를 정리하는 기록에 가까워요.
         </p>
         <p className="mt-4 text-[0.9375rem] leading-[1.7] text-ink-soft">
-          한 화면에 한 문장씩 나오고, 고르면 다음 문장으로 저절로 넘어가요. {SECTION_SIZE}문항씩
-          묶어 보여 주므로 지금 어디쯤인지 알 수 있어요. 우선 27문항으로 시작하고,
-          결과를 더 살펴보고 싶으면 나머지 문항을 이어서 답해도 돼요.
+          한 화면에 한 문장씩 나오고, 답을 고르면 다음 문장으로 저절로 넘어가요. 먼저
+          가볍게 결과를 확인한 뒤, 더 자세히 알고 싶을 때만 이어서 살펴볼 수 있어요.
         </p>
       </header>
 
-      {/* 네 가지 사실. 칸을 선으로 나누지 않고 가라앉은 한 면 안에 여백으로 나눈다. */}
-      <div className="mt-9 space-y-4">
-        {ROUTES.map((route) => (
-          <section
-            key={route.href}
-            aria-labelledby={`route-${route.total}`}
-            className="rounded-card bg-sub p-5 sm:p-7"
-          >
-            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <h2
-                id={`route-${route.total}`}
-                className="tnum text-[1.25rem] font-bold tracking-[-0.02em] text-ink"
-              >
-                {route.total}문항
-              </h2>
-              <p className="tnum text-[0.875rem] font-medium text-ink-faint">
-                {route.perType} · {route.minutes}
-              </p>
-            </div>
-            <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">{route.accuracy}</p>
-            <Link
-              href={route.href}
-              className="press mt-5 flex min-h-[3.5rem] w-full items-center justify-center rounded-control bg-primary px-6 text-center text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press"
-            >
-              {route.cta}
-            </Link>
-          </section>
-        ))}
-      </div>
-
-      <p className="mt-5 text-[0.875rem] leading-[1.7] text-ink-faint">
-        {BASE_TOTAL}문항으로 시작해도 결과 화면에서 나머지 {TOTAL - BASE_TOTAL}문항을 이어서 답할
-        수 있고, <strong className="font-bold text-ink-soft">이미 답한 문항은 다시 묻지
-        않아요.</strong> 어느 쪽이든 한 번에 다 하지 않아도 돼요 — 중간에 나가도, 새로고침해도
-        같은 탭에서는 멈춘 자리에서 이어져요. 응답은 브라우저 안에만 머물러요.
-      </p>
+      <section aria-labelledby="start-heading" className="mt-9 rounded-card bg-sub p-5 sm:p-7">
+        <p className="text-[0.8125rem] font-bold text-primary">가볍게 알아보기</p>
+        <h2 id="start-heading" className="mt-2 text-[1.25rem] font-bold tracking-[-0.02em] text-ink">
+          지금의 나와 가까운 유형을 살펴봐요
+        </h2>
+        <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">
+          약 3–5분이면 결과를 볼 수 있어요. 한 번에 끝내지 않아도 같은 탭에서는 멈춘
+          자리에서 이어지고, 답변은 브라우저 밖으로 전송되지 않아요.
+        </p>
+        <Link
+          href="/test"
+          className="press mt-5 flex min-h-[3.5rem] w-full items-center justify-center rounded-control bg-primary px-6 text-center text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press"
+        >
+          가볍게 시작하기
+        </Link>
+        <p className="mt-3 text-center text-[0.8125rem] leading-[1.6] text-ink-faint">
+          결과를 본 뒤 원할 때만 더 자세히 이어갈 수 있어요.
+        </p>
+      </section>
 
       <ResumeNotice total={TOTAL} signature={QUESTION_SET_SIGNATURE} />
 

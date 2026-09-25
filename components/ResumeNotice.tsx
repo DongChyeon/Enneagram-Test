@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { SECTION_SIZE, clearProgress, countAnswered, readProgress, sectionCount } from './progress';
+import { clearProgress, countAnswered, readProgress } from './progress';
 
 /**
  * 랜딩의 이어하기 안내.
@@ -26,15 +26,12 @@ export default function ResumeNotice({ total, signature }: { total: number; sign
 
   if (answered === null) return null;
 
-  const sections = sectionCount(total);
-  const section = Math.min(Math.floor(answered / SECTION_SIZE) + 1, sections);
 
   return (
     <div className="animate-rise-in mt-7 rounded-card bg-sub p-5">
       <p className="text-[1rem] font-bold leading-[1.5] text-ink">답하다 만 기록이 남아 있어요</p>
-      <p className="tnum mt-1.5 text-[0.9375rem] leading-[1.6] text-ink-soft">
-        {total}문항 중 {answered}문항 · {sections}묶음 중 {section}번째 묶음까지 왔어요. 아래
-        버튼을 누르면 멈춘 자리에서 이어서 답해요.
+      <p className="mt-1.5 text-[0.9375rem] leading-[1.6] text-ink-soft">
+        아래 버튼을 누르면 멈춘 자리에서 이어서 답할 수 있어요.
       </p>
       {confirming ? (
         <div className="mt-4 flex flex-wrap gap-2">
