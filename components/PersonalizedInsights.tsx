@@ -6,9 +6,10 @@ import { questions } from '../data/questions';
 import { counterSignals, facetKindLabels } from '../data/result-insights';
 import type { FacetKind, Question, TypeId } from '../data/schema';
 import { facets, typeById } from '../data/types';
-import { TYPE_IDS } from '../lib/scoring';
+import { SCALES, TYPE_IDS } from '../lib/scoring';
 import type { Likert, Result } from '../lib/types';
 import { readAnswerProfile, type AnswerSlot } from './progress';
+import { RadialScoreProfile } from './RadialScoreProfile';
 
 function contribution(question: Question, value: Likert): number {
   return question.reverse ? 6 - value : value;
@@ -72,6 +73,11 @@ export function PersonalizedInsights({ result, code }: { result: Result; code: s
           한 유형의 설명에 자신을 전부 맞추기보다 세 유형의 차이를 함께 살펴보세요.
         </p>
       </div>
+
+      <RadialScoreProfile
+        scores={result.scores}
+        scoreRange={[SCALES[result.kind].min, SCALES[result.kind].max]}
+      />
 
       <div className="mt-5 rounded-card border border-line p-5 sm:p-7">
         <h3 className="text-[1rem] font-bold text-ink">이 결과가 잘 맞지 않을 수 있는 신호</h3>
