@@ -3,20 +3,22 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import type { ResultKind } from '../lib/types';
 import { ownsResult } from './progress';
 
 export type ResultNextStepProps = {
   code: string;
+  kind: ResultKind;
 };
 
 const LINK_CLASS =
   'press mt-5 flex min-h-[3.5rem] w-full items-center justify-center rounded-control bg-primary px-6 text-center text-[1.0625rem] font-bold tracking-[-0.01em] text-white hover:bg-primary-press';
 
 /**
- * 27문항 결과의 다음 행동을 결과 생성자와 공유 방문자에게 다르게 보여 준다.
+ * 모든 결과의 다음 행동을 결과 생성자와 공유 방문자에게 다르게 보여 준다.
  * 결과 URL에는 점수만 있고 원 응답은 없으므로, 다른 기기에서 이어하기는 불가능하다.
  */
-export function ResultNextStep({ code }: ResultNextStepProps) {
+export function ResultNextStep({ code, kind }: ResultNextStepProps) {
   const [owner, setOwner] = useState(false);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ export function ResultNextStep({ code }: ResultNextStepProps) {
     );
   }
 
-  return (
+  if (kind === 'base') return (
     <section aria-labelledby="continue-heading" className="mt-14 rounded-card bg-sub p-5 sm:p-7">
       <h2 id="continue-heading" className="text-[1.125rem] font-bold tracking-[-0.01em] text-ink">
         총 90문항으로 더 자세히 알아보기
@@ -54,4 +56,7 @@ export function ResultNextStep({ code }: ResultNextStepProps) {
       </Link>
     </section>
   );
+
+  // 이미 45문항 또는 90문항을 완료한 본인에게는 새 검사 유도 버튼을 반복하지 않는다.
+  return null;
 }

@@ -263,7 +263,7 @@ export function ResultView({ result, code }: ResultViewProps) {
 
       <ShareTools code={code} />
 
-      {base ? <ResultNextStep code={code} /> : null}
+      <ResultNextStep code={code} kind={result.kind} />
 
       {/* ⑥ 면책 고지 */}
       <section
