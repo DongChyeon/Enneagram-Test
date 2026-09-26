@@ -6,3 +6,7 @@ public/og/
 # OMC 작업 디렉터리 — 도구의 로컬 상태이지 프로젝트 산출물이 아니다.
 .omc/
 _workspace/
+
+# 내부 운영 문서 — 공개 저장소에 올리지 않고 로컬에만 둔다.
+docs/deploy.md
+docs/kakao-share.md
