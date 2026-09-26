@@ -20,6 +20,8 @@ import TestRunner from '../../components/TestRunner';
 export const metadata: Metadata = {
   title: '검사 진행 · 에니어그램 유형 테스트',
   description: '5점 척도 자기보고 검사. 응답은 브라우저 안에만 머물러요.',
+  // 문항이 클라이언트에서만 그려져 검색엔진이 읽을 본문이 없다. 검색 유입은 랜딩으로 모은다.
+  robots: { index: false, follow: true },
 };
 
 export default function TestPage() {

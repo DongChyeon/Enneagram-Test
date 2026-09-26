@@ -24,11 +24,18 @@ import { decodeResult } from '../../../lib/code';
 
 type PageProps = { params: Promise<{ code: string }> };
 
+/**
+ * 결과 페이지는 검색 결과에서 뺀다. 결과 코드마다 거의 같은 내용의 URL이 끝없이
+ * 생기므로 색인되면 사이트 전체가 중복 페이지로 평가된다. 공유 미리보기(OG)는
+ * `noindex`와 무관하게 그대로 동작한다.
+ */
+const RESULT_ROBOTS: Metadata['robots'] = { index: false, follow: true };
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { code } = await params;
   const result = decodeResult(code);
   if (result === null) {
-    return { title: '결과를 찾을 수 없어요' };
+    return { title: '결과를 찾을 수 없어요', robots: RESULT_ROBOTS };
   }
 
   // 어느 경로로 나온 결과인지 제목에서부터 밝힌다 — 링크만 보고 지나가는
@@ -41,6 +48,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: RESULT_ROBOTS,
     openGraph: {
       title,
       description,

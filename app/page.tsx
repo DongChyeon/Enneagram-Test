@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { LandingAnalytics } from '../components/ProductAnalytics';
 
@@ -23,6 +24,10 @@ const TOTAL = questions.length;
  * 통째로 랜딩 번들에 실린다.
  */
 const QUESTION_SET_SIGNATURE = questionSetSignature(TOTAL, questions[0].id, questions[TOTAL - 1].id);
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
 
 const DOES: { title: string; body: string }[] = [
   {
