@@ -11,6 +11,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { trackEvent } from '../lib/analytics';
+import { cardPath } from './cardUrl';
 import type { ResultKind } from '../lib/types';
 import { resultStage } from './ProductAnalytics';
 
@@ -98,7 +99,7 @@ export function ShareActions({ code, typeId, kind = 'base' }: ShareActionsProps)
   const [shared, setShared] = useState(false);
   const [inlineVisible, setInlineVisible] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
-  const cardUrl = `/result/${code}/card`;
+  const cardUrl = cardPath(code);
   const buttonLabel = `내 ${typeId}유형 결과 공유하기`;
 
   useEffect(() => {
@@ -212,7 +213,6 @@ export function ShareActions({ code, typeId, kind = 'base' }: ShareActionsProps)
  */
 export function ShareTools({ code, typeId, kind = 'base' }: { code: string; typeId?: number; kind?: ResultKind }) {
   const [status, setStatus] = useState<Status>({ kind: 'idle', message: '' });
-  const cardUrl = `/result/${code}/card`;
   const fileName = `enneagram-${code}.png`;
 
   async function copyLink() {
@@ -239,7 +239,7 @@ export function ShareTools({ code, typeId, kind = 'base' }: { code: string; type
         <button type="button" onClick={copyLink} className={SECONDARY}>
           결과 링크 복사
         </button>
-        <a href={`${cardUrl}?dl=1`} download={fileName} className={SECONDARY}>
+        <a href={cardPath(code, { download: true })} download={fileName} className={SECONDARY}>
           카드 내려받기
         </a>
       </div>

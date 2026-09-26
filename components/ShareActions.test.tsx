@@ -75,7 +75,7 @@ describe('ShareActions', () => {
       expect.objectContaining({
         objectType: 'feed',
         content: expect.objectContaining({
-          imageUrl: `${window.location.origin}/result/test-code/card`,
+          imageUrl: `${window.location.origin}/result/test-code/card?v=2`,
           link: { mobileWebUrl: window.location.href, webUrl: window.location.href },
         }),
       }),

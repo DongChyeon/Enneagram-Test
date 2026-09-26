@@ -10,6 +10,9 @@
  *   - 인라인 스타일만 쓴다(Tailwind 클래스는 적용되지 않는다).
  *   - 지원되는 CSS 부분집합만 쓴다(`gap`, `flex`, `borderRadius` 등은 지원).
  *
+ * **카드 모양을 바꾸면 `components/cardUrl.ts`의 `CARD_VERSION`을 올린다.** 카드 응답은
+ * 1년 `immutable` 캐시라서, 버전이 그대로면 이미 카드를 연 브라우저는 옛 이미지를 계속 쓴다.
+ *
  * **카드 고정 문구는 이 파일이 소유한다.** `scripts/check-glyphs.ts`가
  * `CARD_FIXED_STRINGS`를 그대로 읽어 폰트 서브셋 cmap 검사에 넣으므로,
  * 여기 문자열을 고치면 서브셋이 낡았을 때 빌드가 실패한다(의도된 동작).

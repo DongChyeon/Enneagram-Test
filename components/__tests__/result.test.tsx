@@ -155,13 +155,13 @@ describe('ResultView', () => {
 
     const anchor = container.querySelector('a[download]') as HTMLAnchorElement | null;
     expect(anchor).not.toBeNull();
-    expect(anchor!.getAttribute('href')).toBe('/result/5w4-TEST0000000/card?dl=1');
+    expect(anchor!.getAttribute('href')).toBe('/result/5w4-TEST0000000/card?v=2&dl=1');
     expect(anchor!.getAttribute('download')).toBe('enneagram-5w4-TEST0000000.png');
 
     // 폴백 ③은 **맨 URL**이어야 한다 — ?dl=1이면 attachment로 내려와 렌더되지 않는다.
     const img = container.querySelector('img') as HTMLImageElement | null;
     expect(img).not.toBeNull();
-    expect(img!.getAttribute('src')).toBe('/result/5w4-TEST0000000/card');
+    expect(img!.getAttribute('src')).toBe('/result/5w4-TEST0000000/card?v=2');
     expect(container.textContent).toContain('길게 눌러 저장');
   });
 
