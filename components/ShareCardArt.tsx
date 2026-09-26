@@ -27,9 +27,6 @@ import { TypeMark, markBox } from './TypeMarkView';
 import { RADIAL_ORDER, normalizeScore, radialGeometry } from './radialGeometry';
 import { TYPE_HUES } from './typeMark';
 
-/** 카드에 인쇄되는 윙 마커. 공간 제약 때문에 결과 페이지보다 짧다(확정 문구). */
-export const CARD_WING_MARKER = '날개 — 이론적 해석';
-
 /** 면책 고지의 마지막 한 줄. 카드는 이 줄만 싣는다(확정 문구). */
 export const CARD_DISCLAIMER = '교육·자기이해 목적이며 임상적 진단이 아니에요.';
 
@@ -47,7 +44,6 @@ export const CARD_PRIMARY_LABEL = '가장 높게 나온 유형';
 
 /** 폰트 서브셋 글리프 집합의 입력이 되는 카드 고정 문구 전부. */
 export const CARD_FIXED_STRINGS: readonly string[] = [
-  CARD_WING_MARKER,
   CARD_DISCLAIMER,
   CARD_BRAND,
   CARD_SCORES_HEADING,
@@ -198,7 +194,8 @@ export function ShareCardArt({
             </div>
           </div>
 
-          {/* 윙 라벨과 이론적 해석 마커는 **한 덩어리**로 붙어 있어야 한다(AC-11).
+          {/* 윙 라벨 알약. 카드에는 '이론적 해석' 마커를 싣지 않는다 — 줄임말이 오히려
+              읽히지 않았고, 날개가 측정값이 아니라는 설명은 결과 화면의 날개 칸이 맡는다.
               `alignSelf`가 없으면 열 정렬의 stretch 때문에 알약이 카드 폭 전체로
               늘어나 띠처럼 보인다 — 내용 폭만 차지하게 묶어 둔다. */}
           <div
@@ -214,15 +211,6 @@ export function ShareCardArt({
           >
             <div style={{ fontSize: px(36), fontWeight: 700, color: INK }}>
               {formatWingLabel(wingLabel)}
-            </div>
-            <div
-              style={{
-                fontSize: px(22),
-                color: MUTED,
-                marginLeft: px(16),
-              }}
-            >
-              {CARD_WING_MARKER}
             </div>
           </div>
 
