@@ -204,32 +204,30 @@ export function ShareActions({ code, typeId, kind = 'base' }: ShareActionsProps)
   );
 }
 
-/** 페이지 하단에서 필요할 때만 쓰는 이미지 공유·저장 폴백. */
+/**
+ * 페이지 하단의 보조 공유 수단: 결과 링크 바로 복사와 카드 이미지 저장.
+ * 이전의 '이미지로 공유'는 카드 내려받기와 같은 PNG를 공유 시트로 보낼 뿐이었고,
+ * 파일 공유를 못 하는 브라우저에서는 결국 내려받기로 안내했다. 그래서 공유 시트를
+ * 거치지 않고 링크만 필요한 사람을 위한 복사로 바꿨다.
+ */
 export function ShareTools({ code, typeId, kind = 'base' }: { code: string; typeId?: number; kind?: ResultKind }) {
   const [status, setStatus] = useState<Status>({ kind: 'idle', message: '' });
   const cardUrl = `/result/${code}/card`;
   const fileName = `enneagram-${code}.png`;
 
-  async function shareCard() {
-    const properties = { channel: 'image', primary_type: typeId, result_stage: resultStage(kind) };
+  async function copyLink() {
+    // 주소창의 쿼리·해시가 섞이지 않도록 결과 코드로 링크를 다시 만든다.
+    const url = new URL(`/result/${code}`, window.location.origin).href;
+    const properties = { channel: 'copy_link', primary_type: typeId, result_stage: resultStage(kind) };
     trackEvent('share_attempted', properties);
-    try {
-      const response = await fetch(`${cardUrl}?dl=1`);
-      if (!response.ok) throw new Error(String(response.status));
-      const blob = await response.blob();
-      const file = new File([blob], fileName, { type: 'image/png' });
-      if (typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file] });
-        trackEvent('share_succeeded', properties);
-        setStatus({ kind: 'ok', message: '공유 시트를 열었어요.' });
-        return;
-      }
-      trackEvent('share_failed', { channel: 'image', reason_code: 'unsupported' });
-      setStatus({ kind: 'fail', message: '이 브라우저에서는 카드 내려받기나 길게 눌러 저장을 이용해 주세요.' });
-    } catch (error) {
-      trackEvent('share_failed', { channel: 'image', reason_code: error instanceof DOMException && error.name === 'AbortError' ? 'cancelled' : 'unknown' });
-      setStatus({ kind: 'fail', message: '공유에 실패했어요. 카드 내려받기나 길게 눌러 저장을 이용해 주세요.' });
-    }
+    const copied = await copyText(url);
+    if (copied) trackEvent('share_succeeded', properties);
+    else trackEvent('share_failed', { channel: 'copy_link', reason_code: 'permission_denied' });
+    setStatus(
+      copied
+        ? { kind: 'ok', message: '결과 링크를 복사했어요. 원하는 앱에 붙여 넣으세요.' }
+        : { kind: 'fail', message: '주소창의 결과 링크를 길게 눌러 복사해 주세요.' },
+    );
   }
 
   return (
@@ -238,8 +236,8 @@ export function ShareTools({ code, typeId, kind = 'base' }: { code: string; type
         다른 방법으로 공유하기
       </h2>
       <div className="mt-4 flex gap-2">
-        <button type="button" onClick={shareCard} className={SECONDARY}>
-          이미지로 공유
+        <button type="button" onClick={copyLink} className={SECONDARY}>
+          결과 링크 복사
         </button>
         <a href={`${cardUrl}?dl=1`} download={fileName} className={SECONDARY}>
           카드 내려받기

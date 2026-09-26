@@ -3,7 +3,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { captureOnce, trackEvent } from '../lib/analytics';
 import TestRunner from './TestRunner';
 import { ResultAnalytics, LandingAnalytics } from './ProductAnalytics';
-import { ShareActions } from './ShareActions';
+import { ShareActions, ShareTools } from './ShareActions';
 import { ResultNextStep } from './ResultNextStep';
 
 const push = vi.fn();
@@ -86,4 +86,17 @@ it('tags only the first test after a shared-result click as shared entry', () =>
   expect(sessionStorage.getItem('enneagram:analytics:entry')).toBe('shared_result');
   expect((start?.[2] as () => object)()).toMatchObject({ entry_kind: 'shared_result' });
   expect(sessionStorage.getItem('enneagram:analytics:entry')).toBeNull();
+});
+
+it('copies a clean result link from the secondary share tools', async () => {
+  const writeText = vi.fn().mockResolvedValue(undefined);
+  vi.stubGlobal('navigator', { userAgent: 'desktop', clipboard: { writeText } });
+  window.history.replaceState({}, '', '/result/share-code?from=kakao#top');
+  render(<ShareTools code="share-code" typeId={5} kind="base" />);
+  expect(screen.queryByRole('button', { name: '이미지로 공유' })).toBeNull();
+  await act(async () => fireEvent.click(screen.getByRole('button', { name: '결과 링크 복사' })));
+  expect(writeText).toHaveBeenCalledWith(`${window.location.origin}/result/share-code`);
+  expect(trackEvent).toHaveBeenCalledWith('share_succeeded', { channel: 'copy_link', primary_type: 5, result_stage: 'base' });
+  expect(screen.getByText('결과 링크를 복사했어요. 원하는 앱에 붙여 넣으세요.')).toBeTruthy();
+  window.history.replaceState({}, '', '/');
 });

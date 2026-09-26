@@ -117,7 +117,8 @@ PostHog 개편에 따라 바뀔 수 있으므로 설정 검색창에서 항목 �
   판단하므로 다른 기기에서 연 본인 결과도 `shared`가 될 수 있다.
 - `section`: `radar_profile`, `score_distribution`, `compatibility`, `characters`,
   `personalized_insights`. 어느 다른 유형을 펼쳤는지는 별도로 수집하지 않는다.
-- `channel`: `kakao`, `web_share`, `copy_link`, `image`.
+- `channel`: `kakao`, `web_share`, `copy_link`. `copy_link`는 주 공유 버튼의 마지막 폴백과
+  결과 하단의 '결과 링크 복사' 버튼 양쪽에서 발생한다. 카드 내려받기는 링크 이동이라 이벤트가 없다.
 - `reason_code`: `cancelled`, `unsupported`, `permission_denied`, `sdk_unavailable`, `unknown`.
   `permission_denied`는 복사 실패에 사용하는 분류이며 실제 브라우저 권한 오류로 확정한 값은 아니다.
 - `source_section`: 현재 두 CTA는 모두 `next_step`을 보낸다. 허용 목록에는 `hero`,
@@ -205,7 +206,7 @@ PostHog에서 말하는 고유 사용자는 여기서는 **임시 익명 흐름*
 ## 해석할 때 주의할 점
 
 - `share_succeeded`는 상대에게 전달됐거나 상대가 열었다는 뜻이 아니다. 카카오는 SDK
-  공유창 호출 성공, Web Share와 이미지 공유는 Promise resolve, 링크 복사는 클립보드
+  공유창 호출 성공, Web Share는 Promise resolve, 링크 복사는 클립보드
   쓰기 성공이다. 실제 메시지 전송·수신 여부는 알 수 없다.
 - 한 클릭에서 카카오 실패 → Web Share 실패 → 복사 성공처럼 여러 채널 이벤트가 발생할
   수 있다. 공유 시도 총횟수를 공유 버튼 클릭 수로 해석하지 않는다.

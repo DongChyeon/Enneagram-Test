@@ -14,7 +14,7 @@ const enums: Record<string, readonly unknown[]> = {
   entry_kind: ['direct', 'shared_result', 'unknown'], device_class: ['mobile', 'tablet', 'desktop', 'unknown'],
   viewer_context: ['owner', 'shared', 'unknown'], progress_percent: [25, 50, 75, 100],
   section: ['radar_profile', 'score_distribution', 'compatibility', 'characters', 'personalized_insights'],
-  channel: ['kakao', 'web_share', 'copy_link', 'image'],
+  channel: ['kakao', 'web_share', 'copy_link'],
   elapsed_bucket: ['under_1m', '1_3m', '3_5m', '5_10m', 'over_10m'],
   duration_bucket: ['under_1m', '1_3m', '3_5m', '5_10m', 'over_10m'],
   reason_code: ['cancelled', 'unsupported', 'permission_denied', 'sdk_unavailable', 'unknown'],
