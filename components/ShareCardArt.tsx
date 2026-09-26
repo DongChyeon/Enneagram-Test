@@ -24,6 +24,8 @@ import * as React from 'react';
 import type { TypeId } from '../data/schema';
 import { formatWingLabel } from '../data/wings';
 import { TypeMark, markBox } from './TypeMarkView';
+import { RADIAL_ORDER, normalizeScore, radialGeometry } from './radialGeometry';
+import { TYPE_HUES } from './typeMark';
 
 /** 카드에 인쇄되는 윙 마커. 공간 제약 때문에 결과 페이지보다 짧다(확정 문구). */
 export const CARD_WING_MARKER = '날개 — 이론적 해석';
@@ -34,7 +36,7 @@ export const CARD_DISCLAIMER = '교육·자기이해 목적이며 임상적 진�
 /** 카드 머리글. */
 export const CARD_BRAND = '애니어그램 유형 테스트';
 
-/** 점수 막대 구역의 표제. */
+/** 점수 구역의 표제. */
 export const CARD_SCORES_HEADING = '9유형 점수 분포';
 
 /** 1위–2위 점수차 라벨. */
@@ -53,8 +55,8 @@ export const CARD_FIXED_STRINGS: readonly string[] = [
   CARD_PRIMARY_LABEL,
 ];
 
-/** 점수 막대 한 줄. */
-export type CardBar = {
+/** 한 유형의 점수. */
+export type CardScore = {
   typeId: TypeId;
   nameKo: string;
   score: number;
@@ -70,11 +72,14 @@ export type ShareCardArtProps = {
   /** 주유형 한 줄 요약 */
   summary: string;
   /**
-   * 9유형 점수 막대. OG 미리보기(1200×630)는 `null`이다 —
-   * OG 이미지의 정보 내용을 윙 라벨 18종으로 한정해야 빌드 타임 사전 생성이 성립한다.
+   * 점수 내림차순 9유형 점수. 방사형 프로필과 상위 3개 목록을 그린다.
+   * OG 미리보기(1200×630)는 `null`이다 — OG 이미지의 정보 내용을 윙 라벨
+   * 18종으로 한정해야 빌드 타임 사전 생성이 성립한다.
    */
-  bars?: readonly CardBar[] | null;
-  /** 1위−2위 점수차. `bars`가 있을 때만 의미가 있다. */
+  scores?: readonly CardScore[] | null;
+  /** 방사형 축의 척도 범위. 결과 화면과 같은 `SCALES[kind]`의 [min, max]다. */
+  scoreRange?: readonly [number, number] | null;
+  /** 1위−2위 점수차. `scores`가 있을 때만 의미가 있다. */
   gap?: number | null;
 };
 
@@ -84,8 +89,8 @@ export type ShareCardArtProps = {
  *
  * 카드에는 **버튼이 없다.** 그러므로 파랑도 없다 — 파랑은 누를 수 있는 것의
  * 색이고, 누를 것이 없는 면에 칠하면 그냥 장식이다. 카드에서 채도를 갖는
- * 것은 도트 캐릭터 하나뿐이고, 나머지는 흰 바탕 위 회색 계단이다.
- * 점수 막대도 같은 이유로 무채색이다: 1위는 색이 아니라 잉크 농도로 구분한다.
+ * 것은 주유형의 색 하나뿐이다: 도트 캐릭터와, 방사형 프로필에서 그 유형을
+ * 가리키는 꼭짓점·번호 표식이 같은 색을 쓴다. 나머지는 흰 바탕 위 회색 계단이다.
  */
 const INK = '#191f28';
 const MUTED = '#6b7684';
@@ -93,7 +98,6 @@ const FAINT = '#8b95a1';
 const PAPER = '#ffffff';
 /** 윙 알약·막대 트랙·구분선이 공유하는 중성 채움. `--line`과 같은 값이다. */
 const FILL = '#e5e8eb';
-const TRACK = FILL;
 const RULE = FILL;
 
 /**
@@ -110,12 +114,10 @@ export function ShareCardArt({
   typeNameKo,
   wingLabel,
   summary,
-  bars = null,
+  scores = null,
+  scoreRange = null,
   gap = null,
 }: ShareCardArtProps) {
-  // 상대 비율 막대 — 원점수 자체가 아니라 최고점 대비 비율로 그린다.
-  const maxScore = bars && bars.length > 0 ? Math.max(...bars.map((b) => b.score)) : 1;
-
   // 두 판형은 **화면 비율이 다르다**: 가로 1200×630, 세로 1080×1350.
   // 폭 하나로만 스케일을 잡으면(`width / 1200`) 세로 카드는 630 높이용으로
   // 조판된 내용이 1350 캔버스에 놓여 절반 가까이가 빈 공간이 된다.
@@ -127,16 +129,13 @@ export function ShareCardArt({
   const pad = Math.round(isPortrait ? 66 * ts : 64 * scale);
   const px = (n: number) => Math.round(n * ts);
 
-  // 막대 폭은 **픽셀로 직접 계산한다.** satori(yoga)에서 `width: '<n>%'` 채움은
-  // 부모 트랙의 고유 너비를 키워, 채움이 긴 1·2위 줄에서만 라벨 칸을 밀어내고
-  // 유형명이 한 글자씩 세로로 접힌다(`flexShrink: 0`으로도 막히지 않았다).
-  // 카드 폭이 고정값이므로 퍼센트를 쓸 이유가 없다.
-  const labelWidth = px(268);
-  const scoreWidth = px(70);
-  const columnGap = px(12);
-  const trackWidth = width - pad * 2 - labelWidth - scoreWidth - columnGap * 2;
-  const barHeight = px(22);
-  const rowGap = px(28);
+  // 방사형 프로필은 이전 막대 아홉 줄이 쓰던 높이(약 422 단위)를 그대로 쓴다 —
+  // 세로 판형은 머리글·점수 구역·면책 고지가 캔버스를 정확히 채우므로, 이 구역이
+  // 커지면 면책 고지가 캔버스 밖으로 밀린다. 오른쪽 칸 폭은 **픽셀로 직접 계산한다**
+  // (satori에서 남은 폭에 기대면 긴 유형명이 한 글자씩 세로로 접힌다).
+  const radarSize = px(440);
+  const radarGap = px(36);
+  const rankWidth = width - pad * 2 - radarSize - radarGap;
 
   // 도트 캐릭터의 유형 번호는 윙 라벨(`5w4`)의 앞자리다. 별도 prop을 받지 않는 이유는
   // 두 호출부(`scripts/gen-og.ts`, 카드 라우트)가 이미 윙 라벨을 넘기고 있고,
@@ -246,7 +245,7 @@ export function ShareCardArt({
         </div>
       </div>
 
-      {bars && bars.length > 0 ? (
+      {scores && scores.length > 0 && scoreRange ? (
         <div style={{ display: 'flex', flexDirection: 'column', marginTop: px(40) }}>
           <div style={{ display: 'flex', height: 1, backgroundColor: RULE }} />
           <div
@@ -264,64 +263,61 @@ export function ShareCardArt({
               {gap === null ? '' : `${CARD_GAP_LABEL} ${gap}`}
             </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {bars.map((bar, index) => (
-              <div
-                key={bar.typeId}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginBottom: index === bars.length - 1 ? 0 : rowGap,
-                }}
-              >
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <RadarProfile size={radarSize} scores={scores} scoreRange={scoreRange} px={px} />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: rankWidth,
+                flexShrink: 0,
+                marginLeft: radarGap,
+              }}
+            >
+              {scores.slice(0, 3).map((entry, index) => (
                 <div
-                  style={{
-                    width: labelWidth,
-                    flexShrink: 0,
-                    fontSize: px(22),
-                    fontWeight: index === 0 ? 700 : 400,
-                    color: index === 0 ? INK : MUTED,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {`${bar.typeId}. ${bar.nameKo}`}
-                </div>
-                <div
+                  key={entry.typeId}
                   style={{
                     display: 'flex',
-                    width: trackWidth,
-                    flexShrink: 0,
-                    marginLeft: columnGap,
-                    height: barHeight,
-                    backgroundColor: TRACK,
-                    borderRadius: Math.round(barHeight / 2),
+                    flexDirection: 'column',
+                    marginTop: index === 0 ? 0 : px(30),
                   }}
                 >
+                  {/* 점수는 순위 줄에 둔다 — 이름 옆에 두면 긴 유형명과 붙는다. */}
                   <div
                     style={{
-                      width: Math.round(trackWidth * (bar.score / maxScore)),
-                      height: '100%',
-                      backgroundColor: index === 0 ? INK : FAINT,
-                      borderRadius: Math.round(barHeight / 2),
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: px(20),
+                      color: FAINT,
                     }}
-                  />
+                  >
+                    <div style={{ display: 'flex' }}>{`${index + 1}위`}</div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        fontWeight: index === 0 ? 700 : 400,
+                        color: index === 0 ? INK : FAINT,
+                      }}
+                    >
+                      {`${entry.score}점`}
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      marginTop: px(4),
+                      fontSize: px(index === 0 ? 26 : 23),
+                      fontWeight: index === 0 ? 700 : 400,
+                      color: index === 0 ? INK : MUTED,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {`${entry.typeId}. ${entry.nameKo}`}
+                  </div>
                 </div>
-                <div
-                  style={{
-                    width: scoreWidth,
-                    flexShrink: 0,
-                    marginLeft: columnGap,
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    fontSize: px(22),
-                    fontWeight: index === 0 ? 700 : 400,
-                    color: index === 0 ? INK : FAINT,
-                  }}
-                >
-                  {String(bar.score)}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       ) : null}
@@ -342,6 +338,101 @@ export function ShareCardArt({
           {CARD_DISCLAIMER}
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * 방사형 프로필. 결과 화면의 `RadialScoreProfile`과 같은 도형(`radialGeometry`)을
+ * 픽셀 크기로 그린다. satori는 SVG `<text>`를 그리지 않으므로 유형 번호는 SVG 위에
+ * 절대 위치로 겹친 div로 찍는다.
+ */
+function RadarProfile({
+  size,
+  scores,
+  scoreRange,
+  px,
+}: {
+  size: number;
+  scores: readonly CardScore[];
+  scoreRange: readonly [number, number];
+  px: (n: number) => number;
+}) {
+  const { center, radius, labelRadius, point, polygon } = radialGeometry(size);
+  const scoreOf = new Map(scores.map((entry) => [entry.typeId, entry.score]));
+  const rankOf = new Map(scores.map((entry, index) => [entry.typeId, index]));
+  const primary = scores[0].typeId;
+  const hue = TYPE_HUES[primary];
+  const ratio = (typeId: TypeId) => normalizeScore(scoreOf.get(typeId) ?? scoreRange[0], scoreRange);
+  const unit = size / 320;
+  const labelBox = px(40);
+
+  return (
+    <div style={{ display: 'flex', position: 'relative', width: size, height: size, flexShrink: 0 }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        {[0.25, 0.5, 0.75, 1].map((level) => (
+          <polygon
+            key={level}
+            points={polygon(() => radius * level)}
+            fill="none"
+            stroke={RULE}
+            strokeWidth={(level === 1 ? 1.5 : 1) * unit}
+          />
+        ))}
+        {RADIAL_ORDER.map((typeId, index) => {
+          const [x, y] = point(index, radius);
+          return <line key={typeId} x1={center} y1={center} x2={x} y2={y} stroke={RULE} strokeWidth={unit} />;
+        })}
+        <polygon
+          points={polygon((typeId) => ratio(typeId) * radius)}
+          fill={INK}
+          fillOpacity={0.08}
+          stroke={INK}
+          strokeWidth={2.5 * unit}
+          strokeLinejoin="round"
+        />
+        {RADIAL_ORDER.map((typeId, index) => {
+          const [x, y] = point(index, ratio(typeId) * radius);
+          const rank = rankOf.get(typeId) ?? 9;
+          return (
+            <circle
+              key={typeId}
+              cx={x}
+              cy={y}
+              r={(rank === 0 ? 5.5 : rank < 3 ? 4 : 2.5) * unit}
+              fill={rank === 0 ? hue : rank < 3 ? INK : FAINT}
+              stroke={PAPER}
+              strokeWidth={2 * unit}
+            />
+          );
+        })}
+      </svg>
+      {RADIAL_ORDER.map((typeId, index) => {
+        const [x, y] = point(index, labelRadius);
+        const rank = rankOf.get(typeId) ?? 9;
+        return (
+          <div
+            key={typeId}
+            style={{
+              position: 'absolute',
+              left: Math.round(x - labelBox / 2),
+              top: Math.round(y - labelBox / 2),
+              width: labelBox,
+              height: labelBox,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: labelBox,
+              backgroundColor: rank === 0 ? hue : 'transparent',
+              color: rank === 0 ? PAPER : rank < 3 ? INK : FAINT,
+              fontSize: px(rank < 3 ? 22 : 19),
+              fontWeight: rank < 3 ? 700 : 400,
+            }}
+          >
+            {String(typeId)}
+          </div>
+        );
+      })}
     </div>
   );
 }

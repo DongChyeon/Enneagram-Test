@@ -17,11 +17,11 @@
 
 import { ImageResponse } from 'next/og';
 
-import { ShareCardArt, type CardBar } from '../../../../components/ShareCardArt';
+import { ShareCardArt, type CardScore } from '../../../../components/ShareCardArt';
 import { getCardFonts } from '../../../../components/cardFont';
 import { typeById } from '../../../../data/types';
 import { decodeResult } from '../../../../lib/code';
-import { TYPE_IDS } from '../../../../lib/scoring';
+import { SCALES, TYPE_IDS } from '../../../../lib/scoring';
 
 export const runtime = 'nodejs';
 
@@ -46,14 +46,19 @@ export async function GET(
     return new Response('유형 데이터 누락', { status: 500 });
   }
 
-  const bars: CardBar[] = [...TYPE_IDS]
-    .sort((a, b) => result.scores[b] - result.scores[a])
+  const scores: CardScore[] = [...TYPE_IDS]
+    // 동점이면 채점이 고른 주유형을 먼저 둔다 — 머리글의 유형과 방사형 강조가 어긋나지 않게.
+    .sort((a, b) =>
+      result.scores[b] - result.scores[a] ||
+      Number(b === result.primaryType) - Number(a === result.primaryType) ||
+      a - b)
     .map((typeId) => ({
       typeId,
       nameKo: typeById.get(typeId)?.nameKo ?? String(typeId),
       score: result.scores[typeId],
     }));
-  const gap = bars[0].score - bars[1].score;
+  const gap = scores[0].score - scores[1].score;
+  const scale = SCALES[result.kind];
 
   const headers: Record<string, string> = {
     'content-type': 'image/png',
@@ -71,7 +76,8 @@ export async function GET(
         typeNameKo={type.nameKo}
         wingLabel={result.wing}
         summary={type.summary}
-        bars={bars}
+        scores={scores}
+        scoreRange={[scale.min, scale.max]}
         gap={gap}
       />
     ),

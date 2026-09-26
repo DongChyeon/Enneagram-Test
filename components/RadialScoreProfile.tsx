@@ -2,22 +2,10 @@ import type { TypeId } from '../data/schema';
 import { typeById } from '../data/types';
 import { TYPE_IDS } from '../lib/scoring';
 import type { Scores } from '../lib/types';
+import { RADIAL_ORDER as ORDER, RADIAL_SIZE as SIZE, normalizeScore, radialGeometry } from './radialGeometry';
 import { TYPE_HUES } from './typeMark';
 
-const ORDER: readonly TypeId[] = [9, 1, 2, 3, 4, 5, 6, 7, 8];
-const SIZE = 320;
-const CENTER = SIZE / 2;
-const RADIUS = 105;
-const LABEL_RADIUS = 133;
-
-function point(index: number, radius: number): [number, number] {
-  const angle = (-90 + index * 40) * (Math.PI / 180);
-  return [CENTER + Math.cos(angle) * radius, CENTER + Math.sin(angle) * radius];
-}
-
-function points(radiusFor: (typeId: TypeId) => number): string {
-  return ORDER.map((typeId, index) => point(index, radiusFor(typeId)).join(',')).join(' ');
-}
+const { center: CENTER, radius: RADIUS, labelRadius: LABEL_RADIUS, point, polygon: points } = radialGeometry(SIZE);
 
 export function RadialScoreProfile({
   scores,
@@ -30,7 +18,7 @@ export function RadialScoreProfile({
   const ranking = [...TYPE_IDS].sort((a, b) => scores[b] - scores[a] || a - b);
   const topThree = new Set(ranking.slice(0, 3));
   const primary = ranking[0];
-  const normalized = (typeId: TypeId) => Math.max(0, Math.min(1, (scores[typeId] - min) / (max - min)));
+  const normalized = (typeId: TypeId) => normalizeScore(scores[typeId], scoreRange);
   const profilePoints = points((typeId) => normalized(typeId) * RADIUS);
 
   return (
