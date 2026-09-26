@@ -10,6 +10,12 @@
 문항 출처와 저작권 근거는 [`docs/sources.md`](docs/sources.md), 독립 저작권 리뷰
 기록은 [`docs/item-review.md`](docs/item-review.md)에 있다.
 
+## 사용 지표 측정
+
+PostHog로 검사 완료율, 진행 구간별 이탈, 결과 관심 영역, 공유·이어하기 전환을 측정한다.
+수집 이벤트와 계산식, 개인정보 제외 범위, 환경변수 및 대시보드 설정은
+[`docs/analytics.md`](docs/analytics.md)에 정리했다. 키와 명시적 활성화 설정이 없으면 전송하지 않는다.
+
 ## 개발
 
 ```bash

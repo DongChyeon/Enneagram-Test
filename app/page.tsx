@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import { LandingAnalytics } from '../components/ProductAnalytics';
 
 import Disclaimer from '../components/Disclaimer';
+import { PrivacyLink } from '../components/PrivacyLink';
 import ResumeNotice from '../components/ResumeNotice';
 import { questionSetSignature } from '../components/progress';
 import { questions } from '../data/questions';
@@ -33,7 +35,7 @@ const DOES: { title: string; body: string }[] = [
   },
   {
     title: '응답은 서버로 가지 않아요',
-    body: '검사 중 응답은 브라우저의 sessionStorage에만 임시로 남아 새로고침해도 이어서 답할 수 있고, 탭을 닫으면 사라져요. 결과는 링크 주소 안에 담기므로 데이터베이스도 로그인도 없어요.',
+    body: '검사 중 응답은 브라우저의 sessionStorage에만 임시로 남아 새로고침해도 이어서 답할 수 있고, 탭을 닫으면 사라져요. 결과는 링크 주소 안에 담기므로 데이터베이스도 로그인도 없어요. 서비스 개선을 위해 대표 유형 번호 같은 익명 사용 통계만 수집해요.',
   },
 ];
 
@@ -46,6 +48,7 @@ const DOES_NOT = [
 export default function HomePage() {
   return (
     <main className="mx-auto w-full max-w-[38rem] px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
+      <LandingAnalytics />
       <header className="animate-rise-in">
         <h1 className="text-[1.75rem] font-bold leading-[1.4] tracking-[-0.03em] text-ink sm:text-[2.375rem] sm:leading-[1.32]">
           아홉 가지 동기 패턴 중<br />
@@ -126,6 +129,7 @@ export default function HomePage() {
       <div className="mt-14">
         <Disclaimer />
       </div>
+      <PrivacyLink />
     </main>
   );
 }

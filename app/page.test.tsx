@@ -12,7 +12,9 @@ describe('HomePage', () => {
 
     const start = screen.getByRole('link', { name: '가볍게 시작하기' });
     expect(start.getAttribute('href')).toBe('/test');
-    expect(screen.getAllByRole('link')).toHaveLength(1);
+    const testLinks = screen.getAllByRole('link').filter((link) => link.getAttribute('href')?.startsWith('/test'));
+    expect(testLinks).toHaveLength(1);
+    expect(screen.getByRole('link', { name: '개인정보 처리방침' }).getAttribute('href')).toBe('/privacy');
     expect(document.body.textContent).not.toContain('27문항');
     expect(document.body.textContent).not.toContain('90문항');
     expect(screen.queryByRole('link', { name: /전체|자세히|90/ })).toBeNull();

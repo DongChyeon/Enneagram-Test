@@ -21,6 +21,8 @@
  *     읽는 사람이 누를 곳을 잘못 찾는다.
  */
 
+import { ResultAnalytics } from './ProductAnalytics';
+import { PrivacyLink } from './PrivacyLink';
 import { typeById } from '../data/types';
 import { formatWingLabel, wingByLabel } from '../data/wings';
 import { fictionalCharactersByType } from '../data/fictional-characters';
@@ -90,6 +92,7 @@ export function ResultView({ result, code }: ResultViewProps) {
   ];
 
   return (
+    <ResultAnalytics code={code} kind={result.kind} primaryType={result.primaryType}>
     <main className="mx-auto w-full max-w-[38rem] px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
       {/* ① 주유형 이름 + 윙 라벨 */}
       <header className="animate-rise-in">
@@ -113,7 +116,7 @@ export function ResultView({ result, code }: ResultViewProps) {
         <p className="mt-6 text-[1.0625rem] leading-[1.65] text-ink-soft">{type.summary}</p>
       </header>
 
-      <ShareActions code={code} typeId={result.primaryType} />
+      <ShareActions code={code} typeId={result.primaryType} kind={result.kind} />
 
       {/* ⑤ 모호성 안내 — isAmbiguous(1위−2위 < 3)일 때만.
           경고가 아니라 **읽을 것**이므로 노랑도 파랑도 쓰지 않는다. 회색 면 위에
@@ -206,14 +209,16 @@ export function ResultView({ result, code }: ResultViewProps) {
         연구(hook-2021, newgent-2004)에 대한 대응이다 — 45문항 경로에서 분포가 빠지면
         그 정직성 설계가 절반만 작동한다. 각주의 원점수 범위는 `ScoreBars`가 인자로 받는다.
       */}
+      <div data-analytics-section="score_distribution">
       <ScoreBars
         scores={result.scores}
         primaryType={result.primaryType}
         scoreRange={[scale.min, scale.max]}
       />
+      </div>
 
 
-      <section aria-labelledby="relationship-heading" className="mt-14">
+      <section data-analytics-section="compatibility" aria-labelledby="relationship-heading" className="mt-14">
         <h2 id="relationship-heading" className="text-[1.25rem] font-bold text-ink">
           다른 유형과의 관계
         </h2>
@@ -243,7 +248,7 @@ export function ResultView({ result, code }: ResultViewProps) {
         </div>
       </section>
 
-      <section aria-labelledby="character-heading" className="mt-14">
+      <section data-analytics-section="characters" aria-labelledby="character-heading" className="mt-14">
         <h2 id="character-heading" className="text-[1.25rem] font-bold text-ink">
           작품 속에서 찾아보기
         </h2>
@@ -261,9 +266,9 @@ export function ResultView({ result, code }: ResultViewProps) {
         </ul>
       </section>
 
-      <ShareTools code={code} />
+      <ShareTools code={code} typeId={result.primaryType} kind={result.kind} />
 
-      <ResultNextStep code={code} kind={result.kind} />
+      <ResultNextStep code={code} kind={result.kind} primaryType={result.primaryType} />
 
       {/* ⑥ 면책 고지 */}
       <section
@@ -282,6 +287,8 @@ export function ResultView({ result, code }: ResultViewProps) {
           {DISCLAIMER_LAST_LINE}
         </p>
       </section>
+      <PrivacyLink />
     </main>
+    </ResultAnalytics>
   );
 }

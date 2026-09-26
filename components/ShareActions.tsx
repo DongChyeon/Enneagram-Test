@@ -10,12 +10,16 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
+import { trackEvent } from '../lib/analytics';
+import type { ResultKind } from '../lib/types';
+import { resultStage } from './ProductAnalytics';
 
 export type ShareActionsProps = {
   /** `/result/[code]`의 코드. 카드 URL과 파일명이 둘 다 이 값에서 나온다. */
   code: string;
   /** 개인화된 공유 버튼 문구에 쓰는 주유형 번호. */
   typeId: number;
+  kind?: ResultKind;
 };
 
 type Status = { kind: 'idle' | 'ok' | 'fail'; message: string };
@@ -38,9 +42,10 @@ function isAppleMobile(): boolean {
     || (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
 }
 
-function shareWithKakao(url: string, imageUrl: string, typeId: number): boolean {
+/** `null`이면 공유창을 열었다는 뜻이고, 아니면 실패 사유다. */
+function shareWithKakao(url: string, imageUrl: string, typeId: number): 'sdk_unavailable' | 'unknown' | null {
   const kakao = window.Kakao;
-  if (!isKakaoTalkWebView() || !kakao?.isInitialized()) return false;
+  if (!isKakaoTalkWebView() || !kakao?.isInitialized()) return 'sdk_unavailable';
 
   try {
     kakao.Share.sendDefault({
@@ -53,9 +58,9 @@ function shareWithKakao(url: string, imageUrl: string, typeId: number): boolean 
       },
       buttons: [{ title: '결과 보기', link: { mobileWebUrl: url, webUrl: url } }],
     });
-    return true;
+    return null;
   } catch {
-    return false;
+    return 'unknown';
   }
 }
 
@@ -88,7 +93,7 @@ async function copyText(text: string): Promise<boolean> {
 }
 
 /** 결과 요약 바로 아래의 주 공유 행동 + 모바일 하단 고정 리마인더. */
-export function ShareActions({ code, typeId }: ShareActionsProps) {
+export function ShareActions({ code, typeId, kind = 'base' }: ShareActionsProps) {
   const [status, setStatus] = useState<Status>({ kind: 'idle', message: '' });
   const [shared, setShared] = useState(false);
   const [inlineVisible, setInlineVisible] = useState(true);
@@ -110,13 +115,19 @@ export function ShareActions({ code, typeId }: ShareActionsProps) {
   async function shareLink() {
     const url = window.location.href;
     const imageUrl = new URL(cardUrl, window.location.origin).href;
-    if (shareWithKakao(url, imageUrl, typeId)) {
+    const properties = { primary_type: typeId, result_stage: resultStage(kind) };
+    if (isKakaoTalkWebView()) trackEvent('share_attempted', { ...properties, channel: 'kakao' });
+    const kakaoFailure = shareWithKakao(url, imageUrl, typeId);
+    if (!kakaoFailure) {
+      trackEvent('share_succeeded', { ...properties, channel: 'kakao' });
       setShared(true);
       setStatus({ kind: 'ok', message: '카카오톡 공유창을 열었어요.' });
       return;
     }
 
+    if (isKakaoTalkWebView()) trackEvent('share_failed', { channel: 'kakao', reason_code: kakaoFailure });
     if (typeof navigator.share === 'function') {
+      trackEvent('share_attempted', { ...properties, channel: 'web_share' });
       try {
         await navigator.share(
           isAppleMobile()
@@ -127,15 +138,21 @@ export function ShareActions({ code, typeId }: ShareActionsProps) {
                 url,
               },
         );
+        trackEvent('share_succeeded', { ...properties, channel: 'web_share' });
         setShared(true);
         setStatus({ kind: 'ok', message: '공유 시트를 열었어요.' });
         return;
       } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') return;
+        const cancelled = error instanceof DOMException && error.name === 'AbortError';
+        trackEvent('share_failed', { channel: 'web_share', reason_code: cancelled ? 'cancelled' : 'unknown' });
+        if (cancelled) return;
       }
     }
 
+    trackEvent('share_attempted', { ...properties, channel: 'copy_link' });
     const copied = await copyText(url);
+    if (copied) trackEvent('share_succeeded', { ...properties, channel: 'copy_link' });
+    else trackEvent('share_failed', { channel: 'copy_link', reason_code: 'permission_denied' });
     if (copied) setShared(true);
     setStatus(
       copied
@@ -188,12 +205,14 @@ export function ShareActions({ code, typeId }: ShareActionsProps) {
 }
 
 /** 페이지 하단에서 필요할 때만 쓰는 이미지 공유·저장 폴백. */
-export function ShareTools({ code }: { code: string }) {
+export function ShareTools({ code, typeId, kind = 'base' }: { code: string; typeId?: number; kind?: ResultKind }) {
   const [status, setStatus] = useState<Status>({ kind: 'idle', message: '' });
   const cardUrl = `/result/${code}/card`;
   const fileName = `enneagram-${code}.png`;
 
   async function shareCard() {
+    const properties = { channel: 'image', primary_type: typeId, result_stage: resultStage(kind) };
+    trackEvent('share_attempted', properties);
     try {
       const response = await fetch(`${cardUrl}?dl=1`);
       if (!response.ok) throw new Error(String(response.status));
@@ -201,11 +220,14 @@ export function ShareTools({ code }: { code: string }) {
       const file = new File([blob], fileName, { type: 'image/png' });
       if (typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file] });
+        trackEvent('share_succeeded', properties);
         setStatus({ kind: 'ok', message: '공유 시트를 열었어요.' });
         return;
       }
+      trackEvent('share_failed', { channel: 'image', reason_code: 'unsupported' });
       setStatus({ kind: 'fail', message: '이 브라우저에서는 카드 내려받기나 길게 눌러 저장을 이용해 주세요.' });
-    } catch {
+    } catch (error) {
+      trackEvent('share_failed', { channel: 'image', reason_code: error instanceof DOMException && error.name === 'AbortError' ? 'cancelled' : 'unknown' });
       setStatus({ kind: 'fail', message: '공유에 실패했어요. 카드 내려받기나 길게 눌러 저장을 이용해 주세요.' });
     }
   }

@@ -61,7 +61,7 @@ export function PersonalizedInsights({ result, code }: { result: Result; code: s
   }, [first, profile]);
 
   return (
-    <section aria-labelledby="profile-heading" className="mt-14">
+    <section data-analytics-section="personalized_insights" aria-labelledby="profile-heading" className="mt-14">
       <h2 id="profile-heading" className="text-[1.25rem] font-bold text-ink">내 점수 조합으로 읽어보기</h2>
       <div className="mt-5 rounded-card bg-sub p-5 sm:p-7">
         <p className="text-[1rem] font-bold leading-[1.6] text-ink">
@@ -74,10 +74,12 @@ export function PersonalizedInsights({ result, code }: { result: Result; code: s
         </p>
       </div>
 
+      <div data-analytics-section="radar_profile">
       <RadialScoreProfile
         scores={result.scores}
         scoreRange={[SCALES[result.kind].min, SCALES[result.kind].max]}
       />
+      </div>
 
       <div className="mt-5 rounded-card border border-line p-5 sm:p-7">
         <h3 className="text-[1rem] font-bold text-ink">이 결과가 잘 맞지 않을 수 있는 신호</h3>
@@ -111,7 +113,7 @@ export function PersonalizedInsights({ result, code }: { result: Result; code: s
       ) : null}
 
       {evidence && evidence.length > 0 ? (
-        <div className="mt-8 rounded-card border border-line p-5 sm:p-7">
+        <div className="ph-no-capture mt-8 rounded-card border border-line p-5 sm:p-7">
           <h3 className="text-[1.0625rem] font-bold text-ink">이런 응답이 결과에 영향을 줬어요</h3>
           <div className="mt-4 space-y-4">
             {evidence.slice(0, 2).map(({ question, answer }) => (
@@ -155,7 +157,7 @@ function ClarifyingQuestions({ result, profile }: { result: Result; profile: Ans
     : null;
 
   return (
-    <div className="mt-8 rounded-card bg-primary-wash p-5 sm:p-7">
+    <div className="ph-no-capture mt-8 rounded-card bg-primary-wash p-5 sm:p-7">
       <h3 className="text-[1.0625rem] font-bold text-ink">상위 두 유형을 조금 더 비교해 볼까요?</h3>
       <p className="mt-2 text-[0.875rem] leading-[1.7] text-ink-soft">아직 답하지 않은 {first}유형과 {second}유형 문항을 세 개씩 골랐어요. 유형을 확정하는 검사가 아니라 두 후보의 차이를 살펴보는 보조 질문이에요.</p>
       <div className="mt-5 space-y-5">

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { AnalyticsProvider } from '../components/AnalyticsProvider';
 import { KakaoSdk } from '../components/KakaoSdk';
 
 import './globals.css';
@@ -18,7 +19,7 @@ import './globals.css';
  *
  * 아래 값은 실제 배포 도메인이다(2026-09-20 배포로 확정). 도메인이 바뀌면
  * 이 상수만 고치는 것으로는 부족하다 — OG 이미지 18장을 재생성해야 한다.
- * 그러지 않으면 미리보기 카드가 옛 주소를 가리킨다. `docs/deploy.md` 참조.
+ * 그러지 않으면 미리보기 카드가 옛 주소를 가리킨다.
  */
 const SITE_URL = new URL('https://enneagram-test-one.vercel.app');
 const LANDING_OG_ALT = '애니어그램 유형 테스트 — 가볍게 시작하는 나의 동기 패턴';
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-paper font-sans text-ink antialiased">
         {children}
         <KakaoSdk />
+        <AnalyticsProvider />
       </body>
     </html>
   );

@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { trackEvent } from '../lib/analytics';
+import { markSharedEntry } from './ProductAnalytics';
 import { useEffect, useState } from 'react';
 
 import type { ResultKind } from '../lib/types';
@@ -9,6 +11,7 @@ import { ownsResult } from './progress';
 export type ResultNextStepProps = {
   code: string;
   kind: ResultKind;
+  primaryType?: number;
 };
 
 const LINK_CLASS =
@@ -18,7 +21,7 @@ const LINK_CLASS =
  * 모든 결과의 다음 행동을 결과 생성자와 공유 방문자에게 다르게 보여 준다.
  * 결과 URL에는 점수만 있고 원 응답은 없으므로, 다른 기기에서 이어하기는 불가능하다.
  */
-export function ResultNextStep({ code, kind }: ResultNextStepProps) {
+export function ResultNextStep({ code, kind, primaryType }: ResultNextStepProps) {
   const [owner, setOwner] = useState(false);
 
   useEffect(() => {
@@ -34,7 +37,10 @@ export function ResultNextStep({ code, kind }: ResultNextStepProps) {
         <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">
           이 링크는 다른 사람이 공유한 결과예요. 내 결과를 보려면 처음부터 27문항에 답해 주세요.
         </p>
-        <Link href="/test" className={LINK_CLASS}>
+        <Link href="/test" className={LINK_CLASS} onClick={() => {
+          markSharedEntry();
+          trackEvent('try_my_test_clicked', { shared_primary_type: primaryType, source_section: 'next_step' });
+        }}>
           27문항 검사 시작하기
         </Link>
       </section>
@@ -51,7 +57,9 @@ export function ResultNextStep({ code, kind }: ResultNextStepProps) {
         점수 분포도 함께 나와요.{' '}
         <strong className="font-bold text-ink">이미 답한 27문항은 다시 묻지 않아요.</strong>
       </p>
-      <Link href="/test?continue" className={LINK_CLASS}>
+      <Link href="/test?continue" className={LINK_CLASS} onClick={() =>
+        trackEvent('detail_cta_clicked', { primary_type: primaryType, source_section: 'next_step' })
+      }>
         63문항 이어서 답하기
       </Link>
     </section>

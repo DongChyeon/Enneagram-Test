@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { captureOnce } from '../lib/analytics';
+import { consumeEntryKind, durationBucket } from './ProductAnalytics';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -140,6 +142,7 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
   const [confirmingReset, setConfirmingReset] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const startedAt = useRef<number>(0);
   const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const cancelAdvance = useCallback(() => {
@@ -244,6 +247,32 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
   }, [select]);
 
   const answeredCount = countAnswered(planSlots);
+  const testStage = mode === 'base' ? 'base' : 'detail';
+  const startedKey = `enneagram:analytics:started:${testStage}`;
+  useEffect(() => { startedAt.current = 0; }, [testStage]);
+  useEffect(() => {
+    if (!restored) return;
+    if (!startedAt.current) {
+      try {
+        startedAt.current = Number(sessionStorage.getItem(startedKey)) || Date.now();
+        sessionStorage.setItem(startedKey, String(startedAt.current));
+      } catch { startedAt.current = Date.now(); }
+    }
+    // Consumed only when the event is actually sent, so a lost queue keeps the mark.
+    captureOnce(`start:${testStage}`, 'test_started', () => ({
+      test_stage: testStage, entry_kind: consumeEntryKind(), resumed,
+    }));
+    for (const milestone of [25, 50, 75, 100]) {
+      if (answeredCount * 100 >= planSize * milestone) {
+        captureOnce(`progress:${testStage}:${milestone}`, 'test_progress_reached', {
+          test_stage: testStage, progress_percent: milestone,
+          question_index: Math.ceil(planSize * milestone / 100),
+          elapsed_bucket: durationBucket(startedAt.current),
+        });
+      }
+    }
+  }, [restored, testStage, startedKey, resumed, answeredCount, planSize]);
+
   const allAnswered = answeredCount === planSize;
   const firstUnanswered = planSlots.findIndex((slot) => slot === null);
 
@@ -272,15 +301,22 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
 
     setSubmitting(true);
     try {
-      const code = encodeResult(buildResult(payload, resultKind));
+      const result = buildResult(payload, resultKind);
+      const code = encodeResult(result);
       rememberResult(code);
       rememberAnswerProfile(code, answers);
+      captureOnce(`complete:${testStage}`, 'test_completed', {
+        test_stage: testStage, duration_bucket: durationBucket(startedAt.current),
+        primary_type: result.primaryType, ambiguous_result: result.ambiguous,
+      });
+      // A later attempt in this tab must not inherit this start time.
+      try { sessionStorage.removeItem(startedKey); } catch { /* Optional measurement. */ }
       router.push(`/result/${code}`);
     } catch {
       setSubmitting(false);
       setError('결과를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.');
     }
-  }, [answers, cancelAdvance, plan, resultKind, router]);
+  }, [answers, cancelAdvance, plan, resultKind, router, testStage, startedKey]);
 
   const question = questions[plan[index]];
   const showFinishPanel = allAnswered || index === planSize - 1;
@@ -296,7 +332,7 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
   const remainingSections = sectionTotal - section;
 
   return (
-    <div className="flex min-h-[100svh] flex-col bg-paper">
+    <div className="ph-no-capture flex min-h-[100svh] flex-col bg-paper">
       <header className="sticky top-0 z-10 border-b border-line bg-paper/90 backdrop-blur">
         <div className="mx-auto w-full max-w-[34rem] px-5 py-3.5 sm:px-8">
           <div className="flex items-baseline justify-between gap-4">
@@ -455,8 +491,8 @@ export default function TestRunner({ requestedMode }: TestRunnerProps = {}) {
                 {allAnswered ? (
                   <p className="text-[0.9375rem] leading-[1.6] text-ink-soft">
                     {mode === 'base'
-                      ? `${planSize}문항에 모두 답했어요. 결과는 링크 주소 안에 담기며 서버에 저장되지 않아요. 이어서 나머지 ${TOTAL - planSize}문항을 답하면 더 다양한 상황을 살펴볼 수 있어요.`
-                      : `${TOTAL}문항에 모두 답했어요. 결과는 링크 주소 안에 담기며 서버에 저장되지 않아요.`}
+                      ? `${planSize}문항에 모두 답했어요. 답변과 결과 링크는 서버에 저장하지 않고, 서비스 개선용 익명 사용 통계만 수집해요. 이어서 나머지 ${TOTAL - planSize}문항을 답하면 더 다양한 상황을 살펴볼 수 있어요.`
+                      : `${TOTAL}문항에 모두 답했어요. 답변과 결과 링크는 서버에 저장하지 않고, 서비스 개선용 익명 사용 통계만 수집해요.`}
                   </p>
                 ) : (
                   <p className="text-[0.9375rem] leading-[1.6] text-ink-soft">
