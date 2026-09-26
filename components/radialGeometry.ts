@@ -8,7 +8,7 @@
 
 import type { TypeId } from '../data/schema';
 
-/** 12시 방향에서 시계 방향으로 도는 애니어그램 원 순서. */
+/** 12시 방향에서 시계 방향으로 도는 에니어그램 원 순서. */
 export const RADIAL_ORDER: readonly TypeId[] = [9, 1, 2, 3, 4, 5, 6, 7, 8];
 
 export const RADIAL_SIZE = 320;

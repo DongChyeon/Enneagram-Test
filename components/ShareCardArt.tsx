@@ -34,7 +34,7 @@ export const CARD_WING_MARKER = '날개 — 이론적 해석';
 export const CARD_DISCLAIMER = '교육·자기이해 목적이며 임상적 진단이 아니에요.';
 
 /** 카드 머리글. */
-export const CARD_BRAND = '애니어그램 유형 테스트';
+export const CARD_BRAND = '에니어그램 유형 테스트';
 
 /** 점수 구역의 표제. */
 export const CARD_SCORES_HEADING = '9유형 점수 분포';

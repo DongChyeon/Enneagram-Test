@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // 사람에게도 45문항 결과와 90문항 결과가 같은 것으로 보여서는 안 된다.
   const items = SCALES[result.kind].itemsPerType * 9;
   const type = typeById.get(result.primaryType);
-  const title = `[${items}문항] ${formatWingLabel(result.wing)} · ${type?.nameKo ?? ''} — 애니어그램 유형 테스트`;
+  const title = `[${items}문항] ${formatWingLabel(result.wing)} · ${type?.nameKo ?? ''} — 에니어그램 유형 테스트`;
   const description = `${items}문항 자기보고 결과예요. ${type?.summary ?? ''} 교육·자기이해 목적이며 임상적 진단이 아니에요.`;
 
   return {

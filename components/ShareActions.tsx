@@ -51,7 +51,7 @@ function shareWithKakao(url: string, imageUrl: string, typeId: number): 'sdk_una
     kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: `내 애니어그램 ${typeId}유형 결과`,
+        title: `내 에니어그램 ${typeId}유형 결과`,
         description: '친구와 결과를 비교해 보세요.',
         imageUrl,
         link: { mobileWebUrl: url, webUrl: url },
@@ -133,7 +133,7 @@ export function ShareActions({ code, typeId, kind = 'base' }: ShareActionsProps)
           isAppleMobile()
             ? { url }
             : {
-                title: `내 애니어그램 ${typeId}유형 결과`,
+                title: `내 에니어그램 ${typeId}유형 결과`,
                 text: '친구와 결과를 비교해 보세요.',
                 url,
               },

@@ -58,7 +58,7 @@ export function GET() {
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ fontSize: 68, fontWeight: 700, letterSpacing: '-2.5px', lineHeight: 1.15 }}>
-            애니어그램 유형 테스트
+            에니어그램 유형 테스트
           </div>
           <div style={{ marginTop: 24, fontSize: 31, color: '#66645f', lineHeight: 1.45 }}>
             가볍게 시작해 알아보는 나의 동기 패턴

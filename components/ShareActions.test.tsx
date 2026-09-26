@@ -40,7 +40,7 @@ describe('ShareActions', () => {
 
     await waitFor(() => expect(share).toHaveBeenCalledTimes(1));
     expect(share).toHaveBeenCalledWith({
-      title: '내 애니어그램 5유형 결과',
+      title: '내 에니어그램 5유형 결과',
       text: '친구와 결과를 비교해 보세요.',
       url: window.location.href,
     });

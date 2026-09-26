@@ -3,8 +3,8 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: '개인정보 처리방침 · 애니어그램 유형 테스트',
-  description: '애니어그램 유형 테스트가 수집하는 정보와 처리 방식을 안내해요.',
+  title: '개인정보 처리방침 · 에니어그램 유형 테스트',
+  description: '에니어그램 유형 테스트가 수집하는 정보와 처리 방식을 안내해요.',
   alternates: { canonical: '/privacy' },
 };
 
