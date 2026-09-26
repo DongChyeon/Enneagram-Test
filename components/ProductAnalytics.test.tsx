@@ -58,8 +58,10 @@ it('records result sections but never interactions within private answer evidenc
 });
 
 it('marks shared entry when a recipient starts their own test', () => {
-  render(<ResultNextStep code="other-result" kind="base" primaryType={4} />);
-  const link = screen.getByRole('link');
+  const { container } = render(<ResultNextStep code="other-result" kind="base" primaryType={4} />);
+  // 랜딩처럼 문항 수를 앞세우지 않는다.
+  expect(container.textContent).not.toMatch(/\d+문항/);
+  const link = screen.getByRole('link', { name: '검사 시작하기' });
   link.addEventListener('click', (event) => event.preventDefault());
   fireEvent.click(link);
   expect(trackEvent).toHaveBeenCalledWith('try_my_test_clicked', { shared_primary_type: 4, source_section: 'next_step' });

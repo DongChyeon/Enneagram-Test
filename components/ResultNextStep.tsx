@@ -35,13 +35,13 @@ export function ResultNextStep({ code, kind, primaryType }: ResultNextStepProps)
           내 결과도 알아보기
         </h2>
         <p className="mt-3 text-[0.9375rem] leading-[1.7] text-ink-soft">
-          이 링크는 다른 사람이 공유한 결과예요. 내 결과를 보려면 처음부터 27문항에 답해 주세요.
+          이 링크는 다른 사람이 공유한 결과예요. 약 3–5분이면 내 결과도 볼 수 있어요.
         </p>
         <Link href="/test" className={LINK_CLASS} onClick={() => {
           markSharedEntry();
           trackEvent('try_my_test_clicked', { shared_primary_type: primaryType, source_section: 'next_step' });
         }}>
-          27문항 검사 시작하기
+          검사 시작하기
         </Link>
       </section>
     );

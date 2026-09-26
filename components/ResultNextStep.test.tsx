@@ -12,7 +12,7 @@ describe('ResultNextStep', () => {
     render(<ResultNextStep code="shared-code" kind="base" />);
 
     expect(screen.getByText('내 결과도 알아보기')).toBeTruthy();
-    expect(screen.getByRole('link', { name: '27문항 검사 시작하기' }).getAttribute('href')).toBe('/test');
+    expect(screen.getByRole('link', { name: '검사 시작하기' }).getAttribute('href')).toBe('/test');
     expect(screen.queryByText('총 90문항으로 더 자세히 알아보기')).toBeNull();
   });
 
@@ -27,12 +27,12 @@ describe('ResultNextStep', () => {
   });
 
   it.each(['legacy-base', 'full'] as const)(
-    '%s 결과를 받은 공유 방문자에게도 27문항 검사 시작을 안내한다',
+    '%s 결과를 받은 공유 방문자에게도 새 검사 시작을 안내한다',
     (kind) => {
       render(<ResultNextStep code={`shared-${kind}`} kind={kind} />);
 
       expect(screen.getByText('내 결과도 알아보기')).toBeTruthy();
-      expect(screen.getByRole('link', { name: '27문항 검사 시작하기' }).getAttribute('href')).toBe('/test');
+      expect(screen.getByRole('link', { name: '검사 시작하기' }).getAttribute('href')).toBe('/test');
     },
   );
 
